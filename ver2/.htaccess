@@ -1,0 +1,7 @@
+RewriteEngine On
+
+#RewriteRule te.html$ te.php [QSA,L]
+#RewriteRule details.html$ details.php [QSA,L]
+
+# RewriteRule details_$ details.php [QSA,L]
+RewriteRule ^(.*)details_(.*)$ details.php [QSA,L]
