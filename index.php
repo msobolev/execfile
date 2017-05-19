@@ -191,6 +191,25 @@ if(isset($_GET['action']) && $_GET['action'] == 'logout')
     com_redirect("index.php");
 }
 
+
+
+$log_history_query="select * from " .TABLE_LOGIN_HISTORY." where last_respond_time >0 and add_date = '".date('Y-m-d')."' and log_status='Login'";
+$log_history_result = com_db_query($log_history_query);
+while($log_history_row = com_db_fetch_array($log_history_result))
+{
+    //echo "<br>User ID: ".$log_history_row['user_id'];
+    //echo "<br>last_respond_time: ".$log_history_row['last_respond_time'];
+    
+    if($log_history_row['last_respond_time'] > 0)
+    $tot_off_time = time()-$log_history_row['last_respond_time'];
+    //echo "<br>tot_off_time: ".$tot_off_time;
+    if($tot_off_time > 600)
+    {
+        $log_history_update = "update ".TABLE_LOGIN_HISTORY." set log_status='Logout', logout_time='".time()."' where add_date = '".date('Y-m-d')."' and log_status='Login' and user_id='".$log_history_row['user_id']."'";
+        com_db_query($log_history_update);
+    }
+}
+
 //echo "<pre>";   print_r($_SESSION);   echo "</pre>";
 
 //$this_site = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
@@ -203,9 +222,25 @@ if((isset($_POST['field-name']) && $_POST['field-name'] != '') && (isset($_POST[
 {
     $name = $_POST['field-name'];
     $email = $_POST['field-email'];
-    add_user($name,$email);
     
-    header("Location: request_demo.php?sf=1");
+    
+    $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
+    //echo "<br>check_user: ".$check_user;
+    $check_user_rs = com_db_query($check_user);
+    $check_user_rows = com_db_num_rows($check_user_rs);
+    //echo "<br>check_user_rows: ".$check_user_rows;
+    //die();
+    if($check_user_rows > 0)
+    {
+        header("Location: request_demo.php?sf=2");
+    }    
+    else
+    {    
+        add_user($name,$email);
+        header("Location: request_demo.php?sf=1");
+    }
+    
+    
 
 }   
 

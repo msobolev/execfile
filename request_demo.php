@@ -15,29 +15,48 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
     $first_name = $_POST['first_name_rq'];
     $last_name = $_POST['last_name_rq'];
     $email = $_POST['email_rq'];
-    add_user($first_name,$email,1,$last_name,'Request a demo');
-    $msg = "Thank you! One of our representatives will be in touch with you shortly.";
-    
-    $email_message = "Below are details of request a demo user:";
-    $email_message .= "\r\nFirst Name: ".$first_name; 
-    $email_message .= "\r\nLast Name: ".$last_name; 
-    $email_message .= "\r\nEmail: ".$email; 
-    
-    $headers = 'From: info@execfile.com' . "\r\n" .
-    'Reply-To: info@execfile.com' . "\r\n" ;
     
     
+    $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
+    //echo "<br>check_user: ".$check_user;
+    $check_user_rs = com_db_query($check_user);
+    $check_user_rows = com_db_num_rows($check_user_rs);
+    //echo "<br>check_user_rows: ".$check_user_rows;
+    //die();
+    if($check_user_rows > 0)
+    {
+        header("Location: request_demo.php?sf=2");
+    }    
+    else
+    {    
     
-    // Send
-    mail('misha.sobolev@execfile.com', 'Request A Demo User', $email_message,$headers);
-    //mail('faraz.aia@nxvt.com', 'Request A Demo User', $email_message,$headers);
-    
+        add_user($first_name,$email,1,$last_name,'Request a demo');
+        $msg = "Thank you! One of our representatives will be in touch with you shortly.";
+
+        $email_message = "Below are details of request a demo user:";
+        $email_message .= "\r\nFirst Name: ".$first_name; 
+        $email_message .= "\r\nLast Name: ".$last_name; 
+        $email_message .= "\r\nEmail: ".$email; 
+
+        $headers = 'From: info@execfile.com' . "\r\n" .
+        'Reply-To: info@execfile.com' . "\r\n" ;
+
+
+
+        // Send
+        mail('misha.sobolev@execfile.com', 'Request A Demo User', $email_message,$headers);
+        //mail('faraz.aia@nxvt.com', 'Request A Demo User', $email_message,$headers);
+    }
     
 }
 
 if(isset($_GET['sf']) && $_GET['sf'] == 1)
 {
     $msg = "Thank you for signing up! One of our representatives will be in touch with you shortly to get you started.";
+}
+elseif(isset($_GET['sf']) && $_GET['sf'] == 2)
+{
+    $msg = "User with this email address already exists.";
 }
 
 ?>

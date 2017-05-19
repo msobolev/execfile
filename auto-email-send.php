@@ -1,27 +1,27 @@
 <?php 
-//ini_set('display_errors',1);
-//ini_set('display_startup_errors',1);
-//error_reporting(-1);
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 
-define("TABLE_USER","exec_user");
+//define("TABLE_USER","exec_user");
 //define("TABLE_ALERT_SEND_INFO","hre_personal_awards");
 
 //define("TABLE_COMPANY_MASTER","hre_company_master");
-define("TABLE_MANAGEMENT_CHANGE","hre_management_change");
+//define("TABLE_MANAGEMENT_CHANGE","hre_management_change");
 
 define("TABLE_SOURCE","hre_source");
 
-define("TABLE_STATE","hre_state");
-define("TABLE_COUNTRIES","hre_countries");
-define("TABLE_INDUSTRY","hre_industry");
-define("TABLE_REVENUE_SIZE","hre_revenue_size");
+//define("TABLE_STATE","hre_state");
+//define("TABLE_COUNTRIES","hre_countries");
+//define("TABLE_INDUSTRY","hre_industry");
+//define("TABLE_REVENUE_SIZE","hre_revenue_size");
 
-define("TABLE_EMPLOYEE_SIZE","hre_employee_size");
+//define("TABLE_EMPLOYEE_SIZE","hre_employee_size");
 define("TABLE_PERSONAL_FILTER_ONOFF","hre_personal_filter_onoff");
 define("TABLE_ALERT_SEND","hre_alert_send");
-define("TABLE_ALERT","exec_alert");
+//define("TABLE_ALERT","exec_alert");
 
-define("TABLE_ALERT_SEND_INFO","hre_alert_send_info");
+//define("TABLE_ALERT_SEND_INFO","hre_alert_send_info");
 define("TABLE_MAILER_ERROR","hre_mailer_error");
 
 

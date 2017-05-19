@@ -1,5 +1,7 @@
 RewriteEngine On
 
+Options -Indexes
+
 #RewriteRule te.html$ te.php [QSA,L]
 #RewriteRule details.html$ details.php [QSA,L]
 

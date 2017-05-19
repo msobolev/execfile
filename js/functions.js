@@ -32,8 +32,8 @@
 				.toggleClass(activeItemClass)
 					.siblings()
 					.removeClass(activeItemClass)
-					.find('.widget-body')
-					.slideUp();
+					.find('.widget-body');
+					//.slideUp();
 		});
 
 
@@ -41,22 +41,70 @@
 
 		$( "#from" ).datepicker({
 			numberOfMonths: 1,
-			dayNames: ['Monday', 'Thuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sundai'],
-			dayNamesShort: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			dayNamesMin: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			//dayNames: ['Monday', 'Thuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sundai'],
+			//dayNamesShort: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			//dayNamesMin: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        
+                        //dayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			//dayNamesShort: ['Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			//dayNamesMin: ['Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        
                         //dateFormat: 'yy-mm-dd' ,
                         dateFormat: 'mm-dd-yy' ,
 			onClose: function( selectedDate ) {
 				//$( "#to" ).datepicker( "option", "minDate", selectedDate );
                                 $( "#to" ).datepicker( "option", "minDate", selectedDate );
+                                
+                                var to_date = $("#to").val();
+                                var from_date = $("#from").val();
+                                var companyval = "";
+                                var searchnow = "";
+                                var type = "all";
+                                if ($("#type").val() != '')
+                                {
+                                    type = $("#type").val();
+                                }
+                                if ($("#field-company-name").val() != '')
+                                {
+                                    companyval = $("#field-company-name").val();
+                                }
+                                
+                                if ($("#developer").val() != '')
+                                {
+                                    searchnow = $("#developer").val();
+                                }
+                                var revenue = $("#hidden_revenue").val();
+                                var employee_size = $("#hidden_employee_size").val();
+                                
+                                var mweb = $('#mweb').val();
+                                
+                                
+                                var zip_val = $('#zip').val();
+                                var city_val = $('#city').val();
+                                var hidden_states = '';
+                                if ($("#hidden_states").val() != '')
+                                {
+                                    hidden_states = $("#hidden_states").val();
+                                }
+                                var industries = "";
+                                if ($("#hidden_industires").val() != '')
+                                {
+                                    industries = $("#hidden_industires").val();
+                                }
+                                
+                                //alert("SEARCH NOW: "+searchnow);
+                                //window.location.href = "http://stackoverflow.com";
+                                //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size;
+                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&mweb="+mweb;
+                                
 			}
 		});
 
 		$( "#to" ).datepicker({
 			numberOfMonths: 1,
-			dayNames: ['Monday', 'Thuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sundai'],
-			dayNamesShort: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			dayNamesMin: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			//dayNames: ['Monday', 'Thuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sundai'],
+			//dayNamesShort: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			//dayNamesMin: ['Mon', 'Thu', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                         //dateFormat: 'yy-mm-dd' ,
                         dateFormat: 'mm-dd-yy' ,
 			onClose: function( selectedDate ) {
@@ -87,10 +135,26 @@
                                 
                                 var mweb = $('#mweb').val();
                                 
+                                
+                                var zip_val = $('#zip').val();
+                                var city_val = $('#city').val();
+                                var hidden_states = '';
+                                if ($("#hidden_states").val() != '')
+                                {
+                                    hidden_states = $("#hidden_states").val();
+                                }
+                                var industries = "";
+                                if ($("#hidden_industires").val() != '')
+                                {
+                                    industries = $("#hidden_industires").val();
+                                }
+                                
+                                
+                                
                                 //alert("SEARCH NOW: "+searchnow);
                                 //window.location.href = "http://stackoverflow.com";
                                 //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size;
-                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&mweb="+mweb;
+                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&mweb="+mweb;
                                 
 			}
 		});
@@ -123,8 +187,9 @@
 			});
 
 		  // slider range
-
-			    $('.slider-range').each(function() {
+//$( ".slider-range" ).slider( "value", 3 );
+			    /*$('.slider-range').each(function() {*/
+			    $('#slider-range, #slider-range-secondary').each(function() {
 			    	var $this = $(this),
 			    		attrID = $(this).attr('id'),
 			    		amount = $this.parent().find('.slider-input')
@@ -135,6 +200,9 @@
 			    		trueValues = $this.data('truevalues').split(","),
 			    		values = $this.data('values').split(",");
 			    		
+                                        
+                                        
+                                        
 			    		 
 		    		var slider = $this.slider({
 		    		    orientation: 'horizontal',
@@ -142,6 +210,7 @@
 		    		    min: 0,
 		    		    max: 8,
 		    		    values: [0, 8],
+                                    
 		    		    slide: function(event, ui) {
 		    		         var includeLeft = event.keyCode != $.ui.keyCode.RIGHT;
 		    		         var includeRight = event.keyCode != $.ui.keyCode.LEFT;
@@ -149,7 +218,7 @@
 		    		     		 values = $this.data('values').split(",");
 
 		    		         var value = findNearest(includeLeft, includeRight, ui.value)
-			    		      	
+			    		  
 		    		         if (ui.value == ui.values[0]) {
 		    		             slider.slider('values', 0, value);
 		    		         }
@@ -217,16 +286,31 @@
                                                 hidden_states = $("#hidden_states").val();
                                             }
                                             var city_val = $('#city').val();
+                                            var hidden_states = '';
+                                            if ($("#hidden_states").val() != '')
+                                            {
+                                                hidden_states = $("#hidden_states").val();
+                                            }
+                                            
                                             
                                             var mweb = $('#mweb').val();
 
                                             var clicked_element = $(this).attr("id");
-                                            if(clicked_element == "slider-range")
+                                            
+                                            var zip_val = $('#zip').val();
+                                            
+                                            if ($("#field-company-name").val() != '')
+                                            {
+                                                companyval = $("#field-company-name").val();
+                                            }  
+                                            
+                                            //if(clicked_element == "slider-range")
+                                            if(clicked_element == "slider-range_1")
                                             {   
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -238,7 +322,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -254,6 +338,366 @@
                                     }
 		    		})
 			    });
+                            
+                            
+                            $('#slider-range_1').each(function() {
+			    	var $this = $(this),
+			    		attrID = $(this).attr('id'),
+			    		amount = $this.parent().find('.slider-input')
+			    		
+			    		trueValues = [],
+			    		values = []
+			    		
+			    		trueValues = $this.data('truevalues').split(","),
+			    		values = $this.data('values').split(",");
+			    		
+                                        
+                                        
+                                        
+			    		 
+		    		var slider = $this.slider({
+		    		    orientation: 'horizontal',
+		    		    range: true,
+		    		    min: 0,
+		    		    max: 8,
+		    		    
+                                    
+		    		    slide: function(event, ui) {
+		    		         var includeLeft = event.keyCode != $.ui.keyCode.RIGHT;
+		    		         var includeRight = event.keyCode != $.ui.keyCode.LEFT;
+		    		         var trueValues = $this.data('truevalues').split(","),
+		    		     		 values = $this.data('values').split(",");
+
+		    		         var value = findNearest(includeLeft, includeRight, ui.value)
+			    		  
+		    		         if (ui.value == ui.values[0]) {
+		    		             slider.slider('values', 0, value);
+		    		         }
+		    		         else {
+		    		             slider.slider('values', 1, value);
+		    		         }
+
+		    		         amount.val( getRealValue(slider.slider('values', 0), trueValues) + ' - ' + getRealValue(slider.slider('values', 1), trueValues));
+		    		         return false;
+		    		     },
+		    		     start: function( event, ui ) {
+		    		     	 
+		    		     },
+                                     change: function( event, ui ) 
+                                     {  
+                                         
+                                        // Getting new values of revenue slider Starts 
+                                        var values;
+                                        if (!ui.values) 
+                                        {
+                                            values = $("#" + event.target.id).slider("values");
+                                        } 
+                                        else 
+                                        {
+                                            values = ui.values;
+                                        }
+                                        if (values[0] == values[1]) 
+                                        {
+                                            return false;
+                                        } 
+                                        else 
+                                        {
+                                            var periodFrom;
+                                            values[0] % 1 == 0 ? periodFrom = 'beginnig of the year' : periodFrom = 'year-end';
+                                            var periodTo;
+                                            values[1] % 1 == 0 ? periodTo = 'beginnig of the year' : periodTo = 'year-end';
+                                            //alert('From ' + periodFrom + ' ' + parseInt(values[0]) + '<br />to ' + periodTo + ' ' + parseInt(values[1]));
+                                            //alert('From: '+ parseInt(values[0]) + '<br />to:' + parseInt(values[1]));
+                                            var lower_revenue = parseInt(values[0]);
+                                            var upper_revenue = parseInt(values[1]);
+                                            //alert("True val: "+trueValues[1]);  return false;
+                                            //var lower_revenue = parseInt(trueValues[0]);
+                                            //var upper_revenue = parseInt(trueValues[1]);
+                                            
+                                            
+                                            var from_date = $("#from").val();
+                                            var to_date = $("#to").val();
+                                            //var type = $("#type").val(); 
+                                            
+                                            var type = "all";
+                                            if ($("#type").val() != '')
+                                            {
+                                                type = $("#type").val();
+                                            }
+                                            
+                                            var industries = "";
+                                            if ($("#hidden_industires").val() != '')
+                                            {
+                                                industries = $("#hidden_industires").val();
+                                            }
+
+                                            var hidden_states = '';
+                                            if ($("#hidden_states").val() != '')
+                                            {
+                                                hidden_states = $("#hidden_states").val();
+                                            }
+                                            var city_val = $('#city').val();
+                                            var hidden_states = '';
+                                            if ($("#hidden_states").val() != '')
+                                            {
+                                                hidden_states = $("#hidden_states").val();
+                                            }
+                                            
+                                            
+                                            var mweb = $('#mweb').val();
+
+                                            var clicked_element = $(this).attr("id");
+                                            
+                                            var zip_val = $('#zip').val();
+                                            
+                                            var companyval = '';
+                                            //if($("#field-company-name"))
+                                            //alert("NAME: "+$("#field-company-name").val());
+                                            //if(typeof $("#field-company-name") != 'undefined')
+                                            //{
+                                                if ($("#field-company-name").val() != '')
+                                                {
+                                                    companyval = $("#field-company-name").val();
+                                                } 
+                                            //} 
+                                             
+                                            
+                                            //if(clicked_element == "slider-range")
+                                            if(clicked_element == "slider-range_1")
+                                            {   
+                                                var employee_size = $("#hidden_employee_size").val();
+                                                setTimeout(function(){
+                                                    //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    //your code to be executed after 1 seconds
+                                                }, 3000); 
+                                            }
+                                            
+                                            else
+                                            if(clicked_element == "slider-range-secondary_1")
+                                            {   
+                                                var revenue = $("#hidden_revenue").val();
+                                                setTimeout(function(){
+                                                    //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    //your code to be executed after 1 seconds
+                                                }, 3000); 
+                                            }
+                                            //setTimeout(function () { 
+                                            //    window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+lower_revenue+","+upper_revenue) }
+                                            //,200);
+                                        }
+                                        // Getting new values of revenue slider Ends  
+                                    }
+		    		})
+			    });
+                            
+                            $('#slider-range-secondary_1').each(function() {
+			    	var $this = $(this),
+			    		attrID = $(this).attr('id'),
+			    		amount = $this.parent().find('.slider-input')
+			    		
+			    		trueValues = [],
+			    		values = []
+			    		
+			    		trueValues = $this.data('truevalues').split(","),
+			    		values = $this.data('values').split(",");
+			    		
+                                        
+                                        
+                                        
+			    		 
+		    		var slider = $this.slider({
+		    		    orientation: 'horizontal',
+		    		    range: true,
+		    		    min: 0,
+		    		    max: 8,
+		    		    
+                                    
+		    		    slide: function(event, ui) {
+		    		         var includeLeft = event.keyCode != $.ui.keyCode.RIGHT;
+		    		         var includeRight = event.keyCode != $.ui.keyCode.LEFT;
+		    		         var trueValues = $this.data('truevalues').split(","),
+		    		     		 values = $this.data('values').split(",");
+
+		    		         var value = findNearest(includeLeft, includeRight, ui.value)
+			    		  
+		    		         if (ui.value == ui.values[0]) {
+		    		             slider.slider('values', 0, value);
+		    		         }
+		    		         else {
+		    		             slider.slider('values', 1, value);
+		    		         }
+
+		    		         amount.val( getRealValue(slider.slider('values', 0), trueValues) + ' - ' + getRealValue(slider.slider('values', 1), trueValues));
+		    		         return false;
+		    		     },
+		    		     start: function( event, ui ) {
+		    		     	 
+		    		     },
+                                     change: function( event, ui ) 
+                                     {  
+                                         
+                                        // Getting new values of revenue slider Starts 
+                                        var values;
+                                        if (!ui.values) 
+                                        {
+                                            values = $("#" + event.target.id).slider("values");
+                                        } 
+                                        else 
+                                        {
+                                            values = ui.values;
+                                        }
+                                        if (values[0] == values[1]) 
+                                        {
+                                            return false;
+                                        } 
+                                        else 
+                                        {
+                                            var periodFrom;
+                                            values[0] % 1 == 0 ? periodFrom = 'beginnig of the year' : periodFrom = 'year-end';
+                                            var periodTo;
+                                            values[1] % 1 == 0 ? periodTo = 'beginnig of the year' : periodTo = 'year-end';
+                                            //alert('From ' + periodFrom + ' ' + parseInt(values[0]) + '<br />to ' + periodTo + ' ' + parseInt(values[1]));
+                                            //alert('From: '+ parseInt(values[0]) + '<br />to:' + parseInt(values[1]));
+                                            var lower_revenue = parseInt(values[0]);
+                                            var upper_revenue = parseInt(values[1]);
+                                            //alert("True val: "+trueValues[1]);  return false;
+                                            //var lower_revenue = parseInt(trueValues[0]);
+                                            //var upper_revenue = parseInt(trueValues[1]);
+                                            
+                                            
+                                            var from_date = $("#from").val();
+                                            var to_date = $("#to").val();
+                                            //var type = $("#type").val(); 
+                                            var zip_val = $('#zip').val();
+                                            
+                                            var type = "all";
+                                            if ($("#type").val() != '')
+                                            {
+                                                type = $("#type").val();
+                                            }
+                                            
+                                            var industries = "";
+                                            if ($("#hidden_industires").val() != '')
+                                            {
+                                                industries = $("#hidden_industires").val();
+                                            }
+
+                                            var hidden_states = '';
+                                            if ($("#hidden_states").val() != '')
+                                            {
+                                                hidden_states = $("#hidden_states").val();
+                                            }
+                                            var city_val = $('#city').val();
+                                            
+                                            
+                                            
+                                            var mweb = $('#mweb').val();
+
+                                            var clicked_element = $(this).attr("id");
+                                            var companyval = '';
+                                            if ($("#field-company-name").val() != '')
+                                            {
+                                                companyval = $("#field-company-name").val();
+                                            }
+                                            
+                                            //if(clicked_element == "slider-range")
+                                            if(clicked_element == "slider-range_1")
+                                            {   
+                                                var employee_size = $("#hidden_employee_size").val();
+                                                setTimeout(function(){
+                                                    //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    //your code to be executed after 1 seconds
+                                                }, 3000); 
+                                            }
+                                            
+                                            else
+                                            if(clicked_element == "slider-range-secondary_1")
+                                            {   
+                                                var revenue = $("#hidden_revenue").val();
+                                                setTimeout(function(){
+                                                    //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    //your code to be executed after 1 seconds
+                                                }, 3000); 
+                                            }
+                                          
+
+                                            
+                                            //setTimeout(function () { 
+                                            //    window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+lower_revenue+","+upper_revenue) }
+                                            //,200);
+                                        }
+                                        // Getting new values of revenue slider Ends  
+                                         
+                                         
+                                    }
+		    		})
+			    });
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            /*
+                            $('.slider-range').click(function() {
+                                {   
+                                    
+                                    var periodFrom;
+                                            values[0] % 1 == 0 ? periodFrom = 'beginnig of the year' : periodFrom = 'year-end';
+                                            var periodTo;
+                                            values[1] % 1 == 0 ? periodTo = 'beginnig of the year' : periodTo = 'year-end';
+                                            //alert('From ' + periodFrom + ' ' + parseInt(values[0]) + '<br />to ' + periodTo + ' ' + parseInt(values[1]));
+                                            //alert('From: '+ parseInt(values[0]) + '<br />to:' + parseInt(values[1]));
+                                            var lower_revenue = parseInt(values[0]);
+                                            var upper_revenue = parseInt(values[1]);
+                                    
+                                    
+                                    
+                                    var from_date = $("#from").val();
+                                            var to_date = $("#to").val();
+                                            //var type = $("#type").val(); 
+                                            
+                                            var type = "all";
+                                            if ($("#type").val() != '')
+                                            {
+                                                type = $("#type").val();
+                                            }
+                                            
+                                            var industries = "";
+                                            if ($("#hidden_industires").val() != '')
+                                            {
+                                                industries = $("#hidden_industires").val();
+                                            }
+
+                                            var hidden_states = '';
+                                            if ($("#hidden_states").val() != '')
+                                            {
+                                                hidden_states = $("#hidden_states").val();
+                                            }
+                                            var city_val = $('#city').val();
+                                            
+                                            var mweb = $('#mweb').val();
+
+                                            
+                                    
+                                    
+                                    
+                                    var revenue = $("#hidden_revenue").val();
+                                    setTimeout(function(){
+                                        //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
+                                        window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&mweb="+mweb;
+                                        //your code to be executed after 1 seconds
+                                    }, 3000); 
+                                }
+                            });
+                            */
+                            
 			    
 			    function findNearest(includeLeft, includeRight, value) {
 			        var nearest = null;

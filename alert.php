@@ -63,9 +63,29 @@ if($company_website == '')
     $company_website = $filter_arr[7];
 $industry_ids = $filter_arr[8];
 $state_ids =  $filter_arr[9];
-$revenue =  $filter_arr[11];
-$employee_size = $filter_arr[13];
+$revenue =  $filter_arr[10];
+$employee_size = $filter_arr[11];
 //$company_website = '';
+
+//echo "<br>company_website:".$company_website;
+//echo "<br>company:".$company;
+//echo "<br>Strpos:".strpos($company_website,'www.').":";
+//if($company_website != '' && (strpos($company_website,'www.') < 0 || strpos($company_website,'www.') == ''))
+$company_website = trim($company_website);
+$first_four = substr($company_website, 0, 4);
+//if(strpos($company_website,'www.') < 0 || strpos($company_website,'www.') == '')
+if($first_four != 'www.')
+{
+    //echo "<br>within one";
+    //if(strpos($company_website,'www.') != 0)
+    //{    
+        //echo "<br>within two";
+        $company = $company_website;
+        $company_website = '';
+    //}    
+}        
+//echo "<br>company AFTER:".$company;
+
 
 if(strpos($state_ids,',') > -1)
 {
@@ -75,7 +95,8 @@ else
     $state_id_arr[] = $state_ids;
 
 //echo "<pre>filter_arr ARR";   print_r($filter_arr);   echo "</pre>";
-//echo "<br>industry_ids: ".$employee_size;
+//echo "<br>employee_size: ".$employee_size;
+//echo "<br>revenue: ".$revenue;
 //echo "<pre>industry_id_arr ARR";   print_r($employee_size);   echo "</pre>";
 
 if(strpos($industry_ids,',') > -1)
@@ -108,7 +129,7 @@ else
 
 //echo "<br>zip_code: ".$zip_code;
 //com_db_connect() or die('Unable to connect to database server!');
-
+//echo "<pre>industry_id_arr ONE: ";   print_r($industry_id_arr);   echo "</pre>";
 
 $submit_btn = "Create Alert";
 if(isset($_GET['alert_id']) && $_GET['alert_id'] != '')
@@ -285,13 +306,22 @@ function sub_save_list()
                                         <?PHP 	$indQuery = "select industry_id,title from ".TABLE_INDUSTRY." where status=0 and parent_id=0";
                                         $indResult = com_db_query($indQuery);
                                         ?>
+                                        <?PHP
+                                        //echo "<br>indQuery: ".$indQuery;
+                                        //echo "<pre>industry_id_arr: ";   print_r($industry_id_arr);   echo "</pre>";
+                                        ?>
+                                        
+                                        
+                                        
+                                        
                                         <select class="chosen-select" style="margin-left:6px;width:260px;" name="industry[]" id="industry" multiple data-placeholder="Any">
+                                        
                                             <?PHP while($indRow = com_db_fetch_array($indResult)){ ?>
                                             <optgroup label="<?=com_db_output($indRow['title'])?>">
                                         <?=MultiSelectionComboBox("select industry_id,title from ".TABLE_INDUSTRY." where status=0 and parent_id='".$indRow['industry_id']."'",$industry_id_arr)?>
-                                            </optgroup>
+                                            </optgroup> 
                                             <?PHP } ?>
-                                        </select>
+                                         </select> 
                                         </div><!-- /.row -->
                                         <div class="row"><label style="width:128px;">Size ($ Revenue)</label>
                                             <select class="chosen-select" style="margin-left:3px;width:260px;" name="revenue_size[]" id="revenue_size" multiple data-placeholder="Any">

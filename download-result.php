@@ -8,9 +8,23 @@ include("config.php");
 include("functions.php");
 $filter_arr = explode(":",$_POST['selected_filters_hidden']);
 $all_data_count = "";
+
+
+
 $all_data = get_all_data('',$filter_arr[0],$filter_arr[1],$filter_arr[2],$filter_arr[3],$filter_arr[4],$filter_arr[5],$filter_arr[6],$filter_arr[7],$filter_arr[8],$filter_arr[9],$filter_arr[10],$filter_arr[11],"file");
+
 $all_data_count = count($all_data);
+
+//echo "<pre>filter_arr: ";   print_r($filter_arr);   echo "</pre>";
+
 //echo "<pre>all_data DL: ";   print_r($all_data);   echo "</pre>";  
+
+//die();
+
+//echo "<br><br>all_data_count: ".$all_data_count;
+//die();
+//
+//die();
 $speaking_array = array();
 $awards_array = array();
 $publication_array = array();
@@ -168,6 +182,7 @@ for($v=0;$v<=$all_data_count;$v++)
         
         $publication_array[$publication_count]['industry_title'] = $all_data[$v]['industry_title'];
         $publication_array[$publication_count]['state_short'] = $all_data[$v]['state_short'];
+        $publication_array[$publication_count]['move_title'] = $all_data[$v]['move_title'];
         $publication_count++;
     }
     
@@ -215,6 +230,7 @@ for($v=0;$v<=$all_data_count;$v++)
         
         $media_array[$media_count]['industry_title'] = $all_data[$v]['industry_title'];
         $media_array[$media_count]['state_short'] = $all_data[$v]['state_short'];
+        
         
         $media_count++;
     }
@@ -578,7 +594,7 @@ if($publication_count > 0)
         $xls->Text($xlsRow,17,$publication_array[$pu]['zip_code']);
         
         $xls->Text($xlsRow,18,$publication_array[$pu]['publication_date']);
-        $xls->Text($xlsRow,19,$publication_array[$pu]['title']);
+        $xls->Text($xlsRow,19,$publication_array[$pu]['move_title']);
         $xls->Text($xlsRow,20,$publication_array[$pu]['link']);
         
         $xlsRow++;
@@ -784,7 +800,8 @@ if($jobs_count > 0)
     //$xls->Text($xlsRow,2,"Last Name");
     //$xls->Text($xlsRow,3,"Title");
     //$xls->Text($xlsRow,4,"E-Mail");
-    $xls->Text($xlsRow,1,"Personal Unique ID");
+    //$xls->Text($xlsRow,1,"Personal Unique ID");
+    $xls->Text($xlsRow,1,"");
     $xls->Text($xlsRow,2,"Company Name");
     $xls->Text($xlsRow,3,"Phone");
     

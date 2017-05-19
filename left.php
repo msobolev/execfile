@@ -173,7 +173,7 @@ $all_industries = get_all_industries();
         </li><!-- /.widget -->
 
         <li id="timeframe_left" class="widget widget-calendar">
-            <div class="widget-head">
+            <div id="date_tab"  class="widget-head">
                 <span class="ico-widget">
                     <i class="ico-calendar"></i>
                 </span>
@@ -184,13 +184,13 @@ $all_industries = get_all_industries();
             </div><!-- /.widget-head -->
             <?PHP
             $timeframe_display = "";
-            if($from_date_initial != '' && $to_date_initial != '')
+            if($from_date_initial != '' || $to_date_initial != '')
             {    
                 $timeframe_display = 'style=display:block;';
             } 
             ?>
             
-            <div class="widget-body" <?=$timeframe_display?>>
+            <div  id="date_tab_body" class="widget-body" <?=$timeframe_display?>>
                 <div class="calendar-holder">
                     <i class="ico-calendar-small"></i>
                     <label class="calendar-label "for="from" >From:</label>
@@ -205,7 +205,7 @@ $all_industries = get_all_industries();
         </li><!-- /.widget -->
 
         <li class="widget widget-slider">
-            <div class="widget-head">
+            <div id="company_tab"  class="widget-head">
                 <span class="ico-widget">
                     <i class="ico-building"></i>
                 </span>
@@ -226,7 +226,7 @@ $all_industries = get_all_industries();
             } 
             ?>
             
-            <div class="widget-body" <?=$company_display?>>
+            <div  class="widget-body" <?=$company_display?>>
                 <div class="form-company">
                     <!-- <form action="#" method="post"> -->
                     <div class="form-body">
@@ -240,6 +240,8 @@ $all_industries = get_all_industries();
                         <div class="checkbox-holder">
                             <ul class="list-checkboxes">
                                 <?PHP
+                                //echo "<pre>";   print_r();   echo "</pre>";
+                                //echo "<br>Industries: ".$_GET['industries'];
                                 if(isset($_GET['industries']) && $_GET['industries'] != '')
                                 {
                                     //$industries = trim($_GET['industries'],",");
@@ -256,11 +258,26 @@ $all_industries = get_all_industries();
                                         $search_industry_id = $industry_id.",";
                                     }
                                     $checked = "";
-
-                                    if(strpos($industries,$industry_id.",") > -1)
-                                    {        
-                                       $checked = "checked";
+                                    //echo "<br>Industry_id: ".$industry_id;
+                                    //if(strpos($industries,$industry_id.",") > -1)
+                                    //if($industry_id."," == $industries)        
+                                    //{        
+                                    //   $checked = "checked";
+                                    //}
+                                    
+                                    
+                                    $ind_arr = explode(",",$industries);
+                                    foreach($ind_arr as $ind_index => $ind_value) 
+                                    {
+                                        if($ind_value == $industry_id) 
+                                        { 
+                                            $checked = "checked";
+                                        }
                                     }
+
+                                    
+                                    if($industry_data['parent_id'] != 0)
+                                    {    
                                 ?>
                                     <li>
                                         <div class="checkbox">
@@ -269,6 +286,7 @@ $all_industries = get_all_industries();
                                         </div><!-- /.checkbox -->
                                     </li>
                                 <?PHP
+                                    }
                                 }
                                 ?>
                             </ul><!-- /.list-checkboxes -->	
@@ -280,8 +298,58 @@ $all_industries = get_all_industries();
                                     <label for="amount" class="slider-label">Revenue</label>
                                     <input type="text" id="amount" class="slider-input" value="0 - > $1 bil">
                                 </p>
-                                <?PHP $set_vall = 6; ?>                            
-                                <div id="slider-range" class="slider-range" data-truevalues="0, $1 mil, $10 mil, $50 mil, $100 mil, $250 mil, $500 mil, $1 bil, > $1 bil" data-values="0, 1, 2, 3, 4, 5, 6, 7, 8"></div>
+                                <?PHP 
+                                if(isset($_GET['revenue']) && $_GET['revenue'] != '')
+                                {
+                                    $revenue_arr = explode(",", $_GET['revenue']);
+                                    $set_vall = '4'; 
+                                }    
+                                else
+                                {    
+                                    $set_vall = ''; 
+                                }   
+                                
+                                
+                                if(isset($_GET['employee_size']) && $_GET['employee_size'] != '')
+                                {
+                                    $employee_size_arr = explode(",", $_GET['employee_size']);
+                                    $set_vall_emp = '4'; 
+                                }    
+                                else
+                                {    
+                                    $set_vall_emp = ''; 
+                                }   
+                                
+                                
+                                
+                                
+                                ?>                            
+                                <?PHP $set_val_slider = 1; ?>                            
+                                <div id="slider-range_<?php echo $set_val_slider;?>" class="slider-range" data-truevalues="0, $1 mil, $10 mil, $50 mil, $100 mil, $250 mil, $500 mil, $1 bil, > $1 bil" data-values="0, 1, 2, 3, 4, 5, 6, 7, 8"></div>
+                                <?php
+                                    if(!empty($set_vall)){ 
+                                        $saved_values = [intval($revenue_arr[0]),intval($revenue_arr[1])]; //$set_vall
+                                        //$true_saved_values = [$100 mil,$500 mil];
+                                    }else{
+                                        $saved_values = [0, 8];
+                                    }
+                                ?>   
+                                <script type="text/javascript">
+                                    $slider_id = "slider-range_<?php echo $set_val_slider;?>";
+                                    $slider_saved_values = "<?php echo json_encode($saved_values); ?>";
+                                    
+                                    //console.log($slider_saved_values);
+                                    $('#'+ $slider_id).slider({
+                                        orientation: 'horizontal',
+                                        range: true,
+                                        min: 0,
+                                        max: 8,
+                                        /*values: [2, 5],*/
+                                        values: $.parseJSON($slider_saved_values)
+                                    });
+                                    //$('#slider-range_1').val('very');
+                                </script>
+  
                             </div><!-- /.slider-holder -->
 
                             <div class="slider-holder">
@@ -289,7 +357,36 @@ $all_industries = get_all_industries();
                                     <label for="amount2" class="slider-label">Employees</label>
                                     <input type="text" id="amount2" class="slider-input" value="1 - >100K">
                                 </p>
-                                <div id="slider-range-secondary" class="slider-range" data-truevalues="0, 25, 100, 250, 1k, 10k, 50k, 100k, > 100k" data-values="0, 1, 2, 3, 4, 5, 6, 7, 8"></div>
+                                <div id="slider-range-secondary_<?php echo $set_val_slider;?>" class="slider-range" data-truevalues="0, 25, 100, 250, 1k, 10k, 50k, 100k, > 100k" data-values="0, 1, 2, 3, 4, 5, 6, 7, 8"></div>
+                                <!-- <div id="slider-range-secondary_<?php echo $set_val_slider;?>" class="slider-range" data-truevalues="0, 25, 100, 250, 1k, 10k, 50k, 100k, > 100k" data-values="1, 2, 3, 4, 5, 6, 7, 8, 8"></div> -->
+                                <?php
+                                    if(!empty($set_vall_emp)){ 
+                                        $saved_values_emp = [intval($employee_size_arr[0]),intval($employee_size_arr[1])]; //$set_vall
+                                        //$true_saved_values = [$100 mil,$500 mil];
+                                    }else{
+                                        $saved_values_emp = [0, 8];
+                                    }
+                                ?>   
+                                <script type="text/javascript">
+                                    $slider_id_emp = "slider-range-secondary_<?php echo $set_val_slider;?>";
+                                    $slider_saved_values_emp = "<?php echo json_encode($saved_values_emp); ?>";
+                                   
+                                   
+                                    //console.log($slider_saved_values);
+                                    $('#'+ $slider_id_emp).slider({
+                                        orientation: 'horizontal',
+                                        range: true,
+                                        min: 0,
+                                        max: 8,
+                                        /*values: [2, 5],*/
+                                        values: $.parseJSON($slider_saved_values_emp)
+                                    });
+                                    //$('#slider-range_1').val('very');
+                                </script>
+  
+                            
+                            
+                            
                             </div><!-- /.slider-holder -->
                         </div><!-- /.sliders -->
                     </div><!-- /.form-body -->

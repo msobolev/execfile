@@ -356,7 +356,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     $data_arr = array();
     $data = 0;
     
-    
+    $city_clause = "";
     $revenue_ids = "";
     $revenue_clause = "";
     
@@ -373,7 +373,8 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             if($revenue_limits[0] < $revenue_limits[1])
             {
                 $initial_revenue_id = 2;
-                for($r=$revenue_limits[0];$r<=$revenue_limits[1];$r++)
+                //for($r=$revenue_limits[0];$r<=$revenue_limits[1];$r++)
+                for($r=$revenue_limits[0];$r<$revenue_limits[1];$r++)
                 {
                     $new_revenue_id = $r+$initial_revenue_id;
                     $revenue_ids .= $new_revenue_id.",";
@@ -413,7 +414,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
       //  if($type == '')
       //      $type = 'all';
     }
-    
+    //echo "<br>FA company : ".$company;
     if($company != '')
     {    
         $web_arr = array();
@@ -449,6 +450,11 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             }
             $company_personal_clause .= ")";
             $company_personal_clause = str_replace(',)',')',$company_personal_clause);
+            
+            
+            
+            
+            $company_personal_clause .= " or company_name in ('$company')";
             
             
             
@@ -503,14 +509,33 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         if($employee_size_limits[0] < $employee_size_limits[1])
         {
             //$initial_revenue_id = 0;
-            for($r=$employee_size_limits[0];$r<=$employee_size_limits[1];$r++)
+            for($r=$employee_size_limits[0]+1;$r<=$employee_size_limits[1];$r++)
             {
+                //$new_employee_size_id = $r;
+                //if($employee_size_limits[0] == 7 && $employee_size_limits[1] == 8)
+                //{
+                //    $new_employee_size_id = $r;
+                //}  
+                //else
+                
                 $new_employee_size_id = $r;
                 $employee_size_ids .= $new_employee_size_id.",";
             }
         }
-        $employee_size_ids = trim($employee_size_ids,","); 
-        $employee_size_clause .= " and company_employee in (".$employee_size_ids.")";
+        
+        
+        
+        if($employee_size_limits[0] < $employee_size_limits[1])
+        {    
+            if($employee_size_limits[1] - $employee_size_limits[0] == 1)
+                $employee_size_clause .= " and company_employee in (".$employee_size_limits[1].")";
+            else
+            {    
+                $employee_size_ids = trim($employee_size_ids,","); 
+                $employee_size_clause .= " and company_employee in (".$employee_size_ids.")";
+            }
+            
+        }
     }
     
     
@@ -518,24 +543,35 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     if($func == 'ciso')
     {
         $ciso_clause = " and ciso_user = 1";
-    } 
+    }
+    elseif($func == 'cto')
+    {
+        $ciso_clause = " and ciso_user = 0";
+    }
+            
     
     $cso_clause = "";
     if($func == 'cso')
     {
         $cso_clause = " and cmo_user = 1";
-    } 
+    }
+    elseif($func == 'cmo')
+    {
+        $ciso_clause = " and cmo_user = 0";
+    }
     
-    
-    
+    //echo "<br>TYPE: ".$type;
+    //echo "<br>display_type: ".$display_type;
+    //echo "<br>P:".$_GET['p'];
+    //die();
     if($type == 'movements' || $type == 'all' || strpos($type,"movements") > -1)        
     {
         //$limit_clause = " LIMIT 0,200";
         if($city != '' || $company != '' || $industries_ids != '' || $state_ids != '' || $revenue != '' || $employee_size != '' || $to_date != '' || $from_date != ''|| $zip != '')
             $limit_clause = "";
-        $limit_clause = " LiMIT 30";
+        $limit_clause = " LiMIT 300";
         if($display_type == 'file')
-            $limit_clause = " LIMIT 0,500";
+            $limit_clause = " LIMIT 0,1000";
         
         $where_personal_clause = "";
         if($id != '')
@@ -545,7 +581,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $from_date_clause = "";
         $to_date_clause = "";
         //$zip_clause = "";
-        $city_clause = "";
+        
         //$industries_clause = "";
         //$state_clause = "";  
         
@@ -734,7 +770,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             //echo "<br>filtered_count: ".$filtered_count;
             
         /*
-         echo "Movement Query:SELECT SQL_CALC_FOUND_ROWS personal_id,move_id,first_name, last_name,
+         echo "<br>Movement Query:SELECT SQL_CALC_FOUND_ROWS personal_id,move_id,first_name, last_name,
             personal_image,email,phone".$company_fields.",title,movement_type,
             more_link,announce_date as announce_date,effective_date as add_date,effective_date,source_id,headline,
             '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,
@@ -745,13 +781,17 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
             $revenue_clause $employee_size_clause $ciso_clause $cso_clause    
             $order_by $limit_clause";
-        */
+        */ 
+         
+        // die();
+         
+        //die();
          
         
         while($indRow = mysql_fetch_array($indResult))
         {
             //echo "<br>Within";
-            //echo "<br>Move id: ".$indRow['move_id'];   
+           // echo "<br>Move id: ".$indRow['move_id'];   
             $data_arr[$data]['id'] = $indRow['move_id'];
             $data_arr[$data]['personal_id'] = $indRow['personal_id'];
             $data_arr[$data]['move_id'] = $indRow['move_id'];
@@ -820,10 +860,12 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     }
     //echo "<pre>data_arr after movement: ";   print_r($data_arr); echo "</pre>"; 
     
-    
+    //echo "<br>filtered_count a: ".$filtered_count;
     // SPEAKING
-    if($type == 'speaking' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"speaking") > -1)
+    //echo "<br>Before speaking";
+    if($type == 'speaking' || ($type == 'all' && $_GET['p'] > 1) || ($display_type == 'file' && (strpos($type,"speaking") > -1) || $type == 'all'))
     {    
+        //echo "<br>Within speaking";
         $default_speaking_limit = ' limit 30';
         if($display_type = 'file')
             $default_speaking_limit = '';
@@ -888,7 +930,8 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
             
             // Count Query
-            $indCountResult = mysql_query("select count(*) as total_speaking_count
+            // Below query commented and updated on 17 Apr 2017
+            /*$indCountResult = mysql_query("select count(*) as total_speaking_count
                 from ".$table_personal_speaking." as ps,
                 ".$table_personal_master." as pm,
                 ".$table_movement_master." as mm,
@@ -898,8 +941,23 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
                 where (ps.personal_id = pm.personal_id and mm.personal_id = pm.personal_id and 
                 cm.company_id = mm.company_id and cm.company_industry = ci.industry_id and cm.state=cs.state_id)
                  $ciso_clause $cso_clause $count_date_clause");
+            */
+            
+            
+            $indCountResult = mysql_query("select count(*) as total_speaking_count
+                from ".$table_search_data." 
+                where record_type = 'speaking'
+                 $ciso_clause $cso_clause $count_date_clause $from_date_clause $to_date_clause");
+            
+            
+            
             $indCountRow = mysql_fetch_array($indCountResult);
             $speaking_count = $indCountRow['total_speaking_count'];
+            /*echo "<br>FAR Speaking Count from Q: select count(*) as total_speaking_count
+                from ".$table_search_data." 
+                where record_type = 'speaking'
+                 $ciso_clause $cso_clause $count_date_clause";
+            */
             
             //echo "<br>Direct speaking id q: SELECT max(speaking_id) as max_speaking_id from $table_personal_speaking";
             //$max_speaking_id_q = mysql_query("SELECT max(speaking_id) as max_speaking_id from $table_personal_speaking");
@@ -1057,7 +1115,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             //$num_speaking_query = "SELECT FOUND_ROWS() as total_rows";
             $num_speaking_result = mysql_query("SELECT FOUND_ROWS() as total_speaking_rows");
             $num_speaking_row = mysql_fetch_array($num_speaking_result);
-            $filtered_count = $num_speaking_row['total_speaking_rows'];
+            $filtered_count = $num_speaking_row['total_speaking_rows']+$filtered_count;
         
             //echo "<br>filtered_count: ".$filtered_count;    
             //die("<br>FA");
@@ -1150,7 +1208,8 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //die("After speaking");
         
     }   
-    
+    //die();
+    //echo "<br>filtered_count b: ".$filtered_count;
     // AWARDS
     if($type == 'awards' || $type == 'all' || strpos($type,"awards") > -1)
     { 
@@ -1285,8 +1344,12 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         $num_awards_result = mysql_query("SELECT FOUND_ROWS() as total_speaking_rows");
             $num_awards_row = mysql_fetch_array($num_awards_result);
-            $filtered_count = $num_awards_row['total_speaking_rows'];
+            $filtered_count = $num_awards_row['total_speaking_rows']+$filtered_count;
         
+            
+        //echo "<br>num_awards_row: ".$num_awards_row['total_speaking_rows'];
+        //echo "<br>filtered_count c: ".$filtered_count;
+            
         
         while($indRow = mysql_fetch_array($indResult))
         {
@@ -1341,7 +1404,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }
     }    
         
-
+    //echo "<br>filtered_count c: ".$filtered_count;
     // MEDIA MENTIONS
     if($type == 'media' || $type == 'media_mention' || $type == 'all' || strpos($type,"media_mention") > -1)
     {
@@ -1397,7 +1460,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             //$company_related_joins = " and cm.company_industry = ci.industry_id and cm.state=cs.state_id and mm.personal_id = pm.personal_id and cm.company_id = mm.company_id";
             
             
-            $company_related_fields = ",title as industry_title,state_name as state_short,mm_id,company_name,title,company_revenue,company_employee,address,address2,city,zip_code,company_website,revenue_name,employee_size_name";
+            $company_related_fields = ",industry_name as industry_title,state_name as state_short,mm_id,company_name,title,company_revenue,company_employee,address,address2,city,zip_code,company_website,revenue_name,employee_size_name";
             $company_related_table = " ,".$table_company_industry." as ci,".$table_company_state." as cs,".$table_movement_master." as mm,".$table_company_master." as cm";
             
             $company_related_joins = " and company_industry = ci.industry_id and cm.state=cs.state_id and mm.personal_id = pm.personal_id and cm.company_id = mm.company_id";
@@ -1492,7 +1555,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         $num_media_result = mysql_query("SELECT FOUND_ROWS() as total_speaking_rows");
             $num_media_row = mysql_fetch_array($num_media_result);
-            $filtered_count = $num_media_row['total_speaking_rows'];
+            $filtered_count = $num_media_row['total_speaking_rows']+$filtered_count;
         
         while($indRow = mysql_fetch_array($indResult))
         {
@@ -1547,7 +1610,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }
     }
 
-    
+    //echo "<br>filtered_count d: ".$filtered_count;
     // PUBLICATION
     if($type == 'publication' || $type == 'all' || strpos($type,"publication") > -1)
     {
@@ -1582,6 +1645,15 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $where_personal_clause = "";
         if($id != '')
             $where_personal_clause = " and publication_id = ".$id;
+        
+        
+        if($industries_ids != '')
+        {
+            //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
+            $industries_clause_pub = " and cm.industry_id in (".$industries_ids.")";
+        }
+        
+        
         
         
         $company_related_fields = "";
@@ -1635,7 +1707,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
              $pub_count_date_clause";
         */
         
-        
+        //echo "<br>industries_clause: ".$industries_clause;
         $msc = microtime(true);
         $indResult = mysql_query("select SQL_CALC_FOUND_ROWS pm.personal_id,ppp.link,first_name,last_name,personal_image,
             pm.email as email,publication_id,ppp.title,ppp.publication_date,ppp.add_date as add_date,
@@ -1644,7 +1716,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             ".$table_personal_master." as pm
             ".$company_related_table."
             where (ppp.personal_id = pm.personal_id $company_related_joins) $from_date_clause $to_date_clause $zip_clause $revenue_clause
-            $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause  $where_personal_clause $ciso_clause $cso_clause 
+            $city_clause $company_personal_clause $industries_clause_pub $state_clause $employee_size_clause  $where_personal_clause $ciso_clause $cso_clause 
             group by personal_id order by publication_date desc $default_pub_limit");
         
         $msc = microtime(true)-$msc; 
@@ -1659,14 +1731,15 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             ".$table_personal_master." as pm
             ".$company_related_table."
             where (ppp.personal_id = pm.personal_id $company_related_joins) $from_date_clause $to_date_clause $zip_clause $revenue_clause
-            $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause  $where_personal_clause  
+            $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause  $where_personal_clause $ciso_clause $cso_clause 
             group by personal_id order by publication_date desc $default_pub_limit";
         */
-        
+        //echo "<br>filtered_count dd: ".$filtered_count;
         $num_speaking_result = mysql_query("SELECT FOUND_ROWS() as total_speaking_rows");
             $num_speaking_row = mysql_fetch_array($num_speaking_result);
-            $filtered_count = $num_speaking_row['total_speaking_rows'];
-        
+            $filtered_count = $num_speaking_row['total_speaking_rows']+$filtered_count;
+           // echo "<br>Speaking count: ".$num_speaking_row['total_speaking_rows'];
+        //echo "<br>filtered_count ddd: ".$filtered_count;
         
         
         while($indRow = mysql_fetch_array($indResult))
@@ -1731,7 +1804,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     //echo "<br>pub_c: ".$pub_c;    
      //die("pub end");
         
-    
+    //echo "<br>filtered_count e: ".$filtered_count;
     // funding
     if($type == 'funding' || $type == 'all' || strpos($type,"funding") > -1)
     {
@@ -1894,7 +1967,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             WHERE ( record_type = 'fundings'
             $from_date_clause $to_date_clause $zip_clause $where_personal_clause
             $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
-            $revenue_clause) order by funding_add_date desc $default_speaking_limit");
+            $revenue_clause) group by funding_id order by funding_add_date desc $default_speaking_limit");
         
         
         
@@ -1918,15 +1991,15 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             WHERE ( record_type = 'fundings'
             $from_date_clause $to_date_clause $zip_clause $where_personal_clause
             $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
-            $revenue_clause) order by funding_add_date desc $default_speaking_limit";
-        */ 
+            $revenue_clause) group by funding_id order by funding_add_date desc $default_speaking_limit";
+         */
         //die();
         
 
         
         $num_speaking_result = mysql_query("SELECT FOUND_ROWS() as total_speaking_rows");
         $num_speaking_row = mysql_fetch_array($num_speaking_result);
-        $filtered_count = $num_speaking_row['total_speaking_rows'];
+        $filtered_count = $num_speaking_row['total_speaking_rows']+$filtered_count;
         
 
         while($indRow = mysql_fetch_array($indResult))
@@ -1987,6 +2060,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }
     }
     
+    //echo "<br>filtered_count f: ".$filtered_count;
     // Jobs
     if($type == 'jobs' || $type == 'all' || strpos($type,"jobs") > -1)
     {
@@ -2093,7 +2167,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         $num_speaking_result = mysql_query("SELECT FOUND_ROWS() as total_speaking_rows");
             $num_speaking_row = mysql_fetch_array($num_speaking_result);
-            $filtered_count = $num_speaking_row['total_speaking_rows'];
+            $filtered_count = $num_speaking_row['total_speaking_rows']+$filtered_count;
         
         $msc = microtime(true)-$msc; 
         if($show_time == 1)
@@ -2110,9 +2184,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             ".$table_company_job." as cj
             ".$company_related_table." 
             WHERE (cm.company_id = cj.company_id $company_related_joins)  $from_date_clause $to_date_clause $zip_clause
-            $revenue_clause $city_clause $company_personal_clause $industries_clause $ciso_clause $cso_clause
+            $revenue_clause $city_clause $company_personal_clause $industries_clause 
             $state_clause $employee_size_clause $where_personal_clause order by job_id desc   
-             $default_speaking_limit";  
+             $default_speaking_limit ";  
         */    
         
         
@@ -2168,8 +2242,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }
     }
    
+    //echo "<br>filtered_count g: ".$filtered_count;
     $total_count_without_where = $total_speaking_count+$total_award_count+$total_media_count+$total_publication_count+$total_move_count+$total_funding_count+$total_job_count;
-    
+    //echo "<br>filtered_count fun bt: ".$filtered_count;
     /*
     echo "<br>total_speaking_count: ".$total_speaking_count;
     echo "<br>total_award_count: ".$total_award_count;
@@ -2228,7 +2303,7 @@ function get_all_industries()
     
     $data = 0;
     //echo "<br>Industry: SELECT industry_id,parent_id,title FROM hre_industry";
-    $indResult = mysql_query("SELECT industry_id,parent_id,title FROM hre_industry");
+    $indResult = mysql_query("SELECT industry_id,parent_id,title FROM hre_industry where status = 0");
 //echo "<br>Before while";
     while($indRow = mysql_fetch_array($indResult))
     {
@@ -2358,13 +2433,13 @@ function get_revenue_limits($revenue)
 {
     //$site = mysql_connect(HR_SERVER_IP,HR_DB_USER_NAME,HR_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
-    
+    //echo "<br>revenue in func: ".$revenue;
     if(strpos($revenue,",") > -1)
     {        
-    
+        //echo "<br>in if";
         $revenue = trim($revenue,",");
         $revenue_arr = explode(",", $revenue);
-        $db_id = 2;
+        //$db_id = 2;
         $lower_revenue = $revenue_arr[0]+$db_id;
         $upper_revenue = $revenue_arr[1]+$db_id;
 
@@ -2392,8 +2467,8 @@ function get_revenue_limits($revenue)
             $lower_limit = '$500 mil';
         elseif($revenue_arr[0] == 7)
             $lower_limit = '$1 bil';
-        //elseif($revenue_arr[0] == 8)
-        //    $lower_limit = '$0';
+        elseif($revenue_arr[0] == 8)
+            $lower_limit = '> $1 bil';
 
 
         if($revenue_arr[1] == 0)
@@ -2412,16 +2487,24 @@ function get_revenue_limits($revenue)
             $upper_limit = '$500 mil';
         elseif($revenue_arr[1] == 7)
             $upper_limit = '$1 bil';
-        //elseif($revenue_arr[1] == 8)
-        //    $lower_limit = '$0';
+        elseif($revenue_arr[1] == 8)
+            $upper_limit = '> $1 bil';
 
-        if($revenue_arr[0] == 8 || $revenue_arr[1] == 8)
+        //if($revenue_arr[0] == 8 || $revenue_arr[1] == 8)
+        if($revenue_arr[0] == 8 && $revenue_arr[1] == 8)
             $revenue_limits = "> $1 bil";
         else
             $revenue_limits = $lower_limit." - ".$upper_limit;
+        
+        //echo "<br>Lower limit : ".$lower_limit;
+        //echo "<br>Upper limit : ".$upper_limit;
+        
+    
+        
     }
     else
     {
+        //echo "<br>in else";
         if($revenue == 0)
             $lower_limit = '0';
         elseif($revenue == 1)
@@ -2550,7 +2633,7 @@ function get_emp_size_value($emp_size)
         $revenue_real = '10K-50K';
     elseif($emp_size == 7)
         $revenue_real = '50K-100K';
-    elseif($revenue == 8)
+    elseif($emp_size == 8)
         $revenue_real = '>100K';
     return $revenue_real;
 }
@@ -2592,17 +2675,32 @@ function selectComboBox($sql,$selected_id,$database_source)
 	return 	$all_option;
 }
 
-function MultiSelectionComboBox($sql,$selected_id_arr){
-	$exe_query = com_db_query($sql);
-	while($data_sql = com_db_fetch_row($exe_query)){
-		if(in_array($data_sql[0],$selected_id_arr)){
-			$selected_str = ' selected="selected"';
-		}else{
-			$selected_str = '';
-		}
-		$all_option .= '<option value="'.$data_sql[0].'" '.$selected_str.'>'.$data_sql[1].'</option>' . "\r\n";
-	}
-	return 	$all_option;
+function MultiSelectionComboBox($sql,$selected_id_arr)
+{
+    //echo "<pre>selected_id_arr: ";   print_r($selected_id_arr);   echo "</pre>";
+    //echo "<br>SQL: ".$sql;
+    
+    //$selected_id_arr= array_column($selected_id_arr, 'name');
+    
+    $exe_query = com_db_query($sql);
+    while($data_sql = com_db_fetch_row($exe_query))
+    {
+        //echo "<br><br>In array: ".$data_sql[0].":";
+        //echo "<br>In array 2nd: ".$data_sql[2].":";
+        if(in_array($data_sql[0],$selected_id_arr))
+        {
+            $selected_str = ' selected="selected"';
+            //echo "<br>In selected_str: ".$data_sql[0];
+        }
+        else
+        {
+            $selected_str = '';
+        }
+        
+        $all_option .= '<option value="'.$data_sql[0].'" '.$selected_str.'>'.$data_sql[1].'</option>' . "\r\n";
+    }
+    //die();
+    return $all_option;
 }
 
 
@@ -2716,9 +2814,15 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         //if($ind == 1)
         if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
             $width = 'width:63%;';
+        
+        
+        $mod_t = $title;
+        if(strlen($mod_t) > 90)
+            $mod_t = substr($mod_t, 0, 90);
+        
         ?>
         <div class="article-content" style="<?=$width?>">
-            <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was <?=$movement_text?> as <?=$title?> at <?=$company_name?>
+            <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was <?=$movement_text?> as <?=$mod_t?> at <?=$company_name?>
             <?PHP
             if($add_date != '')
                 echo "- ".date("m.d.Y",strtotime($add_date)).".";
@@ -2897,12 +3001,17 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
         
         $awards_title = trim($awards_title);
         //echo "<br>awards_title before: ".$awards_title;
-        $aw_pos = '';
-        $aw_pos = strpos($awards_title,"award");
         
+        $awards_title_lower = strtolower($awards_title);
+        
+        $aw_pos = '';
+        $aw_pos = strpos($awards_title_lower,"award");
+        //echo "<br>aw_pos:".$aw_pos."::";
         if($aw_pos === false)
         {
-            $aws_pos = strpos($awards_title,"awards");
+            //echo "<br>within if";
+            $aws_pos = strpos($awards_title_lower,"awards");
+            //echo "<br>aws_pos:".$aws_pos."::";
             if($aws_pos === false)
             {
                 $awards_title = $awards_title." award";    
@@ -2910,10 +3019,10 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
         }    
         
         //echo "<br>strpos: ".strpos($awards_title,"award");
-        
-        if(strpos($awards_title,"award") < 0 || strpos($awards_title,"award") == '')
-            $awards_title = $awards_title." award";    
-        
+        //echo "<br>awards_title BE4:".$awards_title."::";
+        //if(strpos($awards_title,"award") < 0 || strpos($awards_title,"award") == '')
+        //    $awards_title = $awards_title." award";    
+        //echo "<br>awards_title AFT:".$awards_title."::";
         
         //elseif(strpos($awards_title,"awards") < 0 || strpos($awards_title,"awards") == '')
         //    $awards_title = $awards_title." award";    
@@ -4535,7 +4644,7 @@ function get_org_chart_data($company)
     */
     
     //$get_personal_q = "select d.`personal_id`,d.`first_name`,d.`last_name`,d.`level`,d.`level_order`,d.`personal_image`,d.`company_name`,d.`title` from `hre_search_data` AS d where d.`company_website` like '$company' order by level_order asc"; 
-    $get_personal_q = "SELECT personal_id,first_name,last_name,level,level_order,personal_image,company_name,title FROM ".$table_name." WHERE (company_website =  '".$company."' || company_name = '".$company."'  || company_urls = '".$company."')  $ciso_clause $cso_clause ORDER BY level_order ASC LIMIT 0 , 30";
+    $get_personal_q = "SELECT company_id,personal_id,first_name,last_name,level,level_order,personal_image,company_name,title FROM ".$table_name." WHERE (company_website =  '".$company."' || company_name = '".$company."'  || company_urls = '".$company."')  $ciso_clause $cso_clause ORDER BY level_order ASC LIMIT 0 , 30";
        
     //echo "<br>get_personal_q: ".$get_personal_q;
     //die();
@@ -4576,74 +4685,80 @@ function get_org_chart_data($company)
         if($pRow['level'] > 0 || 1 == 1)
         {    
             //echo "<br>Level: ".$pRow['level'];
-            $personal_id = $pRow['personal_id'];
-            $first_name = $pRow['first_name'];
-            $last_name = $pRow['last_name'];
-            $title = $pRow['title'];
-            $company_name = $pRow['company_name'];
-            $level = $pRow['level'];
-            $level_order = $pRow['level_order'];
-            $personal_image = $pRow['personal_image'];
-            //$chart_arr[] = "*img:*".$personal_image."*".$first_name." ".$last_name." ".$title." ".$company_name."".$level;
-            $chart_arr[$personal_id]['personal_id'] = $personal_id;
-            $chart_arr[$personal_id]['first_name'] = $first_name;
-            $chart_arr[$personal_id]['last_name'] = $last_name;
-            $chart_arr[$personal_id]['title'] = $title;
-            $chart_arr[$personal_id]['company_name'] = $company_name;
-            $chart_arr[$personal_id]['level'] = $level;
-            $chart_arr[$personal_id]['level_order'] = $level_order;
-            $chart_arr[$personal_id]['personal_image'] = $personal_image;
-            //$chart_arr[]
             
-            
-            if($level == 1)
+            $get_current_comp = "select company_id from $table_name where personal_id = ".$pRow['personal_id']." order by move_id desc limit 0,1";
+            $get_current_res = mysql_query($get_current_comp);
+            $cRow = mysql_fetch_array($get_current_res);
+            if($cRow['company_id'] == $pRow['company_id'])
             {
-                $output_level = 1;
-            }
-            
-            if($level == 2)
-            {
-                if($level_order == 'a')
+                $personal_id = $pRow['personal_id'];
+                $first_name = $pRow['first_name'];
+                $last_name = $pRow['last_name'];
+                $title = $pRow['title'];
+                $company_name = $pRow['company_name'];
+                $level = $pRow['level'];
+                $level_order = $pRow['level_order'];
+                $personal_image = $pRow['personal_image'];
+                //$chart_arr[] = "*img:*".$personal_image."*".$first_name." ".$last_name." ".$title." ".$company_name."".$level;
+                $chart_arr[$personal_id]['personal_id'] = $personal_id;
+                $chart_arr[$personal_id]['first_name'] = $first_name;
+                $chart_arr[$personal_id]['last_name'] = $last_name;
+                $chart_arr[$personal_id]['title'] = $title;
+                $chart_arr[$personal_id]['company_name'] = $company_name;
+                $chart_arr[$personal_id]['level'] = $level;
+                $chart_arr[$personal_id]['level_order'] = $level_order;
+                $chart_arr[$personal_id]['personal_image'] = $personal_image;
+                //$chart_arr[]
+
+
+                if($level == 1)
                 {
-                   $output_level = $level_2;
-                   $output_level_a = $output_level;
-                   $level_2 = $level_2+200;
-                }  
-                
-                if($level_order == 'b')
+                    $output_level = 1;
+                }
+
+                if($level == 2)
                 {
-                   $output_level = $level_2;
-                   $output_level_b = $output_level;
-                   $level_2 = $level_2+200;
-                   $output_level_b = $level_2;
-                }  
-                
-            }    
+                    if($level_order == 'a')
+                    {
+                       $output_level = $level_2;
+                       $output_level_a = $output_level;
+                       $level_2 = $level_2+200;
+                    }  
+
+                    if($level_order == 'b')
+                    {
+                       $output_level = $level_2;
+                       $output_level_b = $output_level;
+                       $level_2 = $level_2+200;
+                       $output_level_b = $level_2;
+                    }  
+
+                }    
             
             
-            if($level == 3)
-            {
-                if($level_order == 'a')
+                if($level == 3)
                 {
-                   $output_level_a = $output_level_a+2;
-                   $output_level = $output_level_a;
-                }  
-                
-                if($level_order == 'b')
-                {
-                   $output_level_b = $output_level_b+2;
-                   $output_level = $output_level_b;
-                }  
-                
-            }
+                    if($level_order == 'a')
+                    {
+                       $output_level_a = $output_level_a+2;
+                       $output_level = $output_level_a;
+                    }  
+
+                    if($level_order == 'b')
+                    {
+                       $output_level_b = $output_level_b+2;
+                       $output_level = $output_level_b;
+                    }  
+
+                }
             
-            if($level == '')
-            {
-                $output_level = $no_level;
-                $no_level = $no_level+2; 
-            }
-            $chart_arr[$personal_id]['generated_level'] = $output_level;
-             
+                if($level == '')
+                {
+                    $output_level = $no_level;
+                    $no_level = $no_level+2; 
+                }
+                $chart_arr[$personal_id]['generated_level'] = $output_level;
+            } 
             
         }
         

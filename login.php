@@ -73,7 +73,7 @@ function ShowSignUpButton(){
 		
             <div class="field1">
                 <div id="loginbox_password" <?PHP if($action=='LoginPassword' || $action=='LoginEmailPassword' || $action=='concurrent'){echo 'class="loginboxdiv_error"';}else{ echo 'class="loginboxdiv"';} ?>>
-                    <input class="loginbox" name="login_pass" id="login_pass" type="password" onfocus="ClassChangeFocus('loginbox_password');" onblur="ClassChangeBlur('loginbox_password');" /> <!--  onkeyup="ShowSignUpButton();" -->
+                    <input class="loginbox" name="login_pass" id="login_pass" type="password" autocomplete="off" onfocus="ClassChangeFocus('loginbox_password');" onblur="ClassChangeBlur('loginbox_password');" /> <!--  onkeyup="ShowSignUpButton();" -->
                 </div>
             </div>
 		

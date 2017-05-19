@@ -45,6 +45,42 @@ define("EXECFILE_ROOT","http://www.execfile.com");
 define("NO_PERSONAL_IMAGE","no-personal-image.png");
 $profile_root_link = "https://www.hrexecsonthemove.com/";
 $personal_pic_root = "https://www.hrexecsonthemove.com/";
+
+
+if($_SESSION['site'] == '' || $_SESSION['site'] == 'hr')
+{
+    $personal_pic_root            = "https://www.hrexecsonthemove.com/";
+}
+elseif($_SESSION['site'] == 'cto' || $_SESSION['site'] == 'ciso')
+{
+    $personal_pic_root            = "https://www.ctosonthemove.com/";
+    
+}
+elseif($_SESSION['site'] == 'cfo')
+{
+    $personal_pic_root            = "https://www.cfosonthemove.com/";
+    
+}
+elseif($_SESSION['site'] == 'cmo'  || $_SESSION['site'] == 'cso')
+{
+    $personal_pic_root            = "https://www.cmosonthemove.com/";
+    
+}
+elseif($_SESSION['site'] == 'clo')
+{
+    $personal_pic_root            = "https://www.closonthemove.com/";
+    
+}
+
+
+
+
+
+
+
+
+
+
 $company_pic_root = "https://www.ctosonthemove.com/"; 
 $hr_dot = "http://hr.execfile.com/"; 
 
@@ -76,7 +112,7 @@ if(!isset($_COOKIE[$cookie_name])) {
 }
 */
 
-$all_data = get_all_data($id,$type);
+$all_data = get_all_data($id,$type,$_SESSION['site']);
 $all_data_count = count($all_data);
 
 //echo "<pre>all_data: ";   print_r($all_data);   echo "</pre>";
@@ -292,10 +328,18 @@ function get_https($url)
                             {
                                 $this_source = trim($all_data[$i]['speaking_link']);
                                 $starting_url_part = substr($this_source,0,5);
+                                
+                                //echo "<br>this_source: ".$this_source;
+                                
+                                
                                 if($starting_url_part == 'https')
                                     $html = get_https($this_source);
                                 else
                                     $html = file_get_html($all_data[$i]['speaking_link']);
+                                
+                                
+                                //echo "<br>HTML: ".$html;
+                                
                                 
                             } 
                             show_speaking($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,'','read',1);

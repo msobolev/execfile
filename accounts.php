@@ -86,7 +86,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
                     <label for="field-name" class="form-label hidden">Password </label>
                     <div class="form-controls">
                         <i class="ico-user"></i>
-                        <input style="border:1px solid #CCCCCC;" type="password" class="field" name="password" id="password" value="" placeholder="Password" required>
+                        <input style="border:1px solid #CCCCCC;" type="password" class="field" name="password" id="password" value="" placeholder="Password" autocomplete="off" required>
                     </div><!-- /.form-controls -->
                 </div><!-- /.form-row -->
                 

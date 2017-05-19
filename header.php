@@ -242,8 +242,15 @@ function searchKeyPress(e)
             var hidden_employee_size = $("#hidden_employee_size").val();
             
             var mweb = $('#mweb').val();
+            
+            var org = '';
+            if(type == 'all' || type == 'All')
+                org = "&org=1";
+            
             //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size;
-            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&org=1";
+            //window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&org=1";
+           
+            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+org;
         }    
     }    
 }
@@ -255,6 +262,7 @@ function companyKeyPress(e)
     if (e.keyCode == 13)
     { 
         var searchnow = $('#field-company-name').val();
+        searchnow = searchnow.replace("&", "##");
         //alert("HERE Search now : "+searchnow);
         if(searchnow != '')
         {    
@@ -485,6 +493,10 @@ $func = $_SESSION['site'];
 
 //echo "<pre>GET: ";   print_r($_GET);   echo "</pre>";
 
+
+
+
+
 if(isset($_GET['rem']) && $_GET['rem'] != '')
 {
     $types_arr = array("movements","Speaking","Media Mentions","Publication","Industry Awards","Funding","Jobs");
@@ -566,7 +578,7 @@ if(isset($_GET['to_date']) && $_GET['to_date'] != '')
     $only_company = 0;
 }
 
-
+//echo "<br>only_company ONE: ".$only_company;
 if(isset($_GET['zip']) && $_GET['zip'] != '')
 {
     $zip = $_GET['zip'];
@@ -582,13 +594,16 @@ if(isset($_GET['searchnow']) && $_GET['searchnow'] != '')
     
     $only_company = 1;
 }
-
+//echo "<br>only_company ONE ONE: ".$only_company;
+//echo "<br>companyval: ".$_GET['companyval'];
+$_GET['companyval'] = str_replace("##","&",$_GET['companyval']);
+//echo "<br>companyval: ".$_GET['companyval'];
 if(isset($_GET['companyval']) && $_GET['companyval'] != '')
 {
     $companyval = $_GET['companyval'];
     $pg_int_parameters .= "&companyval=".$companyval;
 }
-
+//echo "<br>only_company ONE TWO: ".$only_company;
 if(isset($_GET['company']) && $_GET['company'] != '')
 {
     $companyval = $_GET['company'];
@@ -602,7 +617,7 @@ if(isset($_GET['city']) && $_GET['city'] != '')
     
     $only_company = 0;
 }
-
+//echo "<br>only_company TWO: ".$only_company;
 if(isset($_GET['industries']) && $_GET['industries'] != '')
 {
     
@@ -654,10 +669,11 @@ if(isset($_GET['revenue']) && $_GET['revenue'] != '')
 {
     //echo "<br>GET revenue: ".$_GET['revenue'];
     $revenue = trim($_GET['revenue'],",");
+    //echo "<br>revenue: ".$revenue;
     $pg_int_parameters .= "&revenue=".$revenue;
 
     $revenue_limits = get_revenue_limits($revenue);
-    
+    //echo "<br>revenue_limits: ".$revenue_limits;
     $only_company = 0;
 }
 
@@ -684,11 +700,12 @@ if(isset($_GET['company']) && $_GET['company'] != '')
     
 }
 include("left.php"); 
-
-if(isset($_GET['type']) && $_GET['type'] != '')
+//echo "<br>only_company THREE: ".$only_company;
+if(isset($_GET['type']) && $_GET['type'] != '' && $_GET['type'] != 'all')
 {    
     $type = trim($_GET['type']);
     $pg_int_parameters .= "&type=".$type;
+    $only_company = 0;
 }    
 else
 {    
@@ -729,6 +746,17 @@ else
 }    
 $company_pic_root = "https://www.ctosonthemove.com/";
 
+
+if ($_SESSION['sess_user_id'] !='' and $_SESSION['sess_user_id'] > 0 )
+{
+    $log_history_update = "update ".TABLE_LOGIN_HISTORY." set last_respond_time='".time()."' where add_date = '".date('Y-m-d')."' and log_status='Login' and user_id='".$_SESSION['sess_user_id']."'";
+    //echo "<br>log_history_update: ".$log_history_update;
+    mysql_query($log_history_update);
+}
+
+//echo "<br>only_company: ".$only_company;
+
+
 $home_pos = strpos($_SERVER['REQUEST_URI'],"home.php");
 $filtered_count = '';
 if($home_pos > 0)
@@ -747,15 +775,24 @@ if($home_pos > 0)
     //echo "<br>filter_websites: ".$filter_websites;
     //echo "<br>Func: ".$func;
     //echo "<br>revenue: ".$revenue;
+    //echo "<br>Filtered count First: ".$filtered_count;
     $all_data = get_all_data('',"$type",$func,$from_date,$to_date,$zip,$searchnow,$city,$companyval,$industries_ids,$state_ids,$revenue,$employee_size);
     
     $all_data_count = count($all_data);
     //echo "<br>all_data_count ONE: ".$all_data_count;
-    if($type == 'all' || $type == '')
+    //echo "<br>TYPE:".$type.":";
+    if(($type == 'all' || $type == '') && $revenue == '' && $employee_size == '' && $industries == '' && $states_para == '' && $city == '' && $zip == '' && $from_date_initial == '' && $to_date_initial == '' && $_GET['companyval'] == '' && $_GET['searchnow'] == '')
+    {
+        //echo "<br>FAR In if";
         $all_data_count = $all_data_count;
+        //echo "<br>all_data_count: ".$all_data_count;
+        
+        if($_SESSION['site'] == 'hr') // This block added when user unselect single selected filter and then it shd show hardcoded count
+            $all_data_count = '89926'; //'65543';
+    }    
     else
     {   
-        //echo "<br>In else: ".$filtered_count;
+        //echo "<br>FAR In else: ".$filtered_count;
         if($filtered_count != '' && $filtered_count != 0)
         {
             //echo "<br>in else if";
@@ -772,7 +809,7 @@ if($home_pos > 0)
 //if(strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || strpos($_SERVER['HTTP_REFERER'],'accounts.php') > -1 || strpos($_SERVER['HTTP_REFERER'],'settings.php') > -1 || strpos($_SERVER['HTTP_REFERER'],'alert.php') > -1)
 if((strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || strpos($_SERVER['HTTP_REFERER'],'accounts.php') > -1 || strpos($_SERVER['HTTP_REFERER'],'alert.php') > -1) && $_GET['def_l'] != '1')        
 {   //echo "<br>within if";    
-    $all_data_count = '65543'; 
+    $all_data_count = '89926'; //'65543'; 
     
     
 }    
@@ -780,7 +817,8 @@ if((strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || strpos($_SERVER['HTTP_R
 //die();
 
 //
-$form_hidden_values = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".":".$revenue.":".":".$employee_size;
+//$form_hidden_values = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".":".$revenue.":".":".$employee_size;
+$form_hidden_values = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".$revenue.":".$employee_size;
 //echo "<br>form_hidden_values: ".$form_hidden_values;
 //echo "REQUEST_URI: ".$_SERVER['REQUEST_URI'];
 $details_pos = strpos($_SERVER['REQUEST_URI'],'details.php');
@@ -791,6 +829,7 @@ if($details_pos > -1 || $details_html_pos > -1)
     $hide_header = 1;
     ?>
     <script language="javascript">
+        
         //$(".header").hide();
         $(".sidebar").hide();  
         //alert("here");
@@ -800,6 +839,13 @@ if($details_pos > -1 || $details_html_pos > -1)
 }    
 ?>
 <input type="hidden" name="personal_pic_root" id="personal_pic_root" value="<?=$personal_pic_root?>">    
+
+<input type="hidden" name="employee_size_limits" id="employee_size_limits" value="<?=$employee_size_limits?>">    
+
+<input type="hidden" name="revenue_limits" id="revenue_limits" value="<?=$revenue_limits?>">    
+
+
+
 <div class="wrapper">
     <?PHP
     if($hide_header == 0)
@@ -819,6 +865,7 @@ if($details_pos > -1 || $details_html_pos > -1)
 
                 <nav style="float:left;margin-left:365px;list-style:none;" class="nav-feedorg">
                 <?PHP
+                //echo "<br>only_company: ".$only_company;
                 if($only_company == 1)
                 {  
                     //$_GET['org'] = 1;
@@ -855,9 +902,9 @@ if($details_pos > -1 || $details_html_pos > -1)
                             </form>
                             
                             <?PHP
-                            if($all_data_count > 500)
+                            if($all_data_count > 1000)
                             {
-                                $dl_text = "use filters to select 500 records or less for download";
+                                $dl_text = "use filters to select 1000 records or less for download";
                                 ?>
                                 <a href="#" title="<?=$dl_text?>" class="download"> 
                                 <?PHP

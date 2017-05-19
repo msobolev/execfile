@@ -42,11 +42,16 @@ if(isset($_GET['login_page_flow']) && $_GET['login_page_flow'] == 1)
 include("header.php"); 
 //echo "<br>login_page_flow: ".$login_page_flow;
 //die("<br>FA");
-if((strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || $login_page_flow == 1) && $_GET['def_l'] != '1')
+//echo "<br>SITE: ".$_SESSION['site'];
+//if((strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || $login_page_flow == 1) && $_GET['def_l'] != '1')
+// Updated on 12 Apr 2017
+if($_SESSION['site'] != 'hr' && ($type == 'all' || $type == '') && $revenue == '' && $employee_size == '' && $industries == '' && $states_para == '' && $city == '' && $zip == '' && $from_date_initial == '' && $to_date_initial == '' && $_GET['companyval'] == '' && $_GET['searchnow'] == '')
 {
-    $all_data_count = '65543'; //$total_count_without_where;
+    //echo "<br>FAR Within home if";
+    //$all_data_count = '89926'; //65543'; //$total_count_without_where;
     if($_SESSION['site'] == 'cmo' || $_SESSION['site'] == 'cfo' || $_SESSION['site'] == 'clo' || $_SESSION['site'] == 'cto' || $_SESSION['site'] == 'ciso' || $_SESSION['site'] == 'cso')
     {
+        //echo "<br>Within if 2";
         $table_company_master = "hre_company_master";
         if($func == '' || $func == 'hr')
             {
@@ -92,12 +97,33 @@ if((strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || $login_page_flow == 1) 
         where cm.company_id = mm.company_id and
         mm.personal_id = pm.personal_id $ciso_cl $cso_cl;";
         
+        //echo "<br>FAR Q: ".$c_query;
+        
         $c_res = mysql_query($c_query);
         $count_row = mysql_fetch_array($c_res);
         $all_data_count = $count_row['t_c'];
+        //echo "<br>FAR All data count: ".$all_data_count;
     }
+    /*
+    else
+    {
+        //echo "<br>Within else";
+        $c_query = "select count(distinct mm.personal_id) as t_c from hre_company_master as cm,
+        hre_movement_master as mm,
+        hre_personal_master as pm
+        where cm.company_id = mm.company_id and
+        mm.personal_id = pm.personal_id;";
+        
+        $c_res = mysql_query($c_query);
+        $count_row = mysql_fetch_array($c_res);
+        $all_data_count = $count_row['t_c'];
+        
+    } 
+     */   
 }
 
+//echo "<br>home all_data_count : ".$all_data_count;
+    
 
 $add_date = date('Y-m-d');
 $this_user_for_log = $_SESSION['sess_user_id'];
@@ -207,7 +233,7 @@ com_db_query($search_history);
         <?PHP
         //echo "<br>only_company: ".$only_company;
         //if($only_company == 1)
-                
+        //echo "<br>ORG: ".$_GET['org'];        
         if($_GET['org'] == 1)
         {
         $hr_root_link = "https://www.hrexecsonthemove.com/";    
@@ -232,18 +258,22 @@ com_db_query($search_history);
         elseif($_SESSION['site'] == 'cto' || $_SESSION['site'] == 'ciso')
         {
             $pic_root            = "https://www.ctosonthemove.com/";
+            $hr_root_link = "https://www.ctosonthemove.com/";
         }
         elseif($_SESSION['site'] == 'cfo')
         {
             $pic_root            = "https://www.cfosonthemove.com/";
+            $hr_root_link = "https://www.cfosonthemove.com/";
         }
         elseif($_SESSION['site'] == 'cmo'  || $_SESSION['site'] == 'cso')
         {
             $pic_root            = "https://www.cmosonthemove.com/";
+            $hr_root_link = "https://www.cmosonthemove.com/";
         }
         elseif($_SESSION['site'] == 'clo')
         {
             $pic_root            = "https://www.closonthemove.com/";
+            $hr_root_link = "https://www.closonthemove.com/";
         }
         
         
@@ -300,6 +330,12 @@ com_db_query($search_history);
                         //$chart_data['company_name'] = substr($chart_data['company_name'],0,20)."..";
                         
                         //if($chart_data['level'] == 1)
+                        
+                        $p_title = $chart_data['title'];
+                        if(strlen($p_title) > 80)
+                            $p_title = substr($p_title, 0, 80);
+                        
+                        
                         if($loop_iteration == 0)
                         {
                         ?>
@@ -309,7 +345,7 @@ com_db_query($search_history);
                                     <img src="<?=$per_img?>" height="80" width="80" alt="" class="article-avatar">
                                 </i>
                             </span> 
-                            <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$chart_data['title']?> at <?=$chart_data['company_name']?>
+                            <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$p_title?> at <?=$chart_data['company_name']?>
                         
                         <?PHP
                         $loop_iteration++;
@@ -328,7 +364,7 @@ com_db_query($search_history);
                                         <img src="<?=$per_img?>" height="80" width="80" alt="" class="article-avatar">
                                     </i>
                                 </span> 
-                                <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$chart_data['title']?>
+                                <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$p_title?>
                             
                             
                                 <?PHP
@@ -344,7 +380,7 @@ com_db_query($search_history);
                                         <img src="<?=$per_img?>" height="80" width="80" alt="" class="article-avatar">
                                     </i>
                                 </span> 
-                                <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$chart_data['title']?>
+                                <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$p_title?>
                             
                                 <?PHP
                                 
@@ -360,7 +396,7 @@ com_db_query($search_history);
                                     </i>
                                 </span> 
                                 
-                                <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$chart_data['title']?>
+                                <a href="<?=$hr_root_link?><?=$hr_link?>"><?=$chart_data['first_name']?> <?=$chart_data['last_name']?></a> is <?=$p_title?>
                             
                                 <?PHP
                                 echo "</li>";
@@ -838,11 +874,12 @@ if(strpos($_SERVER['HTTP_REFERER'],'login.php') > -1)
 }
 else
 {
-    //echo "<br>FAR in ELSE bottom";
+    //echo "<br>FAR in ELSE bottom: select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'movement'";
     //echo "<br>In else";
     $unread_movements_count = com_db_GetValue("select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'movement'");
     //echo "<br>FAR In else movement count : ".$unread_movements_count;
     
+    //echo "<br>Speaking unread Q: select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'speaking'";
     $unread_speaking_count = com_db_GetValue("select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'speaking'");
     //echo "<br>From session: ".$unread_speaking_count;
     $unread_media_count = com_db_GetValue("select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'media'");
@@ -900,6 +937,7 @@ else
 
 </html>
 <script>
+//console.log('<?=$unread_movements_count?>');
 //alert('<?=$unread_movements_count?>');
 $('#movements_unread_count').html('<?=$unread_movements_count?>');
 $('#speaking_unread_count').html('<?=$unread_speaking_count?>');
@@ -927,4 +965,46 @@ $(function () {
 });
 
 
+
 </script>
+
+<?PHP
+//if($_GET['employee_size'] != '')
+//{    
+?>
+<script>
+
+var employee_size_limits_val = $('#employee_size_limits').val();
+//alert("employee_size_limits: "+employee_size_limits_val);
+if(employee_size_limits_val != '')
+{
+    //alert('within if');
+    $('#amount2').val(employee_size_limits_val);
+}    
+    
+    
+ 
+ 
+var revenue_limits_val = $('#revenue_limits').val();
+//alert("employee_size_limits: "+employee_size_limits_val);
+if(revenue_limits_val != '')
+{
+    //alert('within if');
+    $('#amount').val(revenue_limits_val);
+} 
+
+
+
+$( "#company_tab" ).click(function() { 
+
+    //$('#date_tab_body').css('display','block').delay(800);
+    //$('#date_tab_body').slideDown(1300).delay(1400);
+        
+});    
+    
+        
+    
+</script>
+<?PHP
+//}
+?>

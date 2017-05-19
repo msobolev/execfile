@@ -150,7 +150,8 @@ while($speakingRow = mysql_fetch_array($speaking_res))
     
     $getting_company_query = "SELECT cm.company_id,cm.company_name,cm.company_website,
     m.name as mgt_change_name,so.source as source_name,s.short_name as state_name,cm.state as state,cm.address,cm.address2,cm.city,cm.zip_code,
-    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title
+    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title,
+    cm.company_revenue,cm.company_employee
     FROM hre_company_master as cm,
     clo_personal_master as pm,
     clo_movement_master as mm, 
@@ -192,6 +193,9 @@ while($speakingRow = mysql_fetch_array($speaking_res))
         $industry_id = $this_company_row['industry_id'];
         
         $state = $this_company_row['state'];
+        
+        $company_revenue = $this_company_row['company_revenue'];
+        $company_employee = $this_company_row['company_employee'];
     }    
     
     
@@ -213,7 +217,7 @@ while($speakingRow = mysql_fetch_array($speaking_res))
     //$cmo_user = $speakingRow['cmo_user'];
     
     $insert_speaking_q = "";
-    $insert_speaking_q = "INSERT into clo_search_data(personal_id,first_name,middle_name,last_name,email,phone,personal_image,speaking_id,speaking_link,event,event_date,topic,add_date,record_type,company_id,company_name,company_website,role,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$speaking_id','$speaking_link','$event','$event_date','$topic','$add_date','speaking','$this_company_id','$this_company_name','$this_company_website','$role','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id')";
+    $insert_speaking_q = "INSERT into clo_search_data(personal_id,first_name,middle_name,last_name,email,phone,personal_image,speaking_id,speaking_link,event,event_date,topic,add_date,record_type,company_id,company_name,company_website,role,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,company_revenue,company_employee) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$speaking_id','$speaking_link','$event','$event_date','$topic','$add_date','speaking','$this_company_id','$this_company_name','$this_company_website','$role','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$company_revenue','$company_employee')";
     
     //echo "<br><br>insert_q: ".$insert_speaking_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
@@ -340,7 +344,7 @@ while($awardsRow = mysql_fetch_array($awards_res))
     
     $getting_company_query = "SELECT cm.company_id,cm.company_name,cm.company_website,
     m.name as mgt_change_name,so.source as source_name,s.short_name as state_name,cm.state as state,cm.address,cm.address2,cm.city,cm.zip_code,
-    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title
+    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title,cm.company_revenue,cm.company_employee
     FROM hre_company_master as cm,
     clo_personal_master as pm,
     clo_movement_master as mm, 
@@ -382,6 +386,9 @@ while($awardsRow = mysql_fetch_array($awards_res))
         $industry_id = $this_company_row['industry_id'];
         
         $state = $this_company_row['state'];
+        
+        $company_revenue = $this_company_row['company_revenue'];
+        $company_employee = $this_company_row['company_employee'];
     }    
     
     
@@ -403,7 +410,7 @@ while($awardsRow = mysql_fetch_array($awards_res))
     
     
     $insert_awards_q = "";
-    $insert_awards_q = "INSERT into clo_search_data_awards(personal_id,first_name,middle_name,last_name,email,phone,personal_image,awards_id,awards_link,awards_title,awards_date,awards_given_by,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$awards_id','$awards_link','$awards_title','$awards_date','$awards_given_by','$add_date','awards','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id')";
+    $insert_awards_q = "INSERT into clo_search_data_awards(personal_id,first_name,middle_name,last_name,email,phone,personal_image,awards_id,awards_link,awards_title,awards_date,awards_given_by,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,company_revenue,company_employee) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$awards_id','$awards_link','$awards_title','$awards_date','$awards_given_by','$add_date','awards','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$company_revenue','$company_employee')";
     
     //echo "<br><br>insert_q: ".$insert_media_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
