@@ -6,26 +6,26 @@ $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ER
 mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
  
 
+if(1 == 1)
+{    
 
 //$del_sp_q = "DELETE from hre_search_data where record_type LIKE 'speaking'";
 //$del_sp_res = mysql_query($del_sp_q);  
 //echo "<br>HERE";
 //if(1 == 1)
 //{
-    $del_q = "DELETE from cmo_search_data";
+    $del_q = "DELETE from hre_search_data";
     $del_res = mysql_query($del_q);  
     
-    $del_q_media = "DELETE from cmo_search_data_media";
+    $del_q_media = "DELETE from hre_search_data_media";
     $del_res_media = mysql_query($del_q_media);  
     
-    $del_q_awards = "DELETE from cmo_search_data_awards";
+    $del_q_awards = "DELETE from hre_search_data_awards";
     $del_res_awards = mysql_query($del_q_awards);  
     
     
-    $del_q_fundings = "DELETE from cmo_search_data_fundings";
+    $del_q_fundings = "DELETE from hre_search_data_fundings";
     $del_res_fundings = mysql_query($del_q_fundings);
-    
-    
     
     
     /*
@@ -47,18 +47,20 @@ mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
      cm.state=s.state_id and cm.country=ct.countries_id and cm.industry_id=i.industry_id and cm.company_revenue=r.id and cm.company_employee=e.id
     group by personal_id";
     */
-    //and move_id = 15570
+    
 
     $main_query = "select cm.company_logo,cm.company_id as company_id, cm.company_name as company_name,cm.company_website as company_website,pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.personal_image as personal_image,mm.move_id as move_id,mm.title as title,
-    pm.level as level, pm.level_order as level_order,pm.email,pm.phone,pm.about_person,pm.cmo_user,cm.about_company,
+    pm.level as level, pm.level_order as level_order,pm.email,pm.phone,pm.about_person,cm.about_company,
     mm.headline,mm.source_id,mm.movement_type,mm.add_date,mm.announce_date,mm.more_link,mm.effective_date,mm.full_body,mm.what_happened,
     cm.company_revenue,cm.company_employee,cm.company_industry,cm.ind_group_id,cm.industry_id,cm.city,cm.state,cm.country,cm.zip_code,cm.address,cm.address2,cm.company_urls
-    from cmo_personal_master as pm,
+    from hre_personal_master as pm,
     hre_company_master as cm,
-    cmo_movement_master as mm
-    where cm.company_id = mm.company_id and pm.personal_id = mm.personal_id";  //  group by personal_id
-    
+    hre_movement_master as mm
+    where cm.company_id = mm.company_id and pm.personal_id = mm.personal_id 
+    ";
+    //group by personal_id
     //echo "<br>main_query: ".$main_query;
+    
     $main_res = mysql_query($main_query);        
 
     //echo "<br>Before while";
@@ -111,10 +113,9 @@ mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
         
         $company_urls = $indRow['company_urls'];
         
-        $ciso_user = $indRow['cmo_user'];
         
         $insert_q = "";
-        $insert_q = "INSERT into cmo_search_data(company_id,company_name,company_website,company_logo,personal_id,first_name,middle_name,last_name,email,phone,personal_image,move_id,title,level,level_order,source_id,movement_type,add_date,announce_date,more_link,company_revenue,company_employee,company_industry,ind_group_id,industry_id,city,state,country,zip_code,address,address2,about_person,about_company,effective_date,headline,full_body,what_happened,company_urls,cmo_user) values('$company_id','$company_name','$company_website','$company_logo','$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$move_id','$title','$level','$level_order','$source_id','$movement_type','$add_date','$announce_date','$more_link','$company_revenue','$company_employee','$company_industry','$ind_group_id','$industry_id','$city','$state','$country','$zip_code','$address','$address2','$about_person','$about_company','$effective_date','$headline','$full_body','$what_happened','$company_urls','$ciso_user')";
+        $insert_q = "INSERT into hre_search_data(company_id,company_name,company_website,company_logo,personal_id,first_name,middle_name,last_name,email,phone,personal_image,move_id,title,level,level_order,source_id,movement_type,add_date,announce_date,more_link,company_revenue,company_employee,company_industry,ind_group_id,industry_id,city,state,country,zip_code,address,address2,about_person,about_company,effective_date,headline,full_body,what_happened,company_urls) values('$company_id','$company_name','$company_website','$company_logo','$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$move_id','$title','$level','$level_order','$source_id','$movement_type','$add_date','$announce_date','$more_link','$company_revenue','$company_employee','$company_industry','$ind_group_id','$industry_id','$city','$state','$country','$zip_code','$address','$address2','$about_person','$about_company','$effective_date','$headline','$full_body','$what_happened','$company_urls')";
 
         //if($personal_id == '68661')
         //    echo "<br><br>Ins Q: ".$insert_q;
@@ -126,9 +127,9 @@ mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
 
 
 
-$speaking_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,ps.speaking_id,ps.speaking_link,ps.event,ps.event_date,ps.topic,ps.add_date,ps.role as role,pm.cmo_user
-        from cmo_personal_master as pm,
-        cmo_personal_speaking as ps 
+$speaking_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,ps.speaking_id,ps.speaking_link,ps.event,ps.event_date,ps.topic,ps.add_date,ps.role as role
+        from hre_personal_master as pm,
+        hre_personal_speaking as ps 
         where pm.personal_id = ps.personal_id";
 
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
@@ -149,11 +150,10 @@ while($speakingRow = mysql_fetch_array($speaking_res))
     
     $getting_company_query = "SELECT cm.company_id,cm.company_name,cm.company_website,
     m.name as mgt_change_name,so.source as source_name,s.short_name as state_name,cm.state as state,cm.address,cm.address2,cm.city,cm.zip_code,
-    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title,
-    cm.company_revenue,cm.company_employee
+    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title
     FROM hre_company_master as cm,
-    cmo_personal_master as pm,
-    cmo_movement_master as mm, 
+    hre_personal_master as pm,
+    hre_movement_master as mm, 
     hre_management_change as m,
     hre_source as so,
     hre_state as s,
@@ -192,9 +192,6 @@ while($speakingRow = mysql_fetch_array($speaking_res))
         $industry_id = $this_company_row['industry_id'];
         
         $state = $this_company_row['state'];
-        
-        $company_revenue = $this_company_row['company_revenue'];
-        $company_employee = $this_company_row['company_employee'];
     }    
     
     
@@ -213,10 +210,9 @@ while($speakingRow = mysql_fetch_array($speaking_res))
     $role = $speakingRow['role'];
     $topic = $speakingRow['topic'];
     
-    $cmo_user = $speakingRow['cmo_user'];
     
     $insert_speaking_q = "";
-    $insert_speaking_q = "INSERT into cmo_search_data(personal_id,first_name,middle_name,last_name,email,phone,personal_image,speaking_id,speaking_link,event,event_date,topic,add_date,record_type,company_id,company_name,company_website,role,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,cmo_user,company_revenue,company_employee) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$speaking_id','$speaking_link','$event','$event_date','$topic','$add_date','speaking','$this_company_id','$this_company_name','$this_company_website','$role','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$cmo_user','$company_revenue','$company_employee')";
+    $insert_speaking_q = "INSERT into hre_search_data(personal_id,first_name,middle_name,last_name,email,phone,personal_image,speaking_id,speaking_link,event,event_date,topic,add_date,record_type,company_id,company_name,company_website,role,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$speaking_id','$speaking_link','$event','$event_date','$topic','$add_date','speaking','$this_company_id','$this_company_name','$this_company_website','$role','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id')";
     
     //echo "<br><br>insert_q: ".$insert_speaking_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
@@ -225,15 +221,14 @@ while($speakingRow = mysql_fetch_array($speaking_res))
 
 
 
-if(1 == 1)
-{
-$media_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.mm_id,pa.media_link,pa.quote,pa.pub_date,pa.publication,pa.add_date,pm.cmo_user
-        from cmo_personal_master as pm,
-        cmo_personal_media_mention as pa 
+
+$media_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.mm_id,pa.media_link,pa.quote,pa.pub_date,pa.publication,pa.add_date
+        from hre_personal_master as pm,
+        hre_personal_media_mention as pa 
         where pm.personal_id = pa.personal_id";
 
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
-echo "<br>media_query: ".$media_query;
+//echo "<br>media_query: ".$media_query;
 
 $media_res = mysql_query($media_query);        
 $media_rows = mysql_num_rows($media_res);
@@ -250,10 +245,10 @@ while($mediaRow = mysql_fetch_array($media_res))
     
     $getting_company_query = "SELECT cm.company_id,cm.company_name,cm.company_website,
     m.name as mgt_change_name,so.source as source_name,s.short_name as state_name,cm.state as state,cm.address,cm.address2,cm.city,cm.zip_code,
-    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title,cm.company_revenue,cm.company_employee
+    cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title
     FROM hre_company_master as cm,
-    cmo_personal_master as pm,
-    cmo_movement_master as mm, 
+    hre_personal_master as pm,
+    hre_movement_master as mm, 
     hre_management_change as m,
     hre_source as so,
     hre_state as s,
@@ -292,9 +287,6 @@ while($mediaRow = mysql_fetch_array($media_res))
         $industry_id = $this_company_row['industry_id'];
         
         $state = $this_company_row['state'];
-        
-        $company_revenue = $this_company_row['company_revenue'];
-        $company_employee = $this_company_row['company_employee'];
     }    
     
     
@@ -314,12 +306,9 @@ while($mediaRow = mysql_fetch_array($media_res))
     //$role = $mediaRow['role'];
     //$topic = $mediaRow['topic'];
     
-    $cso_user = 0;
-    if($mediaRow['cmo_user'] == 1)
-        $cso_user = 1;
     
     $insert_media_q = "";
-    $insert_media_q = "INSERT into cmo_search_data_media(personal_id,first_name,middle_name,last_name,email,phone,personal_image,mm_id,media_link,publication,pub_date,quote,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,cmo_user,company_revenue,company_employee) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$mm_id','$media_link','$publication','$pub_date','$quote','$add_date','media','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$cso_user','$company_revenue','$company_employee')";
+    $insert_media_q = "INSERT into hre_search_data_media(personal_id,first_name,middle_name,last_name,email,phone,personal_image,mm_id,media_link,publication,pub_date,quote,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$mm_id','$media_link','$publication','$pub_date','$quote','$add_date','media','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id')";
     
     //echo "<br><br>insert_q: ".$insert_media_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
@@ -329,9 +318,9 @@ while($mediaRow = mysql_fetch_array($media_res))
 
 
 
-$awards_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.awards_id,pa.awards_link,pa.awards_title,pa.awards_date,pa.awards_given_by,pa.add_date,pm.cmo_user
-        from cmo_personal_master as pm,
-        cmo_personal_awards as pa 
+$awards_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.awards_id,pa.awards_link,pa.awards_title,pa.awards_date,pa.awards_given_by,pa.add_date
+        from hre_personal_master as pm,
+        hre_personal_awards as pa 
         where pm.personal_id = pa.personal_id";
 
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
@@ -354,8 +343,8 @@ while($awardsRow = mysql_fetch_array($awards_res))
     m.name as mgt_change_name,so.source as source_name,s.short_name as state_name,cm.state as state,cm.address,cm.address2,cm.city,cm.zip_code,
     cm.industry_id as industry_id,i.title as industry_name,r.name as revenue_name,e.name as employee_size_name,mm.title as title
     FROM hre_company_master as cm,
-    cmo_personal_master as pm,
-    cmo_movement_master as mm, 
+    hre_personal_master as pm,
+    hre_movement_master as mm, 
     hre_management_change as m,
     hre_source as so,
     hre_state as s,
@@ -413,12 +402,9 @@ while($awardsRow = mysql_fetch_array($awards_res))
     //$role = $mediaRow['role'];
     //$topic = $mediaRow['topic'];
     
-    $cso_user = 0;
-    if($awardsRow['cmo_user'] == 1)
-        $cso_user = 1;
     
     $insert_awards_q = "";
-    $insert_awards_q = "INSERT into cmo_search_data_awards(personal_id,first_name,middle_name,last_name,email,phone,personal_image,awards_id,awards_link,awards_title,awards_date,awards_given_by,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,cmo_user) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$awards_id','$awards_link','$awards_title','$awards_date','$awards_given_by','$add_date','awards','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$cso_user')";
+    $insert_awards_q = "INSERT into hre_search_data_awards(personal_id,first_name,middle_name,last_name,email,phone,personal_image,awards_id,awards_link,awards_title,awards_date,awards_given_by,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$awards_id','$awards_link','$awards_title','$awards_date','$awards_given_by','$add_date','awards','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id')";
     
     //echo "<br><br>insert_q: ".$insert_media_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
@@ -428,23 +414,24 @@ while($awardsRow = mysql_fetch_array($awards_res))
 
 
 
+}
 
 
 
-
-    
+if(1 == 1)
+{    
 $funding_query = "SELECT cm.company_id,cm.company_logo,pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,
     pm.email,pm.phone,pm.personal_image as personal_image,cf.funding_id,cf.funding_source,
-    cf.funding_amount,cf.funding_date,cf.funding_add_date,mm.title,pm.cmo_user
-        from cmo_personal_master as pm,
-        cmo_movement_master as mm,
+    cf.funding_amount,cf.funding_date,cf.funding_add_date,mm.title
+        from hre_personal_master as pm,
+        hre_movement_master as mm,
         hre_company_master as cm,
-        cmo_company_funding as cf
+        hre_company_funding as cf
         where mm.personal_id = pm.personal_id and cm.company_id = mm.company_id
         and cm.company_id = cf.company_id and pm.add_to_funding = 1";
 
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
-echo "<br>funding_query: ".$funding_query;
+//echo "<br>funding_query: ".$funding_query;
 
 $fundings_res = mysql_query($funding_query);        
 $fundings_rows = mysql_num_rows($fundings_res);
@@ -545,13 +532,9 @@ while($fundingsRow = mysql_fetch_array($fundings_res))
     //$role = $mediaRow['role'];
     //$topic = $mediaRow['topic'];
     
-    $cso_user = 0;
-    if($awardsRow['cmo_user'] == 1)
-        $cso_user = 1;
-    
     
     $insert_fundings_q = "";
-    $insert_fundings_q = "INSERT into cmo_search_data_fundings(personal_id,first_name,middle_name,last_name,email,phone,personal_image,funding_id,funding_source,funding_amount,funding_date,funding_add_date,record_type,company_id,company_name,company_website,company_logo,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,cmo_user) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$funding_id','$funding_source','$funding_amount','$funding_date','$funding_add_date','fundings','$this_company_id','$this_company_name','$this_company_website','$this_company_logo','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$cso_user')";
+    $insert_fundings_q = "INSERT into hre_search_data_fundings(personal_id,first_name,middle_name,last_name,email,phone,personal_image,funding_id,funding_source,funding_amount,funding_date,funding_add_date,record_type,company_id,company_name,company_website,company_logo,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$funding_id','$funding_source','$funding_amount','$funding_date','$funding_add_date','fundings','$this_company_id','$this_company_name','$this_company_website','$this_company_logo','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id')";
     
     //echo "<br><br>insert_q: ".$insert_fundings_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;

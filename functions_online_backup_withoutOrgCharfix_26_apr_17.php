@@ -543,22 +543,13 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     if($func == 'ciso')
     {
         $ciso_clause = " and ciso_user = 1";
-    }
-    elseif($func == 'cto')
-    {
-        $ciso_clause = " and ciso_user = 0";
-    }
-            
+    } 
     
     $cso_clause = "";
     if($func == 'cso')
     {
         $cso_clause = " and cmo_user = 1";
-    }
-    elseif($func == 'cmo')
-    {
-        $ciso_clause = " and cmo_user = 0";
-    }
+    } 
     
     //echo "<br>TYPE: ".$type;
     //echo "<br>display_type: ".$display_type;
@@ -2814,15 +2805,9 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         //if($ind == 1)
         if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
             $width = 'width:63%;';
-        
-        
-        $mod_t = $title;
-        if(strlen($mod_t) > 90)
-            $mod_t = substr($mod_t, 0, 90);
-        
         ?>
         <div class="article-content" style="<?=$width?>">
-            <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was <?=$movement_text?> as <?=$mod_t?> at <?=$company_name?>
+            <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was <?=$movement_text?> as <?=$title?> at <?=$company_name?>
             <?PHP
             if($add_date != '')
                 echo "- ".date("m.d.Y",strtotime($add_date)).".";
@@ -4207,38 +4192,13 @@ function com_db_connect_hre2($server = EXEC_SERVER_IP, $username = EXEC_DB_USER_
     {
         $message = "Execfile Website is Down";
         // Send
-        
-        require_once('PHPMailer/class.phpmailer.php');
-$mail                = new PHPMailer();
-$mail->IsSMTP(); // telling the class to use SMTP
-$mail->SMTPAuth      = true;                  // enable SMTP authentication
-$mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
-$mail->Host          = "smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
-$mail->Port          = 25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
-//$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
-$mail->Username      = "misha.sobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
-$mail->Password      = "ryazan"; //"rts0214";        // SMTP account password
-//$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
-$mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
-//$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');
-$mail->AddReplyTo("msobolev@execfile.com", 'Execfile.com');
-$mail->Subject       = "Execfile Website Down";
-
-
-
-$mail->MsgHTML("Execfile Website is Down");
-
-$to_admin = "faraz.aia@nxvt.com";
-$mail->AddAddress($to_admin, $full_name);
-$mail->Send();
-        
-        //mail('faraz.aia@nxvt.com', 'Execfile Website Down', $message);
+        mail('faraz.aia@nxvt.com', 'Execfile Website Down', $message);
         //die("HERE");
         
-        echo "Website will be back soon." ;
-        //echo "Website will be back soon." . PHP_EOL;
-        //echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-        //echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+        
+        echo "Error: Unable to connect to MySQL." . PHP_EOL;
+        echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+        echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
         exit;
     }
       
@@ -4671,7 +4631,7 @@ function get_org_chart_data($company)
     //$get_personal_q = "select d.`personal_id`,d.`first_name`,d.`last_name`,d.`level`,d.`level_order`,d.`personal_image`,d.`company_name`,d.`title` from `hre_search_data` AS d where d.`company_website` like '$company' order by level_order asc"; 
     $get_personal_q = "SELECT company_id,personal_id,first_name,last_name,level,level_order,personal_image,company_name,title FROM ".$table_name." WHERE (company_website =  '".$company."' || company_name = '".$company."'  || company_urls = '".$company."')  $ciso_clause $cso_clause ORDER BY level_order ASC LIMIT 0 , 30";
        
-    //echo "<br>get_personal_q: ".$get_personal_q;
+    echo "<br>get_personal_q: ".$get_personal_q;
     //die();
     
     $output_level = "";
@@ -4710,80 +4670,74 @@ function get_org_chart_data($company)
         if($pRow['level'] > 0 || 1 == 1)
         {    
             //echo "<br>Level: ".$pRow['level'];
+            $personal_id = $pRow['personal_id'];
+            $first_name = $pRow['first_name'];
+            $last_name = $pRow['last_name'];
+            $title = $pRow['title'];
+            $company_name = $pRow['company_name'];
+            $level = $pRow['level'];
+            $level_order = $pRow['level_order'];
+            $personal_image = $pRow['personal_image'];
+            //$chart_arr[] = "*img:*".$personal_image."*".$first_name." ".$last_name." ".$title." ".$company_name."".$level;
+            $chart_arr[$personal_id]['personal_id'] = $personal_id;
+            $chart_arr[$personal_id]['first_name'] = $first_name;
+            $chart_arr[$personal_id]['last_name'] = $last_name;
+            $chart_arr[$personal_id]['title'] = $title;
+            $chart_arr[$personal_id]['company_name'] = $company_name;
+            $chart_arr[$personal_id]['level'] = $level;
+            $chart_arr[$personal_id]['level_order'] = $level_order;
+            $chart_arr[$personal_id]['personal_image'] = $personal_image;
+            //$chart_arr[]
             
-            $get_current_comp = "select company_id from $table_name where personal_id = ".$pRow['personal_id']." order by move_id desc limit 0,1";
-            $get_current_res = mysql_query($get_current_comp);
-            $cRow = mysql_fetch_array($get_current_res);
-            if($cRow['company_id'] == $pRow['company_id'])
+            
+            if($level == 1)
             {
-                $personal_id = $pRow['personal_id'];
-                $first_name = $pRow['first_name'];
-                $last_name = $pRow['last_name'];
-                $title = $pRow['title'];
-                $company_name = $pRow['company_name'];
-                $level = $pRow['level'];
-                $level_order = $pRow['level_order'];
-                $personal_image = $pRow['personal_image'];
-                //$chart_arr[] = "*img:*".$personal_image."*".$first_name." ".$last_name." ".$title." ".$company_name."".$level;
-                $chart_arr[$personal_id]['personal_id'] = $personal_id;
-                $chart_arr[$personal_id]['first_name'] = $first_name;
-                $chart_arr[$personal_id]['last_name'] = $last_name;
-                $chart_arr[$personal_id]['title'] = $title;
-                $chart_arr[$personal_id]['company_name'] = $company_name;
-                $chart_arr[$personal_id]['level'] = $level;
-                $chart_arr[$personal_id]['level_order'] = $level_order;
-                $chart_arr[$personal_id]['personal_image'] = $personal_image;
-                //$chart_arr[]
-
-
-                if($level == 1)
+                $output_level = 1;
+            }
+            
+            if($level == 2)
+            {
+                if($level_order == 'a')
                 {
-                    $output_level = 1;
-                }
-
-                if($level == 2)
+                   $output_level = $level_2;
+                   $output_level_a = $output_level;
+                   $level_2 = $level_2+200;
+                }  
+                
+                if($level_order == 'b')
                 {
-                    if($level_order == 'a')
-                    {
-                       $output_level = $level_2;
-                       $output_level_a = $output_level;
-                       $level_2 = $level_2+200;
-                    }  
-
-                    if($level_order == 'b')
-                    {
-                       $output_level = $level_2;
-                       $output_level_b = $output_level;
-                       $level_2 = $level_2+200;
-                       $output_level_b = $level_2;
-                    }  
-
-                }    
+                   $output_level = $level_2;
+                   $output_level_b = $output_level;
+                   $level_2 = $level_2+200;
+                   $output_level_b = $level_2;
+                }  
+                
+            }    
             
             
-                if($level == 3)
+            if($level == 3)
+            {
+                if($level_order == 'a')
                 {
-                    if($level_order == 'a')
-                    {
-                       $output_level_a = $output_level_a+2;
-                       $output_level = $output_level_a;
-                    }  
-
-                    if($level_order == 'b')
-                    {
-                       $output_level_b = $output_level_b+2;
-                       $output_level = $output_level_b;
-                    }  
-
-                }
+                   $output_level_a = $output_level_a+2;
+                   $output_level = $output_level_a;
+                }  
+                
+                if($level_order == 'b')
+                {
+                   $output_level_b = $output_level_b+2;
+                   $output_level = $output_level_b;
+                }  
+                
+            }
             
-                if($level == '')
-                {
-                    $output_level = $no_level;
-                    $no_level = $no_level+2; 
-                }
-                $chart_arr[$personal_id]['generated_level'] = $output_level;
-            } 
+            if($level == '')
+            {
+                $output_level = $no_level;
+                $no_level = $no_level+2; 
+            }
+            $chart_arr[$personal_id]['generated_level'] = $output_level;
+             
             
         }
         
