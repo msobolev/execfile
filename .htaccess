@@ -7,7 +7,12 @@ Options -Indexes
 
 # RewriteRule details_$ details.php [QSA,L]
 RewriteRule ^(.*)details_(.*)$ details.php [QSA,L]
-
+RewriteRule contact-us.html$ contact.php [QSA,L]
+RewriteRule request-demo.html$ request_demo.php [QSA,L]
+RewriteRule terms.html$ terms.php [QSA,L]
+RewriteRule privacy.html$ privacy.php [QSA,L]
 
 
 php_value session.cookie_domain .execfile.com
+
+

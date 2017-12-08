@@ -2,8 +2,10 @@
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
 //error_reporting(-1);
-$site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
-mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
+include("config.php");
+
+$site = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
  
 
 
@@ -56,9 +58,9 @@ mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     hre_company_master as cm,
     clo_movement_master as mm
     where cm.company_id = mm.company_id and pm.personal_id = mm.personal_id 
-    group by personal_id";
-    
-    //echo "<br>main_query: ".$main_query;
+    ";
+    // group by personal_id
+    echo "<br>main_query: ".$main_query;
     
     $main_res = mysql_query($main_query);        
 

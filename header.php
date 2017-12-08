@@ -419,7 +419,7 @@ function markRead(current_user_id)
     var last_funding_id = $('#last_funding_id').val();
     //alert("Funding ID: "+last_funding_id); return false;
     var last_job_id = $('#last_job_id').val();
-    //alert("Last_funding_id ID: "+last_funding_id); return false;
+    //alert("last_speaking_id ID: "+last_speaking_id); 
     $.ajax({
     method: "POST",
     url: "updateCount.php",
@@ -430,6 +430,7 @@ function markRead(current_user_id)
     })
     .done(function( msg ) 
     {
+        //alert("URL+DATA: "+data); 
         //alert( "Data: " + data );
         //alert( "Data Saved: " + msg );
         $("#movements_unread_count").hide();
@@ -445,7 +446,7 @@ function markRead(current_user_id)
     
     if(current_user_id > 0)
     {
-        $(".list-checkboxes").hide();
+        $(".article .list-checkboxes").hide();
         $(".ico-check").hide();
     }    
 }
@@ -723,6 +724,7 @@ if(isset($_GET['list']) && $_GET['list'] != '')
 if(isset($_SESSION['site']) && $_SESSION['site'] != '')
 {    
     $func = $_SESSION['site'];
+    //echo "<br>func: ".$func;
     $pg_int_parameters .= "&func=".$func;
 
     if($func == 'cto' || $func == 'ciso')
@@ -746,6 +748,7 @@ else
 }    
 $company_pic_root = "https://www.ctosonthemove.com/";
 
+//echo "<br>personal_pic_root TWO: ".$personal_pic_root;
 
 if ($_SESSION['sess_user_id'] !='' and $_SESSION['sess_user_id'] > 0 )
 {

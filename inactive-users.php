@@ -2,6 +2,9 @@
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1);
+
+include("config.php");
+
 //include("config.php");
 //include("functions.php");
 require_once('PHPMailer/class.phpmailer.php');
@@ -34,8 +37,8 @@ function subDate($days)
 }
 
 
-$hre = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
+$hre = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$hre) or die ("ERROR: Database not found ");
 
 //com_db_connect_hre2() or die('Unable to connect to database server!');
 
@@ -82,7 +85,7 @@ if($user_rows > 0)
     $mail->MsgHTML($emailContent);
 
     $mail->AddAddress($email, $user_first_name);
-
+    $mail->AddCC("faraz.aia@nxvt.com", "");
     if(!$mail->Send()) 
     {
         echo $str_error ="Mailer Error (" . str_replace("@", "&#64;", $email) . ') ' . $mail->ErrorInfo;

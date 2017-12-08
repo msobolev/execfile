@@ -9,19 +9,21 @@
 
 define("CTO_SERVER_IP","10.132.233.131");
 define("CTO_DB_USER_NAME","ctou2");
-define("CTO_DB_PASSWORD","ToC@!mvCo23");
+//define("CTO_DB_PASSWORD","ToC@!mvCo23");
+define("CTO_DB_PASSWORD","juitbu1@!ctlho0");
 
 
 define("HR_SERVER_IP","10.132.225.160");
 define("HR_DB_USER_NAME","hre2");
-define("HR_DB_PASSWORD","htXP%th@71");
+//define("HR_DB_PASSWORD","htXP%th@71");
+define("HR_DB_PASSWORD","yTmcds1@#dab133");
 
 
 define("EXEC_SERVER_IP","localhost");
 define("EXEC_DB_USER_NAME","root");
-define("EXEC_DB_PASSWORD","mydevsql129");
+define("EXEC_DB_PASSWORD","ecbu4!!exlmnnb");
 define("DB_DATABASE","exec");
-
+define("HR_DATABASE","hre2");
 
 define("TABLE_USER","exec_user");
 define("TABLE_COUNTRIES","exec_countries");

@@ -8,8 +8,11 @@ include("functions.php");
 
 //com_db_connect_hre2() or die('Unable to connect to database server!');
 
-$site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
-mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
+
+$site = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
+
+
 
 //echo "<pre>";   print_r($_GET);   echo "</pre>";
 

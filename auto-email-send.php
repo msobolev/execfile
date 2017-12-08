@@ -202,6 +202,8 @@ com_db_connect_hre2() or die('Unable to connect to database server!');
 //com_db_connect() or die('Unable to connect to database server!');
 //$alert_query = "select a.* from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=0 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."'   and a.status=0 and a.delivery_schedule <>'No Updates' and a.user_id = 422";//limit 0,20
 $alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates'";  
+
+//$alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates' and a.user_id = 1963;";  
 if($debug == 1)
     echo "<br><br>===================================<br><br>alert_query: ".$alert_query ;
 
@@ -6339,6 +6341,7 @@ else
             //echo $message;
             if($debug == 1)
             {
+                echo "<br>alert_id: ". $alert_row['alert_id'];
                   echo "<br>user_email: ". $user_email;
                   echo "<br>user_first_name: ". $user_first_name;
                   echo "<br>emailContent: ". $emailContent;
@@ -6358,11 +6361,20 @@ else
             {
                 echo "<br>FAR Undo total_job_id: ".$total_job_id;
                 echo "<br>FAR Undo total_funding_id: ".$total_funding_id;
+                echo "<br>IMP::ALERT NAME:".$alert_row['alert_name'].":";
+                
+                
             }
 
             if($alert_row['alert_name'] != '')
             {
+                echo "<br>updating alert subjct";
                 $mail->Subject       = $alert_row['alert_name']." - are these your potential clients?";
+                echo "<br>updated alert subject:";
+            }
+            else
+            {
+                $mail->Subject       = "are these your potential clients?";
             }    
 
             if(!$mail->Send()) 

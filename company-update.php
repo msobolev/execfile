@@ -2,18 +2,17 @@
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
 //error_reporting(-1);
-
+include("config.php");
 
 //$cto = mysql_connect("10.132.233.131","ctou2","wTjP!399RD") or die("Database ERROR ");
 //$cto = mysql_connect("10.132.233.131","ctou2","fAPs321az") or die("Database ERROR ");
-$cto = mysql_connect("10.132.233.131","ctou2","ToC@!mvCo23") or die("Database ERROR ");
+$cto = mysql_connect("10.132.233.131","ctou2","juitbu1@!ctlho0") or die("Database ERROR ");
 mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");
 
-$hre = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ");
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
+$hre = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$hre) or die ("ERROR: Database not found ");
 
-
-$hre_original = mysql_connect("10.132.225.160","hre2","htXP%th@71",TRUE) or die("Database ERROR ".mysql_error());
+$hre_original = mysql_connect("10.132.225.160","hre2","yTmcds1@#dab133",TRUE) or die("Database ERROR ".mysql_error());
 mysql_select_db("hre2",$hre_original) or die ("ERROR: Database not found ");
 
 
@@ -110,6 +109,15 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC) )
             values(".$row['move_id'].",".$row['personal_id'].",".$row['company_id'].",'".mysql_real_escape_string($row['title'])."','".mysql_real_escape_string($row['headline'])."','".$row['effective_date']."','".$row['announce_date']."','".mysql_real_escape_string($row['full_body'])."','".mysql_real_escape_string($row['link'])."','".mysql_real_escape_string($row['short_url'])."','".mysql_real_escape_string($row['what_happened'])."','".mysql_real_escape_string($row['source_id'])."','".mysql_real_escape_string($row['movement_type'])."','".mysql_real_escape_string($row['more_link'])."','".mysql_real_escape_string($row['not_current'])."','".mysql_real_escape_string($row['create_by'])."','".mysql_real_escape_string($row['admin_id'])."','".mysql_real_escape_string($row['movement_url'])."','".mysql_real_escape_string($row['sitemap_status'])."','".mysql_real_escape_string($row['add_date'])."','".mysql_real_escape_string($row['status'])."','".mysql_real_escape_string($row['source_bulk_upload'])."')";
 
     mysql_query($ins_q,$hre);
+}
+
+
+//invoices
+mysql_query("TRUNCATE TABLE `hre_saved_invoices`",$hre);
+$cfResult = mysql_query("select * from hre_saved_invoices",$hre_original);
+while($cfRow = mysql_fetch_array($cfResult)){
+    //echo "<br>INSERT INTO hre_banned_domain (domain_id,domain_name,add_date,status)values(".'"'.$cfRow['domain_id'].'","'.$cfRow['domain_name'].'","'.$cfRow['add_date'].'","'.$cfRow['status'].'"'.")";
+    mysql_query("INSERT INTO hre_saved_invoices (i_id,user_id,invoice_file,display_name)values(".'"'.$cfRow['i_id'].'","'.$cfRow['user_id'].'","'.$cfRow['invoice_file'].'","'.$cfRow['display_name'].'"'.")",$hre);
 }
 
 

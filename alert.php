@@ -110,20 +110,47 @@ else
 if(strpos($employee_size,',') > -1)
 {
     $employee_size_id_arr = explode(",",$employee_size);
+    
 }        
 else
     $employee_size_id_arr[] = $employee_size;
 
 
+
+//echo "<br>revenue: ".$revenue;
+//echo "<pre>revenue_size_id_arr ARR";   print_r($revenue_size_id_arr);   echo "</pre>";
+
+
 if(strpos($revenue,',') > -1)
 {
     $revenue_size_id_arr = explode(",",$revenue);
+    
+    // New code
+    //$revenue_size_id_arr[0] = $revenue_size_id_arr[0]+2;
+    
+    
+    $new_revenue_id = "";
+    if($revenue_size_id_arr[0] < $revenue_size_id_arr[1])
+    {
+        $initial_revenue_id = 2;
+        //for($r=$revenue_limits[0];$r<=$revenue_limits[1];$r++)
+        for($r=$revenue_size_id_arr[0];$r<$revenue_size_id_arr[1];$r++)
+        {
+            $new_revenue_id = $r+$initial_revenue_id;
+            $revenue_ids[] = $new_revenue_id;
+        }
+    }
+    
+    
+    
+    
 }        
 else
     $revenue_size_id_arr[] = $revenue;
 
 //echo "<br>revenue: ".$revenue;
 //echo "<pre>revenue_size_id_arr ARR";   print_r($revenue_size_id_arr);   echo "</pre>";
+//echo "<pre>revenue_id ARR";   print_r($revenue_ids);   echo "</pre>";
 
 //$employee_size_id_arr
 
@@ -323,9 +350,12 @@ function sub_save_list()
                                             <?PHP } ?>
                                          </select> 
                                         </div><!-- /.row -->
+                                        <?PHP
+                                        //echo "<br>Query: select id,name from ".TABLE_REVENUE_SIZE." where status=0 order by from_range",$revenue_size_id_arr
+                                        ?>
                                         <div class="row"><label style="width:128px;">Size ($ Revenue)</label>
                                             <select class="chosen-select" style="margin-left:3px;width:260px;" name="revenue_size[]" id="revenue_size" multiple data-placeholder="Any">
-                                                <?=MultiSelectionComboBox("select id,name from ".TABLE_REVENUE_SIZE." where status=0 order by from_range",$revenue_size_id_arr)?>
+                                                <?=MultiSelectionComboBox("select id,name from ".TABLE_REVENUE_SIZE." where status=0 order by from_range",$revenue_ids)?> <!-- $revenue_size_id_arr -->
                                             </select>
                                         </div><!-- /.row -->
                                 <div class="row"><label style="width:128px;">Size (Employees)</label>

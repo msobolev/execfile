@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title><?PHP if($current_page!='movement.php'){echo 'HREXECsonthemove.com ::';}?> <?=$PageTitle;?></title>
+<title><?PHP if($current_page!='movement.php'){echo 'ExecFile';}?> <?=$PageTitle;?></title>
 <meta name="keywords" content="<?=$PageKeywords?>" />
 <meta name="description" content="<?=$PageDescription?>" />
 <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />

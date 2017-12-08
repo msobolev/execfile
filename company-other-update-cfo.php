@@ -1,14 +1,14 @@
 <?php
 //$cto = mysql_connect("ctou2.db.5330536.hostedresource.com","ctou2","wTjP!399RD") or die("Database ERROR ");
+include("config.php");
 
-$cto = mysql_connect("10.132.233.131","ctou2","ToC@!mvCo23") or die("Database ERROR ");
+$cto = mysql_connect("10.132.233.131","ctou2","juitbu1@!ctlho0") or die("Database ERROR ");
 mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");
 
 
 // below are actually EXEC DB connection
-$hre = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ");
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
-
+$hre = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$hre) or die ("ERROR: Database not found ");
 
 
 

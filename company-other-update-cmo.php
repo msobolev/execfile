@@ -1,17 +1,18 @@
 <?php
 //$cto = mysql_connect("ctou2.db.5330536.hostedresource.com","ctou2","wTjP!399RD") or die("Database ERROR ");
+include("config.php");
 
-$cto = mysql_connect("10.132.233.131","ctou2","ToC@!mvCo23") or die("Database ERROR ");
+$cto = mysql_connect("10.132.233.131","ctou2","juitbu1@!ctlho0") or die("Database ERROR ");
 mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");
 
 
-$cmo = mysql_connect("10.132.232.238","cmo1","mocos!cm123",TRUE) or die("Database ERROR ");
+$cmo = mysql_connect("10.132.232.238","cmo1","aqwdfr1$&dgcmoobq",TRUE) or die("Database ERROR ");
 mysql_select_db("cmo1",$cmo) or die ("ERROR: Database not found ");
 
 
 // below are actually EXEC DB connection
-$hre = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ");
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
+$hre = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$hre) or die ("ERROR: Database not found ");
 
 
 
@@ -37,6 +38,7 @@ while($cjiRow = mysql_fetch_array($cjiResult))
     $job_result = mysql_query("INSERT INTO hre_company_job_info (job_id,company_id,job_title,description,location,post_date,add_date,modify_date,status,source)values('".$cjiRow['job_id']."','".$cjiRow['company_id']."','".$cjiRow['job_title']."','".$cjiRow['description']."','".$cjiRow['location']."','".$cjiRow['post_date']."','".$cjiRow['add_date']."','".$cjiRow['modify_date']."','".$cjiRow['status']."','".$cjiRow['source']."'".")",$hre);	
     if (!$job_result) 
     {
+        //echo "<br>INSERT INTO cmo_company_job_info (job_id,company_id,job_title,description,location,post_date,add_date,modify_date,status,source)values(".'"'.$cjiRow['job_id'].'","'.$cjiRow['company_id'].'","'.$cjiRow['job_title'].'","'.$cjiRow['description'].'","'.$cjiRow['location'].'","'.$cjiRow['post_date'].'","'.$cjiRow['add_date'].'","'.$cjiRow['modify_date'].'","'.$cjiRow['status'].'","'.$cjiRow['source'].'"'.")<br>";
         mysql_query("INSERT INTO cmo_company_job_info (job_id,company_id,job_title,description,location,post_date,add_date,modify_date,status,source)values(".'"'.$cjiRow['job_id'].'","'.$cjiRow['company_id'].'","'.$cjiRow['job_title'].'","'.$cjiRow['description'].'","'.$cjiRow['location'].'","'.$cjiRow['post_date'].'","'.$cjiRow['add_date'].'","'.$cjiRow['modify_date'].'","'.$cjiRow['status'].'","'.$cjiRow['source'].'"'.")",$hre);
     }
 }
@@ -51,6 +53,16 @@ while($cfRow = mysql_fetch_array($cfResult))
 {
    // echo "<br>Funding insert: INSERT INTO cmo_company_funding (funding_id,company_id,funding_date,funding_amount,funding_source,funding_add_date,status)values(".'"'.$cfRow['funding_id'].'","'.$cfRow['company_id'].'","'.$cfRow['funding_date'].'","'.$cfRow['funding_amount'].'","'.$cfRow['funding_source'].'","'.$cfRow['funding_add_date'].'","'.$cfRow['status'].'"'.")";
     mysql_query("INSERT INTO cmo_company_funding (funding_id,company_id,funding_date,funding_amount,funding_source,funding_add_date,status)values(".'"'.$cfRow['funding_id'].'","'.$cfRow['company_id'].'","'.$cfRow['funding_date'].'","'.$cfRow['funding_amount'].'","'.$cfRow['funding_source'].'","'.$cfRow['funding_add_date'].'","'.$cfRow['status'].'"'.")",$hre);
+}
+
+
+
+//invoices
+mysql_query("TRUNCATE TABLE `cmo_saved_invoices`",$hre);
+$cfResult = mysql_query("select * from cmo_saved_invoices",$cmo);
+while($cfRow = mysql_fetch_array($cfResult)){
+    //echo "<br>INSERT INTO hre_banned_domain (domain_id,domain_name,add_date,status)values(".'"'.$cfRow['domain_id'].'","'.$cfRow['domain_name'].'","'.$cfRow['add_date'].'","'.$cfRow['status'].'"'.")";
+    mysql_query("INSERT INTO cmo_saved_invoices (i_id,user_id,invoice_file,display_name)values(".'"'.$cfRow['i_id'].'","'.$cfRow['user_id'].'","'.$cfRow['invoice_file'].'","'.$cfRow['display_name'].'"'.")",$hre);
 }
 
 

@@ -1,17 +1,13 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+include("config.php");
 
 
-$hre = mysql_connect("10.132.225.160","hre2","htXP%th@71") or die("Database ERROR ");
+$hre = mysql_connect("10.132.225.160","hre2","yTmcds1@#dab133") or die("Database ERROR ");
 mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
 
-$exec = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ");
-mysql_select_db("hre2",$exec) or die ("ERROR: Database not found ");
+$exec = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ");
+mysql_select_db(HR_DATABASE,$exec) or die ("ERROR: Database not found ");
 
 $personal_not_added = array();
 

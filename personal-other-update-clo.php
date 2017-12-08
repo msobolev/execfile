@@ -1,18 +1,15 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+include("config.php");
 
 
 
-$cmo = mysql_connect("10.132.233.67","clo2","dtBO#7310",TRUE) or die("Database ERROR".mysql_error());
+$cmo = mysql_connect("10.132.233.67","clo2","vbgtyu1!@cdlgoc",TRUE) or die("Database ERROR".mysql_error());
 mysql_select_db("clo2",$cmo) or die ("ERROR: Database not found ");
 
-$exec = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ");
-mysql_select_db("hre2",$exec) or die ("ERROR: Database not found ");
+$exec = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ");
+mysql_select_db(HR_DATABASE,$exec) or die ("ERROR: Database not found ");
+
 
 $personal_not_added = array();
 
@@ -93,6 +90,14 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
        mysql_query("INSERT INTO $table (".implode(", ",array_keys($row)).") VALUES ('".implode("', '",array_values($row))."')",$exec); // insert one row into new table
 }
 
+
+//invoices
+mysql_query("TRUNCATE TABLE `clo_saved_invoices`",$exec);
+$cfResult = mysql_query("select * from clo_saved_invoices",$cmo);
+while($cfRow = mysql_fetch_array($cfResult)){
+    //echo "<br>INSERT INTO hre_banned_domain (domain_id,domain_name,add_date,status)values(".'"'.$cfRow['domain_id'].'","'.$cfRow['domain_name'].'","'.$cfRow['add_date'].'","'.$cfRow['status'].'"'.")";
+    mysql_query("INSERT INTO clo_saved_invoices (i_id,user_id,invoice_file,display_name)values(".'"'.$cfRow['i_id'].'","'.$cfRow['user_id'].'","'.$cfRow['invoice_file'].'","'.$cfRow['display_name'].'"'.")",$exec);
+}
 
 mysql_close($cmo);
 mysql_close($exec);

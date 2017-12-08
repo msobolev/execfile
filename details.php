@@ -47,6 +47,34 @@ $profile_root_link = "https://www.hrexecsonthemove.com/";
 $personal_pic_root = "https://www.hrexecsonthemove.com/";
 
 
+
+// Getting paraments from url Starts
+$dim_url = explode('/', $_SERVER['REQUEST_URI']);
+$personal_url =$dim_url[sizeof($dim_url)-1];
+$personal_arr = explode("_",$personal_url);
+$persize = sizeof($personal_arr);
+$id = $personal_arr[$persize-1];
+$type = $personal_arr[$persize-2];
+$exec_demo = $personal_arr[$persize-4];
+if($exec_demo == 'clo')
+{
+    $exec_demo = 'ed';
+    $_SESSION['site'] = 'clo';
+}    
+elseif($exec_demo == 'cmo')
+{
+    $exec_demo = 'ed';
+    $_SESSION['site'] = 'cmo';
+}
+elseif($exec_demo == 'ciso')
+{
+    $exec_demo = 'ed';
+    $_SESSION['site'] = 'cto';
+}
+//echo "Ses site: ".$_SESSION['site'];
+
+
+
 if($_SESSION['site'] == '' || $_SESSION['site'] == 'hr')
 {
     $personal_pic_root            = "https://www.hrexecsonthemove.com/";
@@ -73,27 +101,23 @@ elseif($_SESSION['site'] == 'clo')
 }
 
 
-
-
-
-
-
-
-
-
 $company_pic_root = "https://www.ctosonthemove.com/"; 
 $hr_dot = "http://hr.execfile.com/"; 
 
-// Getting paraments from url Starts
-$dim_url = explode('/', $_SERVER['REQUEST_URI']);
-$personal_url =$dim_url[sizeof($dim_url)-1];
-$personal_arr = explode("_",$personal_url);
-$persize = sizeof($personal_arr);
-$id = $personal_arr[$persize-1];
-$type = $personal_arr[$persize-2];
 
+//echo "<br>exec_demo: ".$exec_demo;
+//if($exec_demo = 'ed')
+//    $_SESSION['exec_demo'] = 1;
 if($type == 'media')
     $type = "media_mention";
+
+if(isset($_GET['st']) && $_GET['st'] != '')
+    $_SESSION['site'] = $_GET['st'];
+
+
+
+
+
 
 // Getting paraments from url Ends
 //echo "<br>ID: ".$id;
@@ -111,7 +135,9 @@ if(!isset($_COOKIE[$cookie_name])) {
     echo "Value is: " . $_COOKIE[$cookie_name];
 }
 */
-
+//echo "<br>ID: ".$id;
+//echo "<br>TYPE: ".$type;
+//echo "<br>SITE: ".$_SESSION['site'];
 $all_data = get_all_data($id,$type,$_SESSION['site']);
 $all_data_count = count($all_data);
 
@@ -293,12 +319,13 @@ function get_https($url)
                                     $html = get_https($this_source);
                                 else
                                 {    
+                                    //echo "<br>in else";
                                     //$html = file_get_html($all_data[$i]['more_link']);
                                     //$html = file_get_contents($all_data[$i]['more_link']);
                                     //$html = str_get_html(file_get_contents($all_data[$i]['more_link']));
                                     
-                                    
-                                    $html = get_https(file_get_contents($all_data[$i]['more_link']));
+                                    //$html = get_https(file_get_contents($all_data[$i]['more_link']));
+                                    $html = file_get_html($all_data[$i]['more_link']);
                                     
                                 }
                                 //echo "<br>HTML STR: ".$html;
@@ -504,8 +531,8 @@ function get_https($url)
                     © <?=date("Y");?> Execfile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a target="_blank" href="https://www.hrexecsonthemove.com/why-cto.html">About</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <!-- <a href="#">Help</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-                    <a href="terms.php">Terms</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="privacy.php">Privacy</a>
+                    <a href="terms.html">Terms</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="privacy.html">Privacy</a>
                 </div><br>
     
     

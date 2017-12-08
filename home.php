@@ -57,11 +57,13 @@ if($_SESSION['site'] != 'hr' && ($type == 'all' || $type == '') && $revenue == '
             {
                 $table_personal_master          = "hre_personal_master";
                 $table_movement_master          = "hre_movement_master";
+                //$table_personal_speaking          = "hre_personal_speaking";
             }
             elseif($func == 'cto' || $func == 'ciso')
             {
                 $table_personal_master          = "cto_personal_master";
                 $table_movement_master          = "cto_movement_master";
+                //$table_personal_speaking          = "cto_personal_speaking";
                 if($func == 'ciso')	
                 {
                         $ciso_cl = " and ciso_user = 1";
@@ -71,11 +73,13 @@ if($_SESSION['site'] != 'hr' && ($type == 'all' || $type == '') && $revenue == '
             {
                 $table_personal_master          = "cfo_personal_master";
                 $table_movement_master          = "cfo_movement_master";
+               // $table_personal_speaking          = "cfo_personal_speaking";
             }
             elseif($func == 'cmo'  || $func == 'cso')
             {
                 $table_personal_master          = "cmo_personal_master";
                 $table_movement_master          = "cmo_movement_master";
+                //$table_personal_speaking          = "cmo_personal_speaking";
                 if($func == 'cso')	
                 {
                     $cso_cl = " and cmo_user = 1";
@@ -86,6 +90,7 @@ if($_SESSION['site'] != 'hr' && ($type == 'all' || $type == '') && $revenue == '
             {
                 $table_personal_master          = "clo_personal_master";
                 $table_movement_master          = "clo_movement_master";
+                //$table_personal_speaking          = "clo_personal_speaking";
             }
         
         
@@ -722,15 +727,47 @@ com_db_query($search_history);
                     }
                     
                     //echo "<br>speaking_inc: ".$speaking_inc;
-                    if($speaking_inc == 0 && $speaking_last_id_db == '')
+                    // Last line changed on 17th Aug 2017
+                    //if($speaking_inc == 0 && $speaking_last_id_db == '')
+                    
+                    
+                    // Setting table for respective site to update count
+                    if($func == '' || $func == 'hr')
                     {
-                        $max_speaking_id_q = mysql_query("SELECT max(speaking_id) as max_speaking_id from hre_personal_speaking");
+                            $table_personal_speaking          = "hre_personal_speaking";
+                    }
+                    elseif($func == 'cto' || $func == 'ciso')
+                    {
+                            $table_personal_speaking          = "cto_personal_speaking";
+                    }
+                    elseif($func == 'cfo')
+                    {
+                            $table_personal_speaking          = "cfo_personal_speaking";
+                    }
+                    elseif($func == 'cmo'  || $func == 'cso')
+                    {
+                            $table_personal_speaking          = "cmo_personal_speaking";
+                    }
+                    elseif($func == 'clo')
+                    {
+                            $table_personal_speaking          = "clo_personal_speaking";
+                    }
+                    
+                    if($speaking_last_id_db == '')
+                    {
+                        //echo "<br>Within iff";
+                        //echo "<br>Q: SELECT max(speaking_id) as max_speaking_id from $table_personal_speaking";
+                        $max_speaking_id_q = mysql_query("SELECT max(speaking_id) as max_speaking_id from $table_personal_speaking");
                         $maxSpeakingRow = mysql_fetch_array($max_speaking_id_q);
                         $max_speaking_id_direct = $maxSpeakingRow['max_speaking_id'];
                         $max_speaking_id = $max_speaking_id_direct;
+                        //echo "<br>MAx speaking ID: ".$max_speaking_id;
                     }
                     else
+                    {
+                        //echo "<br>Within elsee";
                         $max_speaking_id = $speaking_last_id_db;
+                    }    
                     //echo "<br>max speaking id : ".$max_speaking_id;
                     
                     
@@ -773,6 +810,7 @@ com_db_query($search_history);
 
                         if($all_data[$i]['type'] == 'movement')
                         {
+                            //echo "<br>personal_pic_root: ".$personal_pic_root;
                             show_movements($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['move_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['movement_type'],$all_data[$i]['more_link'],$all_data[$i]['personal_image'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
                         }
                         if($all_data[$i]['type'] == 'funding')
@@ -781,7 +819,7 @@ com_db_query($search_history);
                         }
                         if($all_data[$i]['type'] == 'jobs')
                         {
-                            show_job($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['job_title'],$all_data[$i]['post_date'],$all_data[$i]['source'],$personal_pic_root,"https://www.ctosonthemove.com/",$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            show_job($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['job_title'],$all_data[$i]['post_date'],$all_data[$i]['source'],$personal_pic_root,"https://www.ctosonthemove.com/",$all_data[$i]['location'],$all_data[$i]['add_date'],$all_data[$i]['show_state']);
                         }
 
                         if($all_data[$i]['type'] == 'publication')

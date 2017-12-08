@@ -6,6 +6,8 @@ error_reporting(-1);
 //include("functions.php");
 require_once('PHPMailer/class.phpmailer.php');
 
+include("config.php");
+
 $from_admin = 'ms@hrexecsonthemove.com';
 $mail                = new PHPMailer();
 $mail->IsSMTP(); // telling the class to use SMTP
@@ -34,8 +36,8 @@ function subDate($days)
 }
 
 
-$hre = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
+$hre = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$hre) or die ("ERROR: Database not found ");
 
 //com_db_connect_hre2() or die('Unable to connect to database server!');
 
@@ -126,6 +128,7 @@ if($user_rows > 0)
     $mail->MsgHTML($emailContent);
 
     $mail->AddAddress($email, $user_first_name);
+    $mail->AddCC("faraz.aia@nxvt.com", "");
 
     if(!$mail->Send()) 
     {

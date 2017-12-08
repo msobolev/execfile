@@ -216,8 +216,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
         
         // Execfile file DB configuration
-        $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+        $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
         mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
+        
         
         
         $table_personal_master          = "hre_personal_master";
@@ -245,7 +246,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //$site = mysql_connect(CTO_SERVER_IP,CTO_DB_USER_NAME,CTO_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
         //mysql_select_db("ctou2",$site) or die ("ERROR: Database not found ");
         //echo "<br>In CTO";
-        $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+        $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
         mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
         
         $table_personal_master          = "cto_personal_master";
@@ -273,7 +274,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //$site = mysql_connect("10.132.233.66","cfo2","cV!kJ201Ze",TRUE) or die("Database ERROR ");
         //mysql_select_db("cfo2",$site) or die ("ERROR: Database not found ");
         
-        $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+        $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
         mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
         
         $table_personal_master          = "cfo_personal_master";
@@ -301,7 +302,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //$site = mysql_connect("10.132.232.238","cmo1","mocos!cm123",TRUE) or die("Database ERROR ");
         //mysql_select_db("cmo1",$site) or die ("ERROR: Database not found ");
         
-        $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+        $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
         mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
         
         
@@ -329,7 +330,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //$site = mysql_connect("10.132.233.67","clo2","dtBO#7310",TRUE) or die("Database ERROR".mysql_error());
         //mysql_select_db("clo2",$site) or die ("ERROR: Database not found ");
         
-        $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+        $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
         mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
         
         $table_personal_master          = "clo_personal_master";
@@ -401,16 +402,26 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     if($searchnow != '')
     {
         //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
-        
         //$company_personal_clause = " and cm.company_name = '".$searchnow."'";
-        
         $personal_name_arr = explode(" ",$searchnow);
+        //echo "<br>Size personal_name_arr:".sizeof($personal_name_arr);
         $searched_first_name = trim($personal_name_arr[0]);
         if($personal_name_arr[1] != '')
-            $company_personal_clause = " and (company_name = '".$searchnow."' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]."'))";
-         else    
-            $company_personal_clause = " and (company_name = '".$searchnow."' OR first_name = '".$searched_first_name."')";
-        
+        {    
+            $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]."'))";
+            if(sizeof($personal_name_arr) == 3)
+            {    
+                $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]." ".$personal_name_arr[2]."') OR (first_name = '".$personal_name_arr[0]." ".$personal_name_arr[1]."' and last_name = '".$personal_name_arr[2]."') OR (first_name = '".$personal_name_arr[0]."' and middle_name = '".$personal_name_arr[1]."' and last_name = '".$personal_name_arr[2]."'))";
+            } 
+            if(sizeof($personal_name_arr) == 4)
+            {    
+                $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$personal_name_arr[0]." ".$personal_name_arr[1]."' and middle_name = '".$personal_name_arr[2]."' and last_name = '".$personal_name_arr[3]."'))";
+            } 
+        }    
+        else    
+        {     
+            $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR first_name = '".$searched_first_name."' OR last_name = '".$searched_first_name."')";
+        }
       //  if($type == '')
       //      $type = 'all';
     }
@@ -454,7 +465,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             
             
             
-            $company_personal_clause .= " or company_name in ('$company')";
+            $company_personal_clause .= " or company_name like ('%$company%')";
             
             
             
@@ -481,7 +492,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         elseif($company != '')
         {
             //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
-            $company_personal_clause = " and (company_name = '".$company."' || company_website = '".$company."' || company_urls = '".$company."')";
+            $company_personal_clause = " and (company_name LIKE '%".$company."%' || company_website = '".$company."' || company_urls = '".$company."')";
         }
     }    
     //echo "<br>industries_ids FIRST: ".$industries_ids;
@@ -743,6 +754,8 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         die();       
         */        
                 
+        $invalid_title = "and lower(title) not like 'chief executive officer' and lower(title) not like 'Founder and Chief Executive Officer'";        
+                
         $msc = microtime(true);     
                 
         //echo "<br>zip_clause before movement: ".$zip_clause;
@@ -756,6 +769,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
             $revenue_clause $employee_size_clause $ciso_clause $cso_clause    
+            $invalid_title
             $order_by $limit_clause");       
            
         $msc = microtime(true)-$msc; 
@@ -780,6 +794,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
             $revenue_clause $employee_size_clause $ciso_clause $cso_clause    
+            $invalid_title
             $order_by $limit_clause";
         */ 
          
@@ -791,7 +806,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         while($indRow = mysql_fetch_array($indResult))
         {
             //echo "<br>Within";
-           // echo "<br>Move id: ".$indRow['move_id'];   
+            //echo "<br>Move id: ".$indRow['move_id'];   
             $data_arr[$data]['id'] = $indRow['move_id'];
             $data_arr[$data]['personal_id'] = $indRow['personal_id'];
             $data_arr[$data]['move_id'] = $indRow['move_id'];
@@ -942,8 +957,12 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
                 cm.company_id = mm.company_id and cm.company_industry = ci.industry_id and cm.state=cs.state_id)
                  $ciso_clause $cso_clause $count_date_clause");
             */
-            
-            
+           /*
+            echo "<br>Count Q: select count(*) as total_speaking_count
+                from ".$table_search_data." 
+                where record_type = 'speaking'
+                 $ciso_clause $cso_clause $count_date_clause $from_date_clause $to_date_clause";
+            */
             $indCountResult = mysql_query("select count(*) as total_speaking_count
                 from ".$table_search_data." 
                 where record_type = 'speaking'
@@ -953,6 +972,14 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             
             $indCountRow = mysql_fetch_array($indCountResult);
             $speaking_count = $indCountRow['total_speaking_count'];
+            
+            // Below check is added on 17th Aug
+            // Case when user clicked on read and next time he login, he still get count from above Query which is wrong
+            if($speaking_last_id_db > 0)
+                $speaking_count = 0;
+            
+            //echo "<br>speaking_count: ".$speaking_count;
+            
             /*echo "<br>FAR Speaking Count from Q: select count(*) as total_speaking_count
                 from ".$table_search_data." 
                 where record_type = 'speaking'
@@ -1174,23 +1201,27 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['mgt_change_name'] = $indRow['mgt_change_name'];
             
             $last_speaking_id = "";
-            
+            //echo "<br>speaking_last_id_db: ".$speaking_last_id_db;
             if($speaking_last_id_db == '' || $move_last_id_db == '0')
             {
+                //echo "<br>In if";
                 $data_arr[$data]['show_state'] = 'unread';
                 //$speaking_count++;
             }    
             else
             {   
+                //echo "<br>In else";
                 //echo "<br>In else row speaking id: ".$indRow['speaking_id'];
                 //echo "<br>speaking_last_id_db: ".$speaking_last_id_db;
                 if($indRow['speaking_id'] <= $speaking_last_id_db)
                 {
+                    //echo "<br>In else if";
                     //echo "<br>marking read";
                     $data_arr[$data]['show_state'] = 'read';
                 }    
                 else
                 {    
+                    //echo "<br>In else else";
                     //echo "<br>marking unread";
                     $data_arr[$data]['show_state'] = 'unread';
                     $speaking_count++;
@@ -1992,7 +2023,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $from_date_clause $to_date_clause $zip_clause $where_personal_clause
             $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
             $revenue_clause) group by funding_id order by funding_add_date desc $default_speaking_limit";
-         */
+        */ 
         //die();
         
 
@@ -2274,7 +2305,7 @@ function get_all_states()
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     //com_db_connect() or die('Unable to connect to database server!');
     
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     $data = 0;
     
@@ -2297,7 +2328,7 @@ function get_all_industries()
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     //$conn = com_db_connect_hre2() or die('Unable to connect to database server!');
     
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     
@@ -2391,7 +2422,7 @@ function get_hr_data($rec_type)
 
 function get_industry_title($industry_id)
 {
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     //$site = mysql_connect(HR_SERVER_IP,HR_DB_USER_NAME,HR_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
@@ -2414,7 +2445,7 @@ function get_state_title($state_id)
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     $indResult = mysql_query("SELECT short_name FROM hre_state where state_id = ".$state_id);
@@ -2536,7 +2567,7 @@ function get_employee_size_limits($employee_size)
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     $employee_size = trim($employee_size,",");
@@ -2720,6 +2751,7 @@ function create_url($first_name = '',$last_name = '',$title = '',$company_name =
 
 function create_job_url($title = '',$company_name = '',$movement_id = '',$record_type = '')
 {
+    //echo "<br>base_url: ".$base_url;
     global $base_url;
     if(strlen($title) > 100)
         $title = substr($title,0,100);
@@ -2732,7 +2764,8 @@ function create_job_url($title = '',$company_name = '',$movement_id = '',$record
 
 function show_movements($first_name,$last_name,$movement_id,$personal_id,$company_name,$title,$email,$phone,$movement_type,$more_link,$personal_image,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
 {
-    
+    global $exec_demo;
+    //echo "<br>Personal_image: ".$personal_image;
     $sf = "";
     $personalURL = "";
     //$converted_date = date("M d, Y", strtotime($all_data[$i]['awards_date']));
@@ -2776,8 +2809,8 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
 
         <div class="article-image">
         <?PHP
-        
-        
+        //echo "<br>exec_demo var: ".$exec_demo;
+        $personal_image_ed = $personal_image; 
         if($_SERVER['HTTP_REFERER'] != '' && strpos($_SERVER['HTTP_REFERER'],"execfile.com") > -1)
         {
 
@@ -2785,11 +2818,25 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         else
             $personal_image = '';
         
-        
+        //echo "<br>personal_pic_root: ".$personal_pic_root;
         if($personal_image != '')
             $pic_src = $personal_pic_root."personal_photo/small/".$personal_image;
         else
             $pic_src = NO_PERSONAL_IMAGE;
+        
+        //echo "<pre>SESSION: ";   print_r($_SESSION);   echo "</pre>";
+        //echo "<br>sess_is_user: ".$_SESSION['sess_is_user'];
+        //echo "<br>exec_demo: ".$_SESSION['exec_demo'];
+        if(!isset($_SESSION['sess_is_user']))
+        {
+            //echo "<br>in not isset";
+            $pic_src = NO_PERSONAL_IMAGE;
+        }    
+        
+        //echo "<br>exec_demo: ".$exec_demo;
+        //echo "<br>personal_image_ed: ".$personal_image_ed;
+        if($exec_demo == 'ed' && $personal_image_ed != '')
+            $pic_src = $personal_pic_root."personal_photo/small/".$personal_image_ed;
         
         
         $detail_page_url = create_url($first_name,$last_name,$title,$company_name,$movement_id,'movements');
@@ -2810,7 +2857,7 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         </div><!-- /.article-image -->
         
         <?PHP
-        $width = 'width:85%;';
+        $width = 'width:63%;';
         //if($ind == 1)
         if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
             $width = 'width:63%;';
@@ -2891,10 +2938,30 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         
         <?PHP
         //echo "IND:".$ind.":";
-        
+        //echo "<br>SESSION:".$_SESSION['sess_user_id'];
         //if($ind == 0)
-        if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')    
-        {    
+        if($_SESSION['exec_demo'] = 1 && $_SESSION['sess_user_id'] == '')
+        {    //echo "<br>in if";
+            //if($_SESSION['site'] == 'hr')
+            $pricing_link = 'https://www.hrexecsonthemove.com/pricing.html';
+            if($_SESSION['site'] == 'clo')
+                $pricing_link = 'https://www.closonthemove.com/pricing.html';
+            elseif($_SESSION['site'] == 'cmo')
+                $pricing_link = 'https://www.cmosonthemove.com/pricing.html';
+            elseif($_SESSION['site'] == 'cto')
+                $pricing_link = 'https://www.ctosonthemove.com/pricing.html';
+        ?>
+            <div class="article-actions">
+                <a href="<?=$pricing_link?>" target="_blank" class="btn btn-primary">
+                    <span>Email now</span>
+                    <i class="ico-arrow-right"></i>
+                </a>
+            </div><!-- /.article-actions -->
+        <?PHP
+        }
+        elseif(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')    
+        {  
+            //echo "<br>in else if";
         ?>
         
         <div class="article-actions">
@@ -2906,8 +2973,21 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         </div><!-- /.article-actions -->
         <?PHP
         }
+        else
+        {    
+            //echo "<br>in else";
+            //if($_SESSION['site'] == 'hr')
+            $pricing_link = 'https://www.hrexecsonthemove.com/pricing.html';
         ?>
-        
+            <div class="article-actions">
+                <a href="<?=$pricing_link?>" target="_blank" class="btn btn-primary">
+                    <span>Email now</span>
+                    <i class="ico-arrow-right"></i>
+                </a>
+            </div><!-- /.article-actions -->
+        <?PHP
+        }
+        ?>
         
         
     </li><!-- /.article -->
@@ -3108,14 +3188,15 @@ function show_speaking($first_name,$last_name,$speaking_id,$personal_id,$company
 {
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
+        //echo "<br>Site: ".$_SESSION['site'];
         $base_site = $_SESSION['site'];
-        if($base_site == 'it')
+        if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
             $profile_root_link = "https://www.ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
 
-        elseif($base_site == 'cmo')
+        elseif($base_site == 'cmo' || $base_site == 'cso')
             $profile_root_link = "https://www.cmosonthemove.com/";
 
         elseif($base_site == 'clo')
@@ -3271,13 +3352,13 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
         $base_site = $_SESSION['site'];
-        if($base_site == 'it')
+        if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
             $profile_root_link = "https://www.ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
 
-        elseif($base_site == 'cmo')
+        elseif($base_site == 'cmo' || $base_site == 'cso')
             $profile_root_link = "https://www.cmosonthemove.com/";
 
         elseif($base_site == 'clo')
@@ -3449,17 +3530,18 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
 
 function show_funding($first_name,$last_name,$funding_id,$personal_id,$company_id,$company_logo,$company_name,$title,$email,$phone,$personal_image,$funding_source,$funding_amount,$funding_date,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
 {
-    
+    //echo "<br>SITE: ".$_SESSION['site'];
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
         $base_site = $_SESSION['site'];
-        if($base_site == 'it')
+        if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
             $profile_root_link = "https://www.ctosonthemove.com/";
-
+        elseif($base_site == 'cto')
+            $profile_root_link = "https://www.ctosonthemove.com/";
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
 
-        elseif($base_site == 'cmo')
+        elseif($base_site == 'cmo' || $base_site == 'cso')
             $profile_root_link = "https://www.cmosonthemove.com/";
 
         elseif($base_site == 'clo')
@@ -3628,9 +3710,32 @@ function show_funding($first_name,$last_name,$funding_id,$personal_id,$company_i
 }
 
 
-function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$company_logo,$company_name,$title,$email,$phone,$personal_image,$job_title,$post_date,$source,$personal_pic_root,$company_pic_root,$add_date = '',$show_state='',$ind=0)
+function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$company_logo,$company_name,$title,$email,$phone,$personal_image,$job_title,$post_date,$source,$personal_pic_root,$company_pic_root,$location,$add_date = '',$show_state='',$ind=0)
 {
-    $profile_root_link = "https://www.hrexecsonthemove.com/";
+    //$profile_root_link = "https://www.hrexecsonthemove.com/";
+    
+    if(isset($_SESSION['site']) && $_SESSION['site'] != '')
+    {    
+        $base_site = $_SESSION['site'];
+        if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
+            $profile_root_link = "https://www.ctosonthemove.com/";
+
+        elseif($base_site == 'cfo')
+            $profile_root_link = "https://www.cfosonthemove.com/";
+
+        elseif($base_site == 'cmo' || $base_site == 'cso')
+            $profile_root_link = "https://www.cmosonthemove.com/";
+
+        elseif($base_site == 'clo')
+            $profile_root_link = "https://www.closonthemove.com/";
+        //if($base_site == 'hr')
+        //    $profile_root_link = "https://www.hrexecsonthemove.com/";
+        else
+            $profile_root_link = "https://www.hrexecsonthemove.com/";
+    }   
+    
+    
+    
     
     $dim_url = "";
     $dim_url = preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'), array('', '_', ''), $company_name).'_Company_'.$company_id;
@@ -3680,7 +3785,7 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
                 $company_logo = '';
 
             
-            
+            //echo "<br>detail_page_url: ".$detail_page_url;
             if($company_logo != '')
             {    
             ?>
@@ -3786,13 +3891,13 @@ function show_publication($first_name,$last_name,$publication_id,$personal_id,$c
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
         $base_site = $_SESSION['site'];
-        if($base_site == 'it')
+        if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
             $profile_root_link = "https://www.ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
 
-        elseif($base_site == 'cmo')
+        elseif($base_site == 'cmo' || $base_site == 'cso')
             $profile_root_link = "https://www.cmosonthemove.com/";
 
         elseif($base_site == 'clo')
@@ -3976,7 +4081,7 @@ function get_companies()
     //$site = mysql_connect(HR_SERVER_IP,HR_DB_USER_NAME,HR_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     $table_company_master = "hre_company_master";
@@ -4144,7 +4249,59 @@ function get_cities()
 function add_user($name,$email,$password,$status,$last_name = '',$form_type = '',$text_only = '',$site = '')
 {
     //com_db_query("INSERT into ".TABLE_USER."(first_name,email,status,add_date) values('".$name."','".$email."','".$status."','".date("Y-m-d:H:i:s")."')");	
-    com_db_query("INSERT into ".TABLE_USER."(first_name,email,password,status,last_name,form_type,add_date,text_only,site) values('".$name."','".$email."','".$password."','".$status."','".$last_name."','".$form_type."','".date("Y-m-d:H:i:s")."','".$text_only."','".$site."')");	    
+    
+    if (preg_match('~[0-9]+~', $name)) 
+    {
+    }
+    else
+    {    
+        if($name != '')
+        {
+            /*
+            if($email != '')
+            {
+                $banned = 0;
+                
+                $banned_domain_array ='';
+                $banned_domain_result = com_db_query("select domain_name from hre_banned_domain where status='0'");
+
+                while($bdRow = com_db_fetch_array($banned_domain_result))
+                {
+                    $dot_pos = explode('.', $bdRow['domain_name']);
+                    $domain = strtolower(substr($bdRow['domain_name'],0,strlen($dot_pos[0])));
+                    if($banned_domain_array=='')
+                    {
+                        $banned_domain_array = "'@".$domain.".'";
+                    }
+                    else
+                    {
+                        $banned_domain_array .= ",'@".$domain.".'";
+                    }
+
+                }
+
+
+                $dom_name = explode("@",$email);
+		$dname = explode(".", $dom_name[1]);
+		$domain_name ='@'.$dname[0]."." ;
+		$eda = str_replace("'","", $banned_domain_array);
+		$banned_email_array = explode(",", $eda);
+		for($dm = 0; $dm < sizeof($banned_email_array); $dm++)
+                {
+                    if(strtoupper($domain_name)==strtoupper($banned_email_array[$dm]))
+                    {
+                        //$url = "provide-contact-information.php?action=BannedEmail&fn=".$first_name."&ln=".$last_name."&cn=".$company_name."&em=".$email."&ph=".$phone;
+                        //com_redirect($url);
+                        $banned = 1;
+                    }
+		}
+            }    
+            */
+            
+            //if($banned == 0)
+            com_db_query("INSERT into ".TABLE_USER."(first_name,email,password,status,last_name,form_type,add_date,text_only,site) values('".$name."','".$email."','".$password."','".$status."','".$last_name."','".$form_type."','".date("Y-m-d:H:i:s")."','".$text_only."','".$site."')");	    
+        }
+    }    
 } 
 
 
@@ -4576,7 +4733,7 @@ function get_org_chart_data($company)
     //mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
     //echo "<pre>HRE: ";   print_r($hre);echo "</pre>";
     
-    $site = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ".mysql_error());
+    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
     mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     
     $chart_arr = array(); 
@@ -4627,14 +4784,22 @@ function get_org_chart_data($company)
     if($_SESSION['site'] == 'ciso')
     {
         $ciso_clause = " and ciso_user = 1";
-    } 
+    }
+    /*else
+    {
+        $ciso_clause = " and ciso_user = 0";
+    }*/
+    
     
     $cso_clause = "";
     if($_SESSION['site'] == 'cso')
     {
         $cso_clause = " and cmo_user = 1";
     } 
-    
+    else
+    {
+        $cso_clause = " and cmo_user = 0";
+    } 
     
     //$table_name = 'hre_search_data';
     

@@ -1,12 +1,13 @@
 <?php
 //$cto = mysql_connect("ctou2.db.5330536.hostedresource.com","ctou2","wTjP!399RD") or die("Database ERROR ");
+include("config.php");
 
-$cto = mysql_connect("10.132.233.131","ctou2","ToC@!mvCo23") or die("Database ERROR ");
+$cto = mysql_connect("10.132.233.131","ctou2","juitbu1@!ctlho0") or die("Database ERROR ");
 mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");
 
 // below are actually EXEC DB connection
-$hre = mysql_connect("localhost","root","mydevsql129",TRUE) or die("Database ERROR ");
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
+$hre = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
+mysql_select_db(HR_DATABASE,$hre) or die ("ERROR: Database not found ");
 
 
 
@@ -98,6 +99,15 @@ while($cejRow = mysql_fetch_array($cejResult)){
 }
 
 
+
+
+//banned domains
+mysql_query("TRUNCATE TABLE `hre_banned_domain`",$hre);
+$cfResult = mysql_query("select * from cto_banned_domain",$cto);
+while($cfRow = mysql_fetch_array($cfResult)){
+    //echo "<br>INSERT INTO hre_banned_domain (domain_id,domain_name,add_date,status)values(".'"'.$cfRow['domain_id'].'","'.$cfRow['domain_name'].'","'.$cfRow['add_date'].'","'.$cfRow['status'].'"'.")";
+    mysql_query("INSERT INTO hre_banned_domain (domain_id,domain_name,add_date,status)values(".'"'.$cfRow['domain_id'].'","'.$cfRow['domain_name'].'","'.$cfRow['add_date'].'","'.$cfRow['status'].'"'.")",$hre);
+}
 
 
 //mysql_query("update hre_company_update_info set end_date_time='".date("Y-m-d : H:i:s")."' where id='".$update_id."'",$hre);

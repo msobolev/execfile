@@ -172,7 +172,15 @@ ob_start();
 <body>
 <?PHP
 
-
+/*
+$myString = $_GET['s'];//"sdfdsfds23";
+if (preg_match('~[0-9]+~', $myString)) 
+{
+    echo "YES DIGITS";
+}
+else
+    echo "NO DIGITS";
+ */
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
 //error_reporting(-1);
@@ -188,6 +196,8 @@ if(isset($_GET['action']) && $_GET['action'] == 'logout')
     com_db_query($logout_query);
     
     session_destroy();
+    
+    
     com_redirect("index.php");
 }
 
@@ -305,7 +315,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
                     <li>
                         <a href="#clients">Clients</a>
                     </li>
-                    <li ><a href="request_demo.php">Request a Demo</a></li> <!-- onclick="req_demo_block()" -->
+                    <li ><a href="request-demo.html">Request a Demo</a></li> <!-- onclick="req_demo_block()" -->
                         <!-- <a  href="">Request a Demo</a> -->
                     
                 </ul>
@@ -464,7 +474,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
                             <h4>Did you know that any contact list (including your house list in your CRM) goes obsolete at a rate of 30% a year? </h4>
                             <p>Yes, that’s right! Your prospects change roles within their companies, resign, retire, switch companies, get fired or move laterally. Every day. And if you think all of that gets updated in LinkedIn in real time, then think again. </p>
                             <p>We track more than 15000 news sources for press releases, company announcements, SEC filings, social media to deliver these delta highlights to you. We believe in perishability of insight and you will get the freshest, most actionable leads.</p>
-                            <a  id="request_demo_2" href="request_demo.php" class="btn btn-primary">Request A Demo</a>  <!-- onclick="change_focus()"   onclick="show_form('two')" -->
+                            <a  id="request_demo_2" href="request-demo.html" class="btn btn-primary">Request A Demo</a>  <!-- onclick="change_focus()"   onclick="show_form('two')" -->
                         </div><!-- /.section-content -->
 
                         <div class="section-image">
@@ -506,7 +516,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 
 					<p>So you will never run out of prospects to reach out to and topics to open your conversation with. This will get you up to 5x higher response rate on your outreach.</p>
 
-					<a  href="request_demo.php" class="btn btn-primary">Request A Demo</a> <!-- onclick="show_form('three')" -->
+					<a  href="request-demo.html" class="btn btn-primary">Request A Demo</a> <!-- onclick="show_form('three')" -->
 				</div><!-- /.section-content -->
                                 
                                 
@@ -537,7 +547,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 
 					<p>We also help draft the messaging both email and phone based on best practices, hacks and tactics that you will not learn in a book. </p>
 
-					<a href="request_demo.php" class="btn btn-primary">Request A Demo</a> <!-- onclick="show_form('four')"  -->
+					<a href="request-demo.html" class="btn btn-primary">Request A Demo</a> <!-- onclick="show_form('four')"  -->
 				</div><!-- /.section-content -->
                                 
                                 
@@ -765,15 +775,15 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 
                             <ul class="list-links">
                                 <li>
-                                    <a href="contact.php">Contact us</a>
+                                    <a href="contact-us.html">Contact us</a>
                                 </li>
 
                                 <li>
-                                    <a href="request_demo.php">Schedule a Demo</a>
+                                    <a href="request-demo.html">Schedule a Demo</a>
                                 </li>
 
                                 <li>
-                                    <a href="terms.php">Terms of Service</a>
+                                    <a href="terms.html">Terms of Service</a>
                                 </li>
                             </ul><!-- /.list-links -->
                         </div><!-- /.footer-col footer-col-1of3 -->

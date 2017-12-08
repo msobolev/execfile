@@ -44,14 +44,14 @@ include("config.php");
 include("functions.php");
 
 
-function this_user_invoices($user_id,$db_conn)
+function this_user_invoices($user_id,$invoice_table)
 {
     $invoice_dates = array();
     //$find_invoices_query = com_db_query("select * from ".TABLE_INVOICES." where user_id='".$_SESSION['sess_user_id']."' and appear_date <= now()");
     
     //echo "select * from hre_saved_invoices where user_id='".$_SESSION['sess_user_id']."'";
     
-    $find_invoices_query = mysql_query("select * from hre_saved_invoices where user_id='".$user_id."'",$db_conn);
+    $find_invoices_query = mysql_query("select * from $invoice_table where user_id='".$user_id."'");
     if($find_invoices_query)
     {
         $invoice_num = mysql_num_rows($find_invoices_query);
@@ -72,21 +72,41 @@ function this_user_invoices($user_id,$db_conn)
 
 
 //echo "<pre>_SESSION: ";   print_r($_SESSION);   echo "</pre>";   
-$hre = mysql_connect("10.132.225.160","hre2","htXP%th@71") or die("Database ERROR ");
-mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
+//$hre = mysql_connect("10.132.225.160","hre2","htXP%th@71") or die("Database ERROR ");
+//$hre = mysql_connect("10.132.225.160","hre2","yTmcds1@#dab133") or die("Database ERROR ");
+//mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
 
-$get_user_q = "SELECT user_id from hre_user where email = '".strtolower($_SESSION['sess_email'])."'";
-$get_user_res = mysql_query($get_user_q,$hre);
-$num_of_usr = mysql_num_rows($get_user_res);
-if($num_of_usr > 0)
-{    
-    $user_row = mysql_fetch_array($get_user_res, MYSQL_ASSOC);
-    $this_usr = $user_row['user_id'];
-    //echo "<pre>user_row: ";   print_r($user_row);   echo "</pre>";   
-    $user_invoices = this_user_invoices($user_row['user_id'],$hre);
-    //echo "<pre>this_user_invoices: ";   print_r($this_user_invoices);   echo "</pre>";   
+
+$user_invoices = array();
+
+$user_site_query = mysql_query("select * from exec_user where user_id='".$_SESSION['sess_user_id']."'");
+$get_usersite_res = mysql_query($user_site_query);
+$num_of_usr_site = mysql_num_rows($get_usersite_res);
+if($num_of_usr_site > 0)
+{
+    $this_usr_site = $user_row['site'];
+    if($this_usr_site == 'hr')
+        $invoice_table = 'hre_saved_invoices';
+    elseif($this_usr_site == 'cmo')
+        $invoice_table = 'cmo_saved_invoices';
+    elseif($this_usr_site == 'clo')
+        $invoice_table = 'clo_saved_invoices';
+    elseif($this_usr_site == 'cto')
+        $invoice_table = 'cto_saved_invoices';
+
+
+    $get_user_q = "SELECT user_id from hre_user where email = '".strtolower($_SESSION['sess_email'])."'";
+    $get_user_res = mysql_query($get_user_q);
+    $num_of_usr = mysql_num_rows($get_user_res);
+    if($num_of_usr > 0)
+    {    
+        $user_row = mysql_fetch_array($get_user_res, MYSQL_ASSOC);
+        $this_usr = $user_row['user_id'];
+        //echo "<pre>user_row: ";   print_r($user_row);   echo "</pre>";   
+        $user_invoices = this_user_invoices($user_row['user_id'],$invoice_table);
+        //echo "<pre>this_user_invoices: ";   print_r($this_user_invoices);   echo "</pre>";   
+    }
 }
-
 
 //com_db_connect() or die('Unable to connect to database server!');
 com_db_connect_hre2() or die('Unable to connect to database server!');
@@ -142,28 +162,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
     $msg = "You successfully changed your subscription.";  
     
     
-    /*
-    $user_query = "select * from " . TABLE_USER ." where email = '".$email."' and user_id = ".$this_user;
-    //echo "<br>user_query: ".$user_query; 
-    $user_result = com_db_query($user_query);
-    if($user_result)
-    {
-        $row_count = com_db_num_rows($user_result);
-        if($row_count > 0)
-        {
-            com_db_query("UPDATE ".TABLE_USER." set password='".$password."' where email ='".$email."' and user_id = ".$this_user);	
-            $msg = "You successfully changed your password.";            
-        }
-        else
-        {
-            $msg = "No user exists with this email address.";            
-        }    
-    }
-    else
-    {
-        $msg = "No user exists with this email address.";            
-    }    
-    */
+   
 }
 
 
@@ -174,26 +173,6 @@ $user_row = com_db_fetch_array($user_result);
 $level = $user_row['level'];
 
 
-?>
-<!-- <a href="https://www.hrexecsonthemove.com/vsword/invoices/4570_2017-01-01.docx">Test Invoice</a> -->
-<?PHP
-
-/*
-if(sizeof($user_invoices) > 0)
-{
-    $sequence = 0;
-    for($j=0;$j<sizeof($user_invoices);$j++)
-    {
-    ?>
-        <a href="https://www.hrexecsonthemove.com/vsword/invoices/<?=$this_usr?>_<?=$user_invoices[$j]?>.docx">Invoice for <?=$user_invoices[$j]?></a><br>
-         
-    <?PHP
-    }
-}
-*/
-
-
-    //if($_POST['request_demo_flag'] == 1)
     if($msg != '')    
     {    
     ?>
@@ -202,37 +181,6 @@ if(sizeof($user_invoices) > 0)
         <h1 style="font-size:53px;margin-top:100px;"><?=$msg?></h1>
     </div><!-- /.intro-content -->    
     <?PHP
-    }
-    else
-    { 
-        if(1 == 2)
-        {    
-    ?>
-            <div class="intro-content" style="width:400px;margin: 0 auto;">
-            <!-- <h3 style="text-align:left;width:100%;padding:0px 0px 15px 0px;margin:0px;">Request A Demo</h3> -->
-            <h1 style="width:600px;margin-bottom: 15px;font-size:53px;">Subscription</h1>
-
-                <div class="form-sing-up">
-                    <form action="settings.php" method="post">
-                        <div class="form-body">
-                            <div style="color:white;" class="form-row">
-                                <label for="field-email" class="form-label hidden">Work Email</label>
-                                <input <?PHP if($level == 'basic') echo "checked";?> type="radio" name="subscription" value="basic"> Basic<br>
-                                <input <?PHP if($level == 'standard') echo "checked";?> type="radio" name="subscription" value="standard"> Standard<br>
-                                <input <?PHP if($level == 'professional') echo "checked";?> type="radio" name="subscription" value="professional"> Professional
-                            </div><!-- /.form-row -->
-                        </div><!-- /.form-body -->
-
-                        <div class="form-actions">
-                            <input type="hidden" id="request_demo_flag" name="request_demo_flag" value="1">
-                            <input type="submit" value="Upgrade" class="form-btn"> <!--  onclick="return filter_email();" -->
-                        </div><!-- /.form-actions -->
-                    </form>
-                </div><!-- /.form-sing-up -->
-
-            </div><!-- /.intro-content -->
-    <?PHP
-        }
     }
 
     
