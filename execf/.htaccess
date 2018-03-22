@@ -1,0 +1,4 @@
+RewriteEngine On
+
+SetEnv downgrade-1.0
+php_value opcache.enable 0

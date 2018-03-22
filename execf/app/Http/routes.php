@@ -56,6 +56,11 @@ Route::post('alerts','mainController@alerts');
 Route::get('alerts/{lid?}/{action?}','mainController@alerts');
 
 Route::get('getuser','mainController@getuserlink');
+
+Route::post('forgot-password','mainController@forgotpassword');
+Route::get('forgot-password','mainController@forgotpassword');
+Route::get('forgot-password/{ucd}','mainController@forgotpassword');
+
 //Route::post('getuser','mainController@getuserlink');
 
 //Route::get('makedefault/{default_list_id}/action','mainController@settings');

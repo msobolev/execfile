@@ -197,7 +197,7 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
 
 elseif($action == 'AlertCreate')
 { 
-    $title = $_POST['title'];
+    $title = trim($_POST['title']);
     if($title=='e.g. CHRO or Vice President - Human Resources')
     {
         $title='';
@@ -254,13 +254,13 @@ elseif($action == 'AlertCreate')
     $state = $state_id_arr;
 
 
-    $city = $_POST['city'];
+    $city = trim($_POST['city']);
 
     $zip_code = $_POST['zip_code'];
     if($zip_code =='Zip Code'){
             $zip_code = '';
     }
-    $company = $_POST['company'];
+    $company = trim($_POST['company']);
     if($company =='e.g. Microsoft'){
             $company ='';
     }

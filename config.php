@@ -51,6 +51,10 @@ define("LINKEDIN_SHARE_ROOT","https://www.linkedin.com/shareArticle?");
 define("TABLE_LOGIN_HISTORY","hre_login_history");
 define("TABLE_SEARCH_HISTORY","hre_search_history");
 define("TABLE_DOWNLOAD","hre_download");
+
+define("EMAIL_ADDRESS","msobolev@execfile.com");
+define("EMAIL_PASSWORD","ryazan");
+
 //define("TABLE_ALERT_SEND_INFO","hre_alert_send_info");
 
 ?>

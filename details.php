@@ -34,8 +34,8 @@ if($_SERVER['HTTP_REFERER'] != '' && strpos($_SERVER['HTTP_REFERER'],'http://exe
     <head>
 <?PHP
  
-
-
+session_start();
+//echo "<br>Session site:".$_SESSION["this_user_site"];
 
 include("config.php");
 include("functions.php");
@@ -105,7 +105,7 @@ $company_pic_root = "https://www.ctosonthemove.com/";
 $hr_dot = "http://hr.execfile.com/"; 
 
 
-//echo "<br>exec_demo: ".$exec_demo;
+//echo "<br>personal_pic_root: ".$personal_pic_root;
 //if($exec_demo = 'ed')
 //    $_SESSION['exec_demo'] = 1;
 if($type == 'media')

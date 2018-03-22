@@ -13,9 +13,8 @@
 <link rel="stylesheet" href="css/chosen.css" type="text/css" media="all" />
 <link rel="stylesheet" href="css/style-search-alert.css" type="text/css" media="all" />
 
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css' />
-<link href='https://fonts.googleapis.com/css?family=Bitter:400,400italic,700' rel='stylesheet' type='text/css' />
-<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Bitter:400,400italic,700' rel='stylesheet' type='text/css' />
 
 <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
 
@@ -29,6 +28,42 @@
 <link rel="stylesheet" href="<?PHP echo asset('home_style_tags.css'); ?>" type="text/css" >
 
 
+<script language="javascript">
+function ChangePasswordSubmit()
+{
+	var pass = document.getElementById('password').value;
+        var rpass = document.getElementById('repassword').value;
+	if(pass=='')
+	{
+		alert('Please type in your password');
+		document.getElementById('password').focus();
+		return false;
+	}
+	else
+	if(rpass=='')
+	{
+		alert('Please type in your Re-password');
+		document.getElementById('repassword').focus();
+		return false;
+	}
+        else
+	if(pass!=rpass)
+	{
+		alert('The password you typed in should match. Please try again');
+		document.getElementById('password').focus();
+		return false;
+	}
+        else
+        {    
+            FormValueSubmit('frmChangePassword');
+        }    
+}
+
+function FormValueSubmit(frmID){document.getElementById(frmID).submit();}
+
+</script>     
+    
+    
 </head>
 <body class="blue_body">
 <div>
@@ -53,43 +88,39 @@
     ?>
     <div class="intro-content" style="width:400px;margin: 0 auto;">
     <!-- <h3 style="text-align:left;width:100%;padding:0px 0px 15px 0px;margin:0px;">Request A Demo</h3> -->
-    <h1 style="width:600px;margin-bottom: 15px;font-size:53px;">Accounts</h1>
+    <h1 style="width:600px;margin-bottom: 15px;font-size:53px;">Reset Your Password</h1>
 
     <div class="form-sing-up">
-        {{-- <form action="{{ url('accounts')  }}" method="post" onsubmit="return filter_email('email_rq');"> --}}
-        {!! Form::open(['url' => 'accounts'])   !!}
+        
+        {{ Form::open(array('url' => 'forgot-password','onSubmit'=>'return ChangePasswordSubmit()')) }}
             <div class="form-body">
 
-                
-
-
                 <div class="form-row">
-                    <label for="field-email" class="form-label hidden">Work Email</label>
+                    <label for="field-email" class="form-label hidden">New Password</label>
 
                     <div class="form-controls">
                         <i class="ico-mail"></i>
-                        <input style="border:1px solid #CCCCCC;" type="email" class="field" name="email_rq" id="email_rq" value="" placeholder="Work Email">
+                        <input style="border:1px solid #CCCCCC;" type="password" class="field" name="password" id="password" value="" placeholder="New Password">
                     </div><!-- /.form-controls -->
                 </div><!-- /.form-row -->
-                
-                
                 
                 <div class="form-row">
-                    <label for="field-name" class="form-label hidden">Password </label>
+                    <label for="field-email" class="form-label hidden">Re-type Password</label>
+
                     <div class="form-controls">
-                        <i class="ico-user"></i>
-                        <input style="border:1px solid #CCCCCC;" type="password" class="field" name="password" id="password" value="" placeholder="Password" autocomplete="off" required>
+                        <i class="ico-mail"></i>
+                        <input style="border:1px solid #CCCCCC;" type="password" class="field" name="repassword" id="repassword" value="" placeholder="Re-type Password">
                     </div><!-- /.form-controls -->
                 </div><!-- /.form-row -->
-                
                 
                 
                 
             </div><!-- /.form-body -->
 
             <div class="form-actions">
-                <input type="hidden" id="request_demo_flag" name="request_demo_flag" value="1">
-                <input type="submit" value="Change Password" class="form-btn"> <!--  onclick="return filter_email();" -->
+                <input type="hidden" id="reset_pw" name="reset_pw" value="1">
+                <input type="hidden" id="user_email" name="user_email" value="<?=$user_email?>">
+                <input type="submit" value="Save" class="form-btn"> <!--  onclick="return filter_email();" -->
             </div><!-- /.form-actions -->
         {{ csrf_field() }} 
         {!! Form::close()   !!}

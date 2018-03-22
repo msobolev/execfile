@@ -13,8 +13,8 @@
 <link rel="stylesheet" href="css/chosen.css" type="text/css" media="all" />
 <link rel="stylesheet" href="css/style-search-alert.css" type="text/css" media="all" />
 
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css' />
-<link href='http://fonts.googleapis.com/css?family=Bitter:400,400italic,700' rel='stylesheet' type='text/css' />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css' />
+<link href='https://fonts.googleapis.com/css?family=Bitter:400,400italic,700' rel='stylesheet' type='text/css' />
 
 <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
 
@@ -169,7 +169,8 @@ $saved_list_count = count($saved_list);
         //$list_link = "http://www.execfile.com/home.php?from_date=&to_date=&type=$this_type&zip=$zip_code&city=$city&industries=$industry_ids&states=$state_ids&revenue=$revenue&employee_size=$employee_size&companyval=&mweb=$mweb&list=$list";
         $list_link = url('search/'.$saved_list[$i]['list_link']);
 
-                
+        $list_link = str_replace("media_mention","media",$list_link);        
+        
         $list_name =$saved_list[$i]['list_name'];
         
         $default_list = $saved_list[$i]['default_list'];

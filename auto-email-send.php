@@ -188,7 +188,7 @@ $mail->SMTPKeepAlive = true;                  // SMTP connection will not close 
 $mail->Host          = "smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
 $mail->Port          = 25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
 //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
-$mail->Username      = "misha.sobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
+$mail->Username      = "msobolev@execfile.com"; //misha.sobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
 $mail->Password      = "ryazan"; //"rts0214";        // SMTP account password
 //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
 $mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
@@ -334,8 +334,13 @@ while($alert_row = com_db_fetch_array($alert_result)){
     $total_funding_id = ""; // This keep tracks of funding records who are send in email
 
     
+    if($debug == 1)
+        echo "<br>Title:".$alert_row['title'].":";
+    
     if($alert_row['title'] !='')
     {
+        if($debug == 1)
+            echo "<br>within title clause";
         $alert_metch_str = " mm.title='".$alert_row['title']."'";
     }
 
@@ -1128,11 +1133,26 @@ while($alert_row = com_db_fetch_array($alert_result)){
     //FAR UNCOMMENT For jobs and fundings
     if($alert_row['jobs'] == 1)
     {    
+        if($debug == 1)
+            echo "<br><br>Alert match str before:".$alert_metch_str;
+        
+        if($alert_row['title'] != '')
+        {    
+            $alert_metch_str = " mm.title='".$alert_row['title']."'";
+            $alert_metch_str_jobs = str_replace("mm.title","cj.job_title",$alert_metch_str);
+        }
+        
+        if($debug == 1)
+            echo "<br><br>Alert match str after:".$alert_metch_str;
+        
         $jobsQuery = "select distinct(cj.company_id),cm.company_name,cm.company_logo from ".$TABLE_COMPANY_JOB_INFO." as cj,"
         .$TABLE_COMPANY_MASTER. " as cm where cj.company_id = cm.company_id and cj.add_date>'".$before_date."' and cj.add_date<'".$future_date."' and cj.status=0";
         
-        if($alert_metch_str != '')
-            $jobsQuery .= " and ".$alert_metch_str;
+        
+        echo "<br>jobsQuery:".$jobsQuery;
+        
+        if($alert_metch_str_jobs != '')
+            $jobsQuery .= " and ".$alert_metch_str_jobs;
         
         
         if($sent_job_id != '')

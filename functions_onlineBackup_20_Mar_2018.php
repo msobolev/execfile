@@ -551,11 +551,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     
     
     $ciso_clause = "";
-    $previous_email_clause = "";
     if($func == 'ciso')
     {
         $ciso_clause = " and ciso_user = 1";
-        $previous_email_clause = ",previous_email";
     }
     elseif($func == 'cto')
     {
@@ -765,7 +763,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             personal_image,email,phone".$company_fields.",title,movement_type,
             more_link,announce_date as announce_date,effective_date as add_date,effective_date,source_id,headline,
             '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,
-            company_name,company_logo $previous_email_clause
+            company_name,company_logo
             FROM $table_search_data
             WHERE 
             movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
@@ -790,7 +788,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             personal_image,email,phone".$company_fields.",title,movement_type,
             more_link,announce_date as announce_date,effective_date as add_date,effective_date,source_id,headline,
             '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,
-            company_name,company_logo $previous_email_clause
+            company_name,company_logo
             FROM $table_search_data
             WHERE 
             movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
@@ -846,11 +844,6 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['industry_id'] = $indRow['industry_id'];
             $data_arr[$data]['industry_title'] = $indRow['industry_title'];
             $data_arr[$data]['state_short'] = $indRow['state_short'];
-            
-            if($func == 'ciso')
-            {
-                $data_arr[$data]['previous_email'] = $indRow['previous_email'];
-            }
             
             
             if($move_last_id_db == '')

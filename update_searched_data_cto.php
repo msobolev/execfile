@@ -51,7 +51,7 @@ mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
     $main_query = "select cm.company_logo,cm.company_id as company_id, cm.company_name as company_name,cm.company_website as company_website,pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.personal_image as personal_image,mm.move_id as move_id,mm.title as title,
     pm.level as level, pm.level_order as level_order,pm.email,pm.phone,pm.about_person,pm.ciso_user,cm.about_company,
     mm.headline,mm.source_id,mm.movement_type,mm.add_date,mm.announce_date,mm.more_link,mm.effective_date,mm.full_body,mm.what_happened,
-    cm.company_revenue,cm.company_employee,cm.company_industry,cm.ind_group_id,cm.industry_id,cm.city,cm.state,cm.country,cm.zip_code,cm.address,cm.address2,cm.company_urls
+    cm.company_revenue,cm.company_employee,cm.company_industry,cm.ind_group_id,cm.industry_id,cm.city,cm.state,cm.country,cm.zip_code,cm.address,cm.address2,cm.company_urls,pm.previous_email
     from cto_personal_master as pm,
     hre_company_master as cm,
     cto_movement_master as mm
@@ -113,10 +113,11 @@ mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
         $company_urls = $indRow['company_urls'];
         
         $ciso_user = $indRow['ciso_user'];
+        $previous_email = $indRow['previous_email'];
         
         
         $insert_q = "";
-        $insert_q = "INSERT into cto_search_data(company_id,company_name,company_website,company_logo,personal_id,first_name,middle_name,last_name,email,phone,personal_image,move_id,title,level,level_order,source_id,movement_type,add_date,announce_date,more_link,company_revenue,company_employee,company_industry,ind_group_id,industry_id,city,state,country,zip_code,address,address2,about_person,about_company,effective_date,headline,full_body,what_happened,company_urls,ciso_user) values('$company_id','$company_name','$company_website','$company_logo','$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$move_id','$title','$level','$level_order','$source_id','$movement_type','$add_date','$announce_date','$more_link','$company_revenue','$company_employee','$company_industry','$ind_group_id','$industry_id','$city','$state','$country','$zip_code','$address','$address2','$about_person','$about_company','$effective_date','$headline','$full_body','$what_happened','$company_urls','$ciso_user')";
+        $insert_q = "INSERT into cto_search_data(company_id,company_name,company_website,company_logo,personal_id,first_name,middle_name,last_name,email,phone,personal_image,move_id,title,level,level_order,source_id,movement_type,add_date,announce_date,more_link,company_revenue,company_employee,company_industry,ind_group_id,industry_id,city,state,country,zip_code,address,address2,about_person,about_company,effective_date,headline,full_body,what_happened,company_urls,ciso_user,previous_email) values('$company_id','$company_name','$company_website','$company_logo','$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$move_id','$title','$level','$level_order','$source_id','$movement_type','$add_date','$announce_date','$more_link','$company_revenue','$company_employee','$company_industry','$ind_group_id','$industry_id','$city','$state','$country','$zip_code','$address','$address2','$about_person','$about_company','$effective_date','$headline','$full_body','$what_happened','$company_urls','$ciso_user','$previous_email')";
 
         //if($personal_id == '68661')
         //    echo "<br><br>Ins Q: ".$insert_q;

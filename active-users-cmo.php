@@ -16,8 +16,8 @@ $mail->SMTPKeepAlive = true;                  // SMTP connection will not close 
 $mail->Host          = "smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
 $mail->Port          = 80;    // 25 465               // 26 set the SMTP port for the GMAIL server
 //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
-$mail->Username      = "misha.sobolev@execfile.com";   //"rts_email_sent@hrexecsonthemove.com"; // SMTP account username
-$mail->Password      = "ryazan";  //"rts0214";        // SMTP account password
+$mail->Username      = EMAIL_ADDRESS; //"misha.sobolev@execfile.com";   //"rts_email_sent@hrexecsonthemove.com"; // SMTP account username
+$mail->Password      = EMAIL_PASSWORD; //"ryazan";  //"rts0214";        // SMTP account password
 //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
 $mail->SetFrom('ms@hrexecsonthemove.com', 'hrexecsonthemove.com');
 //$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');

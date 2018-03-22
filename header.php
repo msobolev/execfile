@@ -245,7 +245,7 @@ function searchKeyPress(e)
             
             var org = '';
             if(type == 'all' || type == 'All')
-                org = "&org=1";
+                org = "&org=0";
             
             //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size;
             //window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&org=1";

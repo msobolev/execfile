@@ -1149,7 +1149,7 @@ $form_hidden_values = $selected_type.":".$user_site.":".$from_date_initial.":".$
             <nav class="nav-utilities">
                 <ul>
                     <li class="download-holder">
-                        <form name="frmResultDownload" method="post" action="https://www.execfile.com/download-result.php">
+                        <form name="frmResultDownload" method="post" action="http://www.execfile.com/download-result.php">
                             <input type="hidden" name="selected_filters_hidden" value="<?=$form_hidden_values?>">
                         </form>
                         
@@ -1427,7 +1427,7 @@ $all_data_count = count($all_data);
                 $max_funding_id = 0;
                 $max_job_id = 0;
                 ?>
-
+fa1
                     @if($all_data_count > 0)
                         @for ($k = 0; $k < $all_data_count; $k++)
                         
@@ -1468,7 +1468,7 @@ $all_data_count = count($all_data);
                                 @if($all_data[$k]['id'] > $max_media_id)
                                     <?PHP $max_media_id = $all_data[$k]['id']; ?>
                                 @endif
-                            @endif
+                            @endif   
 
 
 
@@ -1482,10 +1482,6 @@ $all_data_count = count($all_data);
                                     <?PHP $max_award_id = $all_data[$k]['id']; ?>
                                 @endif
                             @endif  
-
-
-
-
 
                             @if($all_data[$k]['type'] == 'publication')
 
@@ -1520,14 +1516,9 @@ $all_data_count = count($all_data);
                                     <?PHP $max_job_id = $all_data[$k]['id']; ?>
                                 @endif
                             @endif
-   
-
-
-                             
-                            
                         @endfor
                         
-                        
+                        fa2
                         
                         
                         {{ Form::hidden('last_move_id', $max_move_id,array('id'=>'last_move_id')) }}
@@ -1537,11 +1528,11 @@ $all_data_count = count($all_data);
                         {{ Form::hidden('last_publication_id', $max_pub_id,array('id'=>'last_publication_id')) }}
                         {{ Form::hidden('last_funding_id', $max_funding_id,array('id'=>'last_funding_id')) }}
                         {{ Form::hidden('last_job_id', $max_job_id,array('id'=>'last_job_id')) }}
-                        
+                        fa3
                         @for ($i = $starting_point; $i < $ending_point; $i++)
                             @if(isset($all_data[$i]['type']) && $all_data[$i]['type'] == 'movement')
                             <li class="article">
-
+fa4
 
                                 @if($all_data[$i]['show_state'] == 'unread')
 

@@ -9,7 +9,7 @@ include("functions.php");
 $filter_arr = explode(":",$_POST['selected_filters_hidden']);
 $all_data_count = "";
 
-
+echo "<br>site:".$filter_arr[1];
 
 $all_data = get_all_data('',$filter_arr[0],$filter_arr[1],$filter_arr[2],$filter_arr[3],$filter_arr[4],$filter_arr[5],$filter_arr[6],$filter_arr[7],$filter_arr[8],$filter_arr[9],$filter_arr[10],$filter_arr[11],"file");
 
@@ -18,7 +18,6 @@ $all_data_count = count($all_data);
 //echo "<pre>filter_arr: ";   print_r($filter_arr);   echo "</pre>";
 
 //echo "<pre>all_data DL: ";   print_r($all_data);   echo "</pre>";  
-
 //die();
 
 //echo "<br><br>all_data_count: ".$all_data_count;
@@ -43,6 +42,35 @@ $jobs_count = 0;
 
 $country = 'United States';
 //$movement_type = 'Appointments';
+
+$user_site = $filter_arr[1];
+$table_company_master           = "hre_company_master";
+if($user_site == '' || $user_site == 'hr')
+{
+    $table_personal_master          = "hre_personal_master";
+    $table_movement_master          = "hre_movement_master";
+    
+}
+elseif($user_site == 'cto' || $user_site == 'ciso')
+{
+    $table_personal_master          = "cto_personal_master";
+    $table_movement_master          = "cto_movement_master";
+}
+elseif($user_site == 'cfo')
+{
+    $table_personal_master          = "cfo_personal_master";
+    $table_movement_master          = "cfo_movement_master";
+}
+elseif($user_site == 'cmo'  || $user_site == 'cso')
+{
+    $table_personal_master          = "cmo_personal_master";
+    $table_movement_master          = "cmo_movement_master";
+}
+elseif($user_site == 'clo')
+{
+    $table_personal_master          = "clo_personal_master";
+    $table_movement_master          = "clo_movement_master";
+}
 
 
 $download_info_query = "insert into " . TABLE_DOWNLOAD . "(user_id,add_date) values ('".$_SESSION['sess_user_id']."','".date('Y-m-d')."')";
@@ -254,6 +282,27 @@ for($v=0;$v<=$all_data_count;$v++)
             $movement_type = 'Appointment';
         elseif($all_data[$v]['movement_type'] == 2)
             $movement_type = 'Promotion';
+        
+        $previous_company = "";
+        if($all_data[$v]['movement_type'] == 1 || $all_data[$v]['movement_type'] == 2)
+        {
+            if($all_data[$v]['movement_type'] == 1)
+                $limit = " limit 1,1";
+            elseif($all_data[$v]['movement_type'] == 2)
+                $limit = " limit 2,1";
+            
+            
+            $this_personal_id = $all_data[$v]['personal_id'];
+            $last_q = "select cm.company_name as company_name from ".$table_movement_master." as mm,"
+            .$table_personal_master." as pm,"
+            .$table_company_master." as cm where cm.company_id = mm.company_id and pm.personal_id = mm.personal_id and pm.personal_id = $this_personal_id order by move_id desc $limit";
+
+            //echo "<br>last_q:".$last_q;
+            $res_last = com_db_query($last_q);
+            $last_row = com_db_fetch_array($res_last);
+            $previous_company = $last_row['company_name'];
+        }
+        
         //echo "<br>Movement_type: ".$movement_type;
         
         $movement_array[$movement_count]['personal_id'] = $all_data[$v]['personal_id'];
@@ -283,6 +332,13 @@ for($v=0;$v<=$all_data_count;$v++)
         $movement_array[$movement_count]['about_person'] = $all_data[$v]['about_person'];
         $movement_array[$movement_count]['about_company'] = $all_data[$v]['about_company'];
         $movement_array[$movement_count]['more_link'] = $all_data[$v]['more_link'];
+        $movement_array[$movement_count]['previous_company'] = $previous_company;
+        
+        if($user_site == 'ciso')
+        {
+            $movement_array[$movement_count]['previous_email'] = $all_data[$v]['previous_email'];
+        }    
+        
         
         $ind_title = "";
         if($all_data[$v]['industry_id'] != '')
@@ -695,7 +751,11 @@ if($movement_count > 0)
     $xls->Text($xlsRow,25,"What Happened");
     $xls->Text($xlsRow,26,"About Person");
     $xls->Text($xlsRow,27,"About Company");
-    $xls->Text($xlsRow,28,"More Link");
+    $xls->Text($xlsRow,28,"Source Link");
+    $xls->Text($xlsRow,28,"Previous Company");
+    
+    if($user_site == 'ciso')
+        $xls->Text($xlsRow,29,"Previous Email");
     
     $xlsRow++;
     for($mo=0;$mo<$movement_count;$mo++)
@@ -728,6 +788,10 @@ if($movement_count > 0)
         $xls->Text($xlsRow,26,$movement_array[$mo]['about_person']);
         $xls->Text($xlsRow,27,$movement_array[$mo]['about_company']);
         $xls->Text($xlsRow,28,$movement_array[$mo]['more_link']);
+        $xls->Text($xlsRow,28,$movement_array[$mo]['previous_company']);
+        
+        if($user_site == 'ciso')
+            $xls->Text($xlsRow,29,$movement_array[$mo]['previous_email']);
         
         $xlsRow++;
     }

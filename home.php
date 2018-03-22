@@ -239,6 +239,7 @@ com_db_query($search_history);
         //echo "<br>only_company: ".$only_company;
         //if($only_company == 1)
         //echo "<br>ORG: ".$_GET['org'];        
+        
         if($_GET['org'] == 1)
         {
         $hr_root_link = "https://www.hrexecsonthemove.com/";    
@@ -445,6 +446,9 @@ com_db_query($search_history);
                             {    
                                 if($type != '' && $type != 'none' && $type != 'all')
                                 {
+                                    //echo "<br>TYPE:".$type;
+                                    if($type == 'media_mention')
+                                        $type = "media";
                                     if($type == 'movements')    
                                         $filters .= "|Appointments";
                                     elseif($type == 'media')

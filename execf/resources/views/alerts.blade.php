@@ -31,7 +31,7 @@ $current_page = 'alert.php';
 <?php } ?>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css' />
 <link href='http://fonts.googleapis.com/css?family=Bitter:400,400italic,700' rel='stylesheet' type='text/css' />
-
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 <script src="{{ asset('/js/jquery-1.7.2.min.js') }}"></script>
 <script src="{{ asset('/js/jquery.radios.checkboxes.js') }}"></script>
@@ -380,7 +380,7 @@ function sub_save_list()
                                         <!-- <div style="display:block; float:left;width:200px;margin-bottom:10px;margin-left:4px;"> -->
                                         <span>
                                             <select class="chosen-select" name="state[]" id="state" multiple data-placeholder="Any" style="height:80px;padding-left:5px;">
-                                                <option value="">Any</option>
+                                                <option style="font-family:arial, 'sans-serif';" value="">Any</option>
                                                 @for ($j = 0; $j < count($states); $j++)
                                                 
                                                 <?PHP

@@ -738,6 +738,7 @@ $awards_last_id_db = DB::table('exec_count')
     } 
     */
     //echo "<br>Type in fun: ".$type;
+    $limit_clause = '';
     $show_time = 0;
     if($type == 'movements' || $type == 'all' || $type == '0' || strpos($type,"movements") > -1)        
     {
@@ -746,7 +747,7 @@ $awards_last_id_db = DB::table('exec_count')
             $limit_clause = "";
         
         //$limit_clause = " LiMIT 300";
-        $limit_clause = " LiMIT 2300";
+        $limit_clause = " LiMIT 900";
         if($display_type == 'file')
             $limit_clause = " LIMIT 0,1000";
         //else
@@ -891,6 +892,7 @@ $awards_last_id_db = DB::table('exec_count')
             $data_arr[$data]['industry_id'] = $row->industry_id;
             $data_arr[$data]['industry_title'] = '';//$row->industry_title; TODO
             $data_arr[$data]['state_short'] = '';//$row->state_short; TODO
+            $data_arr[$data]['total_count'] = $filtered_count;
             
             if($move_last_id_db == '' || $move_last_id_db == '0')
             {

@@ -58,7 +58,7 @@
         
                 
             <div class="field">
-            
+                <div class="blue-text-left blue-text"><a href="forgot-password">Forgot Your Password?</a></div>
             </div>
 
 
