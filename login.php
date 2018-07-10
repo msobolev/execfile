@@ -76,7 +76,9 @@ function ShowSignUpButton(){
                     <input class="loginbox" name="login_pass" id="login_pass" type="password" autocomplete="off" onfocus="ClassChangeFocus('loginbox_password');" onblur="ClassChangeBlur('loginbox_password');" /> <!--  onkeyup="ShowSignUpButton();" -->
                 </div>
             </div>
-		
+            <div class="field">
+                <div class="blue-text-left blue-text"><a href="forgot_password.php">Forgot Your Password?</a></div>
+            </div>
         
                 
             <div class="field">

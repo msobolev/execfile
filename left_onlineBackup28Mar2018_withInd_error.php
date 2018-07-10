@@ -1,8 +1,4 @@
 <?PHP
-//ini_set('display_errors',1);
-//ini_set('display_startup_errors',1);
-//error_reporting(-1);
-
 $all_states = get_all_states();
 $all_industries = get_all_industries();
 //echo "<pre>all_industries: ";   print_r($all_industries);   echo "</pre>";
@@ -51,35 +47,9 @@ $all_industries = get_all_industries();
                 </h3><!-- /.widget-title -->
             </div><!-- /.widget-head -->
 
-            
-            <?PHP
-            $func_display = "";
-            if($_SESSION['combine_site'] == 'cto/ciso')
-            {    
-                $func_display = 'style=display:block;';
-            } 
-            ?>
-            <div class="widget-body" <?=$func_display?>>
+            <div class="widget-body">
                 <nav class="widget-nav">
                     <ul>
-                        
-                        <?PHP
-                        if($_SESSION['combine_site'] == 'cto/ciso')
-                        {    
-                        ?>
-                            <li>
-                                <a href="home.php?func=cto">CTO</a>
-                            </li>    
-                            <li>
-                                <a href="home.php?func=ciso">CISO</a>
-                            </li>    
-                        <?PHP
-                        }
-                        else
-                        {    
-                        ?>
-                        
-                        
                         <li>
                             <a href="home.php?">
                             <?PHP
@@ -128,11 +98,6 @@ $all_industries = get_all_industries();
                             ?>
                             </a>
                         </li>
-                        
-                        <?PHP
-                        }
-                        ?>
-                        
                     <!--    
                         <li>
                             <a href="home.php?func=cfo">Finance</a>
@@ -221,7 +186,7 @@ $all_industries = get_all_industries();
             $timeframe_display = "";
             if($from_date_initial != '' || $to_date_initial != '')
             {    
-                $timeframe_display = 'style=display:block;padding-left:10px;padding-right:5px;';
+                $timeframe_display = 'style=display:block;';
             } 
             ?>
             
@@ -254,21 +219,11 @@ $all_industries = get_all_industries();
             
             
             <?PHP
-            //com_db_connect_hre2();
-            
-            $cto = mysql_connect(CTO_SERVER_IP,CTO_DB_USER_NAME,CTO_DB_PASSWORD) or die("Database ERROR ".mysql_error());
-            mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");
-            
-            //echo "<br>Q:select * from ".TABLE_INDUSTRY." where parent_id = 0";
-            
-            
             $company_display = "";
             if($_GET['companyval'] != '' || $_GET['industries'] != ''  || $_GET['revenue'] != ''  || $_GET['employee_size'] != '')
             {    
                 $company_display = 'style=display:block;';
-            }
-            
-            
+            } 
             ?>
             
             <div  class="widget-body" <?=$company_display?>>
@@ -285,12 +240,6 @@ $all_industries = get_all_industries();
                         <div class="checkbox-holder">
                             <ul class="list-checkboxes">
                                 <?PHP
-                                
-                                
-                                //$parent_ind_row = mysql_fetch_array($parent_ind_q);
-                                //echo "<pre>PARENT INDS:";   print_r($parent_ind_row);   echo "</pre>";
-                                
-                                
                                 //echo "<pre>";   print_r();   echo "</pre>";
                                 //echo "<br>Industries: ".$_GET['industries'];
                                 if(isset($_GET['industries']) && $_GET['industries'] != '')
@@ -298,23 +247,17 @@ $all_industries = get_all_industries();
                                     //$industries = trim($_GET['industries'],",");
                                     $industries = $_GET['industries'];
                                 }    
-                                //foreach($all_industries as $industry_id => $industry_data)
-                                //foreach($parent_ind_row as $industry_data)
-                                $parent_ind_q = mysql_query("select * from cto_industry where parent_id = '0' and status=0",$cto);
-                                while($parent_ind_row = mysql_fetch_array($parent_ind_q))
+                                foreach($all_industries as $industry_id => $industry_data)
                                 { 
-                                    //echo "<pre>industry_data:";   print_r($industry_data);   echo "</pre>";
-                                    
-                                    
-                                    if($parent_ind_row['parent_id'] == 0)
+                                    if($industry_data['parent_id'] == 0)
                                     {    
                                 ?>
-                                    <strong class="list-checkboxes-title"><?=$parent_ind_row['title']?></strong><!-- /.list-checkboxes-title -->
+                                    <strong class="list-checkboxes-title"><?=$industry_data['title']?></strong><!-- /.list-checkboxes-title -->
                                 <?PHP
                                         $search_industry_id = "";
                                         $search_industry_id = $industry_id.",";
                                     }
-                                    
+                                    $checked = "";
                                     //echo "<br>Industry_id: ".$industry_id;
                                     //if(strpos($industries,$industry_id.",") > -1)
                                     //if($industry_id."," == $industries)        
@@ -323,41 +266,27 @@ $all_industries = get_all_industries();
                                     //}
                                     
                                     
-                                    $this_industry_id = $parent_ind_row['industry_id'];
-                                    $child_ind_q = mysql_query("select * from cto_industry where parent_id = '".$this_industry_id."'",$cto);
-                                    //$child_ind_row = mysql_fetch_array($child_ind_q);
-                                    
-                                    //echo "<pre>CHILD INDS:";   print_r($child_ind_row);   echo "</pre>";
-                                    
                                     $ind_arr = explode(",",$industries);
-                                    
-                                    //foreach($child_ind_row as $ind_data) 
-                                    while($child_ind_row = mysql_fetch_array($child_ind_q))
+                                    foreach($ind_arr as $ind_index => $ind_value) 
                                     {
-                                        $checked = "";
-                                        foreach($ind_arr as $ind_index => $ind_value) 
-                                        {
-                                            if($ind_value == $child_ind_row['industry_id']) 
-                                            { 
-                                                $checked = "checked";
-                                            }
+                                        if($ind_value == $industry_id) 
+                                        { 
+                                            $checked = "checked";
                                         }
-                                    
+                                    }
 
                                     
-                                    //if($industry_data['parent_id'] != 0)
-                                    //{    
+                                    if($industry_data['parent_id'] != 0)
+                                    {    
                                 ?>
                                     <li>
                                         <div class="checkbox">
-                                            <input <?=$checked?> type="checkbox" class="industry_chk" name="field-<?=$child_ind_row['industry_id']?>" id="field-<?=$child_ind_row['industry_id']?>" onclick="update_search()">
-                                            <label class="form-label label-check" for="field-<?=$child_ind_row['industry_id']?>"><?=$child_ind_row['title']?></label>
+                                            <input <?=$checked?> type="checkbox" class="industry_chk" name="field-<?=$industry_id?>" id="field-<?=$industry_id?>" onclick="update_search()">
+                                            <label class="form-label label-check" for="field-<?=$industry_id?>"><?=$industry_data['title']?></label>
                                         </div><!-- /.checkbox -->
                                     </li>
                                 <?PHP
-                                    //}
                                     }
-                                    
                                 }
                                 ?>
                             </ul><!-- /.list-checkboxes -->	

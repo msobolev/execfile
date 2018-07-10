@@ -511,7 +511,7 @@ if($speaking_count > 0)
     $xls->Text($xlsRow,19,"Role");
     $xls->Text($xlsRow,20,"Topic");
     $xls->Text($xlsRow,21,"Event");
-    $xls->Text($xlsRow,22,"Link");
+    $xls->Text($xlsRow,22,"Source Link");
     //$xls->Text($xlsRow,23,"Industry ID");
     $xlsRow++;
     for($sp=0;$sp<$speaking_count;$sp++)
@@ -570,7 +570,7 @@ if($awards_count > 0)
     $xls->Text($xlsRow,18,"Awards Date");
     $xls->Text($xlsRow,19,"Awards Title");
     $xls->Text($xlsRow,20,"Award Given By");
-    $xls->Text($xlsRow,21,"Link");
+    $xls->Text($xlsRow,21,"Source Link");
     
     $xlsRow++;
     for($aw=0;$aw<$awards_count;$aw++)
@@ -626,7 +626,7 @@ if($publication_count > 0)
     									
     $xls->Text($xlsRow,18,"Date");
     $xls->Text($xlsRow,19,"Title");
-    $xls->Text($xlsRow,20,"Link");
+    $xls->Text($xlsRow,20,"Source Link");
     
     $xlsRow++;
     for($pu=0;$pu<$publication_count;$pu++)
@@ -684,7 +684,7 @@ if($media_count > 0)
     $xls->Text($xlsRow,18,"Date");
     $xls->Text($xlsRow,19,"Quote");
     $xls->Text($xlsRow,20,"Publication");
-    $xls->Text($xlsRow,21,"Link");
+    $xls->Text($xlsRow,21,"Source Link");
     
     $xlsRow++;
     for($mm=0;$mm<=$media_count;$mm++)
@@ -752,7 +752,7 @@ if($movement_count > 0)
     $xls->Text($xlsRow,26,"About Person");
     $xls->Text($xlsRow,27,"About Company");
     $xls->Text($xlsRow,28,"Source Link");
-    $xls->Text($xlsRow,28,"Previous Company");
+    $xls->Text($xlsRow,29,"Previous Company");
     
     if($user_site == 'ciso')
         $xls->Text($xlsRow,29,"Previous Email");
@@ -788,7 +788,7 @@ if($movement_count > 0)
         $xls->Text($xlsRow,26,$movement_array[$mo]['about_person']);
         $xls->Text($xlsRow,27,$movement_array[$mo]['about_company']);
         $xls->Text($xlsRow,28,$movement_array[$mo]['more_link']);
-        $xls->Text($xlsRow,28,$movement_array[$mo]['previous_company']);
+        $xls->Text($xlsRow,29,$movement_array[$mo]['previous_company']);
         
         if($user_site == 'ciso')
             $xls->Text($xlsRow,29,$movement_array[$mo]['previous_email']);

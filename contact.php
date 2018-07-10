@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+//ini_set('display_errors',1);
+//ini_set('display_startup_errors',1);
+//error_reporting(-1);
 ?>
 <script src="js/form_functions.js"></script>
 <?PHP
@@ -7,8 +11,14 @@ session_start();
 include("blue_header.php");
 include("config.php");
 include("functions.php");
+
+com_db_connect_hre2() or die('Unable to connect to database server!');
    
 //com_db_connect() or die('Unable to connect to database server!');
+
+//echo "<br>faraz";
+$admin_email = com_db_GetValue("select admin_email from exec_admin");
+//echo "<br>email:".$email;
 
 if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 {
@@ -22,7 +32,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
     $mail->Host          = "smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
     $mail->Port          = 80;    // 25 465               // 26 set the SMTP port for the GMAIL server
     //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
-    $mail->Username      = "misha.sobolev@execfile.com";   //"rts_email_sent@hrexecsonthemove.com"; // SMTP account username
+    $mail->Username      = "msobolev@execfile.com";   //"rts_email_sent@hrexecsonthemove.com"; // SMTP account username
     $mail->Password      = "ryazan";  //"rts0214";        // SMTP account password
     //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
     $mail->SetFrom('ms@hrexecsonthemove.com', 'hrexecsonthemove.com');
@@ -30,14 +40,6 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
     $mail->AddReplyTo($from_admin, 'hrexecsonthemove.com');
     $mail->Subject       = "Contact us form submitted on Execfile";
 
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     $invalid = 0;
@@ -86,17 +88,15 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
         //mail($to,$subject,$message, $headers);
         
         
-        
-        
         $emailContent = $message;
         //$email = 'faraz.aia@nxvt.com';
-        $email = 'msobolev@execfile.com';
+        //$email = 'msobolev@execfile.com';
 
         $user_first_name = 'faraz';
 
         $mail->MsgHTML($emailContent);
 
-        $mail->AddAddress($email, $user_first_name);
+        $mail->AddAddress($admin_email, $user_first_name);
 
         if(!$mail->Send()) 
         {
@@ -104,9 +104,15 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
             //$inserError = "insert into ".TABLE_MAILER_ERROR."(str_error,email,alert_id,add_date) values('$str_error','$email','$alert_id','".date("Y-m-d")."')";
             //com_db_query($inserError);
 
+            
+            
         }
          else {
-             //echo "<br><br>Email send";
+            //echo "<br><br>Email send";
+            $todays = date('Y-m-d');
+            $add_query = "INSERT into exec_forms(form_data,form_date,form_type) values('".$message."','".$todays."','contact')";
+            //echo "query:".$query;
+            com_db_query($add_query);
         }
         $mail->ClearAddresses();
         
@@ -150,7 +156,7 @@ if(isset($_GET['sf']) && $_GET['sf'] == 1)
     <h1 style="width:600px;margin-bottom: 15px;font-size:53px;">Contact Us</h1>
 
     <div class="form-sing-up">
-        <form action="contact.php" method="post" onsubmit="return filter_email('email_rq');">
+        <form action="contact-us.html" method="post" onsubmit="return filter_email('email_rq');">
             <div class="form-body">
                 <div class="form-row">
                     <label for="field-name" class="form-label hidden">Name </label>

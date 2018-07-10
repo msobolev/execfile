@@ -289,7 +289,8 @@ function companyKeyPress(e)
             
             if(from_date == '' && to_date == '' && type == 'all' && zip_val == '' && city_val == '' && industries == '' && hidden_states == '' && hidden_revenue == '' && hidden_employee_size == '')
             {
-                window.location.href = "http://www.execfile.com/home.php?function=hr&company="+searchnow+"&org=1";
+                //window.location.href = "http://www.execfile.com/home.php?function=hr&company="+searchnow+"&org=1";
+                window.location.href = "http://www.execfile.com/home.php?function=hr&company="+searchnow+"";
             }    
             else
             {
@@ -467,6 +468,9 @@ define("EXECFILE_ROOT","http://www.execfile.com");
 
 define("NO_PERSONAL_IMAGE","no-personal-image.png");
 
+
+
+
 $main_page = "home.php";
 $p = isset($_REQUEST["p"]) ? $_REQUEST["p"] : 1;
 $items_per_page = isset($_REQUEST["items_per_page"]) ? $_REQUEST["items_per_page"] : 10;
@@ -489,12 +493,25 @@ $profile_root_link = "https://www.hrexecsonthemove.com/";
 include("config.php");
 include("functions.php");
 
-//echo "<pre>SESSION: ";   print_r($_SESSION);   echo "</pre>";
+
+//echo "<pre>SESSION Before: ";   print_r($_SESSION);   echo "</pre>";
+// Code for combined site users - June 2018
+if($_SESSION['combine_site'] == 'cto/ciso')
+{    
+    if(isset($_GET['func']) && $_GET['func'] == 'ciso')
+    {
+        $_SESSION['site'] = 'ciso';
+    }
+    elseif(isset($_GET['func']) && $_GET['func'] == 'cto')
+    {
+        $_SESSION['site'] = 'cto';
+    }
+}
+
+
 $func = $_SESSION['site'];
 
-//echo "<pre>GET: ";   print_r($_GET);   echo "</pre>";
-
-
+//echo "<pre>SESSION Atfer: ";   print_r($_SESSION);   echo "</pre>";
 
 
 
@@ -614,7 +631,7 @@ if(isset($_GET['company']) && $_GET['company'] != '')
 if(isset($_GET['city']) && $_GET['city'] != '')
 {
     $city = $_GET['city'];
-    $pg_int_parameters .= "&city=".$searchnow;
+    $pg_int_parameters .= "&city=".$city;
     
     $only_company = 0;
 }
@@ -698,6 +715,9 @@ if(isset($_GET['companyval']) && $_GET['companyval'] != '')
 if(isset($_GET['company']) && $_GET['company'] != '')
 {
     $only_company = 1;
+    // added on 23 may 2018
+    if($_GET['companyval'] == '' && $_GET['company'] != '')
+        $_GET['companyval'] = $_GET['company'];
     
 }
 include("left.php"); 

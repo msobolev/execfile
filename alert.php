@@ -11,6 +11,8 @@ session_start();
 //echo "<br>selected_filters_hidden ONE: ".$_POST['selected_filters_hidden'];
 $sfh = $_POST['selected_filters_hidden'];
 $filter_arr = explode(":",$_POST['selected_filters_hidden']);
+
+//echo "<br>sfh:".$sfh;
 //echo "<pre>FILTER: ";   print_r($filter_arr);   echo "</pre>"; 
 
 include("header-content-page.php");
@@ -116,11 +118,7 @@ else
     $employee_size_id_arr[] = $employee_size;
 
 
-
-//echo "<br>revenue: ".$revenue;
-//echo "<pre>revenue_size_id_arr ARR";   print_r($revenue_size_id_arr);   echo "</pre>";
-
-
+//echo "<br>revenue:".$revenue;
 if(strpos($revenue,',') > -1)
 {
     $revenue_size_id_arr = explode(",",$revenue);
@@ -140,13 +138,13 @@ if(strpos($revenue,',') > -1)
             $revenue_ids[] = $new_revenue_id;
         }
     }
-    
-    
-    
-    
 }        
 else
     $revenue_size_id_arr[] = $revenue;
+//echo "<br>revenue: ".$revenue;
+//echo "<pre>revenue_size_id_arr ARR";   print_r($revenue_size_id_arr);   echo "</pre>";
+
+
 
 //echo "<br>revenue: ".$revenue;
 //echo "<pre>revenue_size_id_arr ARR";   print_r($revenue_size_id_arr);   echo "</pre>";
@@ -190,15 +188,37 @@ if(isset($_GET['alert_id']) && $_GET['alert_id'] != '')
     
     $revenue = $this_alert_arr['revenue_size'];
     $revenue_size_id_arr = explode(",",$revenue);
+    $revenue_ids = $revenue_size_id_arr;
+    $raw_revenue = $this_alert_arr['raw_revenue'];
     
     $delivery_schedule = $this_alert_arr['delivery_schedule'];
     
     $management_type = $this_alert_arr['type'];
     
     $submit_btn = "Update Alert";
+    
+    // case when user comes from setting page, $sfh is not set in that case
+    //$sfh = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".$revenue.":".$employee_size;
+    
+    $type_p = $mgtchanges.",".$speaking.",".$awards.",".$media_mentions.",".$publication.",".$board.",".$jobs.",".$fundings;
+    $func_p = 'hr';
+    $from_date_p = '';
+    $to_date_p = '';
+    $zip_p = $zip_code;
+    $searchnow_p = '';
+    $city_p = $city;
+    $companyval_p = '';
+    $industries_ids_p = $industry_id;
+    $state_ids_p = $state_ids;
+    $revenue_p = $revenue;
+    $employee_size_p = $employee_size;
+    //$sfh = $type_p.":".$func_p.":".$from_date_p.":".$to_date_p.":".$zip_p.":".$searchnow_p.":".$city_p.":".$companyval_p.":".$industries_ids_p.":".$state_ids_p.":".":".$revenue_p.":".$employee_size_p;
+    $sfh = $type_p.":".$func_p.":".$from_date_p.":".$to_date_p.":".$zip_p.":".$searchnow_p.":".$city_p.":".$companyval_p.":".$industries_ids_p.":".$state_ids_p.":".":".$raw_revenue.":".$employee_size_p;
+    
 }  
+echo "<br>sfh:".$sfh;
 
-
+//echo "<pre>";   print_r($revenue_ids);   echo "</pre>";   
 
 
 

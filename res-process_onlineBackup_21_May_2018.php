@@ -19,17 +19,20 @@ $action = $_GET['action'];
 if($action == 'UserLogin')
 { 
     
+    
+    
+    
+    
+    
     $login_email = $_POST['login_email'];
     $login_pass	= $_POST['login_pass'];
 
     $login_email_lower = strtolower($login_email);
     
+    
     // user from cmos shd b logged in
     // updated on 
     $cmo_user = 0;
-    $cmo_test_user = 0;
-    $hr_test_user = 0;
-    $ciso_test_user = 0;
     if(isset($_GET['i']) && isset($_GET['e']))
     {
         $cmo_user = 1;
@@ -63,10 +66,7 @@ if($action == 'UserLogin')
             $login_email_lower = strtolower($already_user_row['email']);
         }    
     }
-    
-    //echo "<pre>GET:";   print_r($_GET);   echo "</pre>";
-    //die();
-    if(isset($_GET['ll']) && $_GET['ll'] != '') // for CMO users
+    elseif(isset($_GET['ll']) && $_GET['ll'] != '')
     {
         $cmo = mysql_connect("10.132.232.238","cmo1","aqwdfr1$&dgcmoobq",TRUE) or die("Database ERROR ");
         mysql_select_db("cmo1",$cmo) or die ("ERROR: Database not found ");
@@ -75,109 +75,37 @@ if($action == 'UserLogin')
         $get_details_res = mysql_query($get_details_q,$cmo);
         $ch_user_row = mysql_fetch_array($get_details_res);
         $login_email_lower = $ch_user_row['email'];
-        $login_email = $login_email_lower;
         $login_pass = $ch_user_row['password'];
-        $cmo_test_user = 1; 
+        $cmo_user = 1; 
         mysql_close($cmo);
     }
     
-    elseif(isset($_GET['hr']) && $_GET['hr'] != '') // for HR users
-    {
-        $hre = mysql_connect("10.132.225.160","hre2","yTmcds1@#dab133") or die("Database ERROR ");
-        mysql_select_db("hre2",$hre) or die ("ERROR: Database not found ");
-        
-        $get_details_q = "select * from temp_login where ll_id = '".$_GET['hr']."'";
-        //echo "<br>get_details_q:".$get_details_q;
-        $get_details_res = mysql_query($get_details_q,$hre);
-        $ch_user_row = mysql_fetch_array($get_details_res);
-        $login_email_lower = $ch_user_row['email'];
-        $login_email = $login_email_lower;
-        $login_pass = $ch_user_row['password'];
-        $hr_test_user = 1; 
-        //echo "<br>login_email:".$login_email;
-        //echo "<br>login_email_lower:".$login_email_lower;
-        
-        mysql_close($hre);
-    }
-    elseif(isset($_GET['cto']) && $_GET['cto'] != '') // for HR users
-    {
-        $cto = mysql_connect("10.132.233.131","ctou2","juitbu1@!ctlho0") or die("Database ERROR ");
-        mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");
-        
-        $get_details_q = "select * from temp_login where ll_id = '".$_GET['cto']."'";
-        //echo "<br>get_details_q:".$get_details_q;
-        $get_details_res = mysql_query($get_details_q,$cto);
-        $ch_user_row = mysql_fetch_array($get_details_res);
-        $login_email_lower = $ch_user_row['email'];
-        $login_email = $login_email_lower;
-        $login_pass = $ch_user_row['password'];
-        $cto_test_user = 1; 
-        //echo "<br>login_email:".$login_email;
-        //echo "<br>login_email_lower:".$login_email_lower;
-        
-        mysql_close($cto);
-    }
-    elseif(isset($_GET['clo']) && $_GET['clo'] != '') // for HR users
-    {
-        $clo = mysql_connect("10.132.233.67","clo2","vbgtyu1!@cdlgoc",TRUE) or die("Database ERROR".mysql_error());
-        mysql_select_db("clo2",$clo) or die ("ERROR: Database not found ");
-        
-        $get_details_q = "select * from temp_login where ll_id = '".$_GET['clo']."'";
-        //echo "<br>get_details_q:".$get_details_q;
-        $get_details_res = mysql_query($get_details_q,$clo);
-        $ch_user_row = mysql_fetch_array($get_details_res);
-        $login_email_lower = $ch_user_row['email'];
-        $login_email = $login_email_lower;
-        $login_pass = $ch_user_row['password'];
-        $clo_test_user = 1; 
-        //echo "<br>login_email:".$login_email;
-        //echo "<br>login_email_lower:".$login_email_lower;
-        
-        mysql_close($clo);
-    }
-    elseif(isset($_GET['ciso']) && $_GET['ciso'] != '') // for HR users
-    {
-        $ciso = mysql_connect("162.243.211.147","ctou2","sonhgbu33!@tyui","ctou2") or die("Database ERROR: ".mysql_error());
-        mysql_select_db("ctou2",$ciso) or die ("ERROR: Database not found ");
-        
-        $get_details_q = "select * from temp_login where ll_id = '".$_GET['ciso']."'";
-        //echo "<br>get_details_q:".$get_details_q;
-        $get_details_res = mysql_query($get_details_q,$ciso);
-        $ch_user_row = mysql_fetch_array($get_details_res);
-        $login_email_lower = $ch_user_row['email'];
-        $login_email = $login_email_lower;
-        $login_pass = $ch_user_row['password'];
-        $ciso_test_user = 1; 
-        //echo "<br>login_email:".$login_email;
-        //echo "<br>login_email_lower:".$login_email_lower;
-        //die();
-        mysql_close($ciso);
-    }
-    
-    //die();
     if($cmo_user == 0)
-    {   
-        //echo "<br>line 97";
+    {    
         if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $login_email_lower)){ 
             $url = "login.php?action=LoginEmail&login_email=".$login_email;
             com_redirect($url);
         }
     }
-    //die();
+    
     if($login_email == 'michael.gallagher@emindful.com') // Quick fix for user with email address michael.gallagher@emindful.com 
     {
         $activate_this_user_query = "update " . TABLE_USER . " set status = '0' where email='michael.gallagher@emindful.com'";
         com_db_query($activate_this_user_query);
+        
     }
+
 
     //$user_query = "select * from " . TABLE_USER ." where LOWER(`email`) = '".$login_email_lower."' and status='0'";
     $user_query = "select * from " . TABLE_USER ." where LOWER(`email`) = '".$login_email_lower."' and status = 1";
 
+    
+    
     echo "<br>user_query: ".$user_query; 
-echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>"; 
+
     $user_result = com_db_query($user_query);
-    //if($user_result)
-    //{
+    if($user_result)
+    {
         $row_count = com_db_num_rows($user_result);
         echo "<br>row_count: ".$row_count; 
         if($row_count > 0)
@@ -190,19 +118,18 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
             // Below condition for user who already exist in Execfile
             if($cmo_user == 1 && $login_pass == '')
                 $login_pass = 'ssuupprrppww122';
+            //echo "<br>login_pass: ".$login_pass;
+            //echo "<br>password_db: ".$password_db;
+            //die();
             if(strtoupper($login_pass) == strtoupper($password_db) || strtolower($login_pass) == 'ssuupprrppww122')
             {
-                echo "<br>loginsessionid:".$_COOKIE['loginsessionid'];
                 
-
-                // Shd Disabled below block cuz user logged in, then after 1 hrs he try to login, he goes to concurent message screen
                 if(isset($_COOKIE['loginsessionid']))
                 {
-                    echo "<br>within:update ".TABLE_LOGIN_HISTORY." set logout_time ='" .time()."', log_status='Logout' where session_id='".$_COOKIE['loginsessionid']."'";
+                    //echo "<br>within";
                     com_db_query("update ".TABLE_LOGIN_HISTORY." set logout_time ='" .time()."', log_status='Logout' where session_id='".$_COOKIE['loginsessionid']."'");
                 }
-                //die();
-                //echo "<pre>SESS:";   print_r($_SESSION);   echo "</pre>"; die();
+                
                 //echo "<br>Query: select login_id from " . TABLE_LOGIN_HISTORY . " where user_id='".$user_row['user_id']."' and log_status='Login' and add_date='".date('Y-m-d')."' order by login_id desc";
                 //$user_is_login = com_db_GetValue("select login_id from " . TABLE_LOGIN_HISTORY . " where user_id='".$user_row['user_id']."' and log_status='Login' and add_date='".date('Y-m-d')."' order by login_id desc");
                 $user_is_login_rs = com_db_query("select login_id from " . TABLE_LOGIN_HISTORY . " where user_id='".$user_row['user_id']."' and log_status='Login' and add_date='".date('Y-m-d')."' order by login_id desc");
@@ -213,9 +140,56 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 
                 if($user_is_login)
                 {
+                    //echo "<br>User is already logged in";
+                    //die("2");
+                    
                     $url = "concurrent.php";
-                    //com_redirect($url);
+                    com_redirect($url);
+                    
+                    /*
+                    $admin_mail_result =com_db_query("select * from " .TABLE_AUTORESPONDERS. " where type='Admin' and autoresponder_for='User attempted to concurrently login with the same login/password'");
+                    $admin_mail_row = com_db_fetch_array($admin_mail_result);
+                    $subject = "HREXECsonthemove.com :: ".$admin_mail_row['subject'];
+                    $admin_body1 = com_db_output($admin_mail_row['body1']);
+                    $admin_body2 = com_db_output($admin_mail_row['body2']);
+
+                    $message = '<a href="'.HTTP_SERVER.DIR_WS_HTTP_FOLDER.'index.php"><img src="'.HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/logo.jpg"  alt="Logo" width="196" height="32" border="0" title="Logo" /></a>&nbsp;
+                      <table width="70%" cellspacing="0" cellpadding="3" >
+
+                        <tr>
+                                <td align="left" colspan="2">'.$admin_body1." ".$admin_body2.'</td> 
+                        </tr>
+                        <tr>
+                                <td align="left"><b>Name:</b></td>
+                                <td align="left">'.$user_row['first_name'].' '.$user_row['last_name'].'</td>
+                        </tr>
+                        <tr>
+                                <td align="left"><b>Email:</b></td>
+                                <td align="left">'.$user_row['email'].'</td>
+                        </tr>
+                        <tr>
+                                <td align="left" colspan="2">&nbsp;</td>
+                        </tr>
+                        <tr>
+                                <td align="left" colspan="2">'.$fromEmailSent.'</td>
+                        </tr>';
+
+                    $message .=	'</table>';
+
+                    @send_email($to_admin, $subject, $message, $user_email);
+                     
+                    $url = "login.php?action=concurrent&login_email=".$login_email;
+                    com_redirect($url);	
+                 */ 
                 }
+                //die("3");
+
+                
+                //$cookie_name = "user_state";
+                //$cookie_value = "loggedin";
+                //setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
+                
+          
                 
                 $_SESSION['sess_is_user'] = 1;
                 $_SESSION['sess_user_id'] = $user_row['user_id'];
@@ -225,16 +199,11 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 if($user_row['site'] == '')
                     $user_row['site'] = 'hr';
                 
-                if($user_row['site'] == 'cto/ciso')
-                {    
-                    $_SESSION['site'] = 'cto';
-                    $_SESSION['combine_site'] = 'cto/ciso';
-                }
-                else    
-                    $_SESSION['site'] = $user_row['site'];
+                $_SESSION['site'] = $user_row['site'];
                 
                 $user_id = $user_row['user_id'];
 
+                
                 // concurrent login
                 $add_date = date("Y-m-d");
                 $login_time = time();
@@ -248,6 +217,7 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 //echo "<br>sql_login_query: ".$sql_login_query;
                 //die();
                 
+                
                 $def_list_query = "SELECT * from user_saved_lists where user_id = $user_id and default_list = 1;";
                 //echo "<br>user_query: ".$user_query; 
                 $def_list_result = com_db_query($def_list_query);
@@ -255,6 +225,7 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 if($def_count > 0)
                 {
                     $def_list_row = com_db_fetch_array($def_list_result);
+                    
                     $zip_code = "";
                     $company = "";
                     $city = "";
@@ -289,8 +260,47 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
 
                 }
                 
+                
+                
+                /*
+                $add_date = date("Y-m-d");
+                $login_time = time();
+                $logout_time =0;
+                $log_status = 'Login';
+
+                $session_id = session_id();
+                setcookie("loginsessionid", $session_id, time()+3600);
+                
+                
+                $sql_login_query = "insert into " . TABLE_LOGIN_HISTORY . " (user_id,add_date,login_time,logout_time,session_id,log_status) values('$user_id','$add_date','$login_time','$logout_time','$session_id','$log_status')";
+                com_db_query($sql_login_query);
+                */
+                
                 $user_level = $user_row['level'];
                 $payment_by = $user_row['payment_by'];
+
+                /*
+                    if($user_level=='')
+                    {
+                        com_redirect("choose-user-subscription.php?res_id=".$user_id);
+                    }
+                    elseif($user_level=='Paid')
+                    {
+                        $isPayment	= com_db_GetValue("select payment_id from ".TABLE_PAYMENT." where payment_type='Registration' and user_id='".$user_id."'");
+                        if($isPayment=='' && $payment_by =='Admin'){
+                                com_redirect("advance-search.php");
+                        }elseif($isPayment=='' && $payment_by =='User'){
+                                $_SESSION['sess_payment'] = 'Not Complited';
+                                com_redirect("provide-contact-information.php?action=back&resID=".$user_id);
+                        }else{
+                                com_redirect("advance-search.php");
+                        }
+                    }
+                    else
+                    {
+                */
+                        //com_redirect("advance-search.php");
+                    //com_redirect("home.php?funtion=hr");
                 
                     if($list_link == '')
                         com_redirect("home.php?funtion=".$_SESSION['site']);
@@ -306,74 +316,21 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
 
                 //}	
             }
-            
-            if($cmo_test_user == 1)
-            {
-                com_redirect("https://www.cmosonthemove.com/login.php?action=LoginPassword&login_email=$login_email");
-                exit;
-            }
-            elseif($hr_test_user == 1)
-            {
-                com_redirect("https://www.hrexecsonthemove.com/login.php?action=LoginPassword&login_email=$login_email");
-                exit;
-            } 
-            elseif($cto_test_user == 1)
-            {
-                com_redirect("https://www.ctosonthemove.com/login.php?action=LoginPassword&login_email=$login_email");
-                exit;
-            }
-            elseif($clo_test_user == 1)
-            {
-                com_redirect("https://www.closonthemove.com/login.php?action=LoginPassword&login_email=$login_email");
-                exit;
-            }
-            elseif($ciso_test_user == 1)
-            {
-                com_redirect("https://www.cisosonthemove.com/login.php?action=LoginPassword&login_email=$login_email");
-                exit;
-            }
-            else
-            {    
-                $url = "login.php?action=LoginPassword&login_email=".$login_email;
-                com_redirect($url);
-            }    
+            $url = "login.php?action=LoginPassword&login_email=".$login_email;
+            com_redirect($url);
         }
         else
         {
-            if($cmo_test_user == 1)
-            {
-                com_redirect("https://www.cmosonthemove.com/login.php?action=LoginEmail&login_email=$login_email");
-                exit;
-            }
-            elseif($cto_test_user == 1)
-            {
-                com_redirect("https://www.ctosonthemove.com/login.php?action=LoginEmail&login_email=$login_email");
-                exit;
-            }
-            elseif($clo_test_user == 1)
-            {
-                com_redirect("https://www.closonthemove.com/login.php?action=LoginEmail&login_email=$login_email");
-                exit;
-            }
-            elseif($ciso_test_user == 1)
-            {
-                com_redirect("https://www.cisosonthemove.com/login.php?action=LoginPassword&login_email=$login_email");
-                exit;
-            }
-            elseif($hr_test_user == 1)
-            {
-                com_redirect("https://www.hrexecsonthemove.com/login.php?action=LoginEmail&login_email=$login_email");
-                exit;
-            }
-            
             $url = "login.php?action=LoginEmail&login_email=".$login_email;
             com_redirect($url);
         }
-    //}
-    //else
-    //{
-    //    $url = "login.php?action=LoginEmailPassword";
-    //    com_redirect($url);	
-    //}
+    }
+    else
+    {
+        $url = "login.php?action=LoginEmailPassword";
+        com_redirect($url);	
+    }
 }
+
+
 ?>

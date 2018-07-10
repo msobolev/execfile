@@ -9,7 +9,7 @@ include("config.php");
 include("functions.php");
    
 com_db_connect_hre2() or die('Unable to connect to database server!');
-
+$admin_email = com_db_GetValue("select admin_email from exec_admin");
 if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 {
     $first_name = $_POST['first_name_rq'];
@@ -41,11 +41,15 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
         $headers = 'From: info@execfile.com' . "\r\n" .
         'Reply-To: info@execfile.com' . "\r\n" ;
 
-
-
         // Send
-        mail('misha.sobolev@execfile.com', 'Request A Demo User', $email_message,$headers);
+        mail($admin_email, 'Request A Demo User', $email_message,$headers);
         //mail('faraz.aia@nxvt.com', 'Request A Demo User', $email_message,$headers);
+        
+        $todays = date('Y-m-d');
+        $add_query = "INSERT into exec_forms(form_data,form_date,form_type) values('".$email_message."','".$todays."','request_demo')";
+        //echo "query:".$query;
+        com_db_query($add_query);
+        
     }
     
 }
@@ -81,7 +85,7 @@ elseif(isset($_GET['sf']) && $_GET['sf'] == 2)
     <h1 style="width:600px;margin-bottom: 15px;font-size:53px;">Request A Demo</h1>
 
     <div class="form-sing-up">
-        <form action="request_demo.php" method="post" onsubmit="return filter_email('email_rq');">
+        <form action="request-demo.html" method="post" onsubmit="return filter_email('email_rq');">
             <div class="form-body">
                 <div class="form-row">
                     <label for="field-name" class="form-label hidden">Name </label>

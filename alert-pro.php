@@ -63,7 +63,12 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     $list_triggers = "";
     $triggers_count = 0;
     
-    
+    $list_employee = '';
+    $list_state = '';
+    $list_zip = '';
+    $list_mgt = '';
+   // echo "<pre>POST:";   print_r($_POST);   echo "</pre>";
+   // echo "<pre>REQ:";   print_r($_REQUEST);   echo "</pre>";
     
     if(isset($_POST['mgtchanges']) && $_POST['mgtchanges'] == 1)
     {
@@ -125,6 +130,7 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     if(isset($_POST['revenue_size']) && $_POST['revenue_size'] != '')
     {
         $list_revenue = implode(",",$_POST['revenue_size']);
+        echo "<br>list_revenue:".$list_revenue;
         
     }
     if(isset($_POST['employee_size']) && $_POST['employee_size'] != '')
@@ -146,10 +152,33 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     if(isset($_POST['selected_filters']) && $_POST['selected_filters'] != '')
     {
         $selected_filters = $_POST['selected_filters'];
+        
+        echo "<br>selected_filters:".$selected_filters;
+        
         $selected_filters_arr = explode(":",$selected_filters);
+        echo "<pre>selected_filters_arr: ";   print_r($selected_filters_arr);   echo "</pre>";
+        
         $selected_filters_arr[8] = $list_industry;
         
-        $selected_filters_arr[11] = $list_revenue;
+        // Updated on 4 june 2018
+        //if($selected_filters_arr[11] != '')
+        //{    
+        
+        
+        // $selected_filters_arr[11] contains raw revenue value
+        // $list_revenue value get updating above from alert page revenue field
+        // if value in alert page revenue field is same then 
+        // raw revenue after conversion should be same as db revenue
+        // otherwise user updated revenue field on alert page
+        // and hence we need to use that value instead of raw revenue value
+        $db_revenue = get_db_reveunue_against_raw($selected_filters_arr[11]);
+        if($db_revenue != $list_revenue)
+            $selected_filters_arr[11] = $list_revenue; // put updated revenue value
+        // if same then automatically revenue value is entered after explode above
+                
+        //}    
+        
+        //$selected_filters_arr[10] = $list_revenue;
         
         $selected_filters_arr[13] = $list_employee;
         
@@ -165,7 +194,7 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
         
         
         $selected_filters = implode(":",$selected_filters_arr);
-        
+         echo "<br>selected_filters after implode:".$selected_filters;
     }    
     
     $this_user = $_SESSION['sess_user_id'];
@@ -177,14 +206,18 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     
     if(isset($_REQUEST['edit_list']) && $_REQUEST['edit_list'] != '')
     {
+        echo "<br>In if";
         $update_query = "UPDATE user_saved_lists set filters = '$selected_filters',websites_filter = '$websites_filter' where l_id = ".$_REQUEST['edit_list'];
+         echo "<br>update_query:".$update_query;
         com_db_query($update_query);
         $action_msg = 'EditList';
     }
     else
     {    
+        echo "<br>In else";
         //echo "<br>websites_filter: ".$websites_filter;
         $save_query = "insert into user_saved_lists (user_id,filters,websites_filter) values ('$this_user','$selected_filters','$websites_filter')";
+        echo "<br>save_query:".$save_query;
         com_db_query($save_query);
         $action_msg = 'SaveList';
     }    
@@ -197,6 +230,7 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
 
 elseif($action == 'AlertCreate')
 { 
+    
     $title = trim($_POST['title']);
     if($title=='e.g. CHRO or Vice President - Human Resources')
     {
@@ -206,7 +240,9 @@ elseif($action == 'AlertCreate')
     {
         $title = com_db_input($title);
     }
-    //echo "<pre>REQ: ";   print_r($_REQUEST);   echo "</pre>";
+    echo "<pre>REQ: ";   print_r($_REQUEST);   echo "</pre>";
+    //$revenew_raw_arr = explode(" ",$_REQUEST['selected_filters']);
+    //die();
     //echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
     $type = $_POST['management'];
     if($type=='Any')
@@ -288,9 +324,16 @@ elseif($action == 'AlertCreate')
     }
     $industry = $industry_id_arr;
 
-
+    
+    $selected_filters_raw = explode(":", $_POST['selected_filters']);
+    //echo "<pr>selected_filters_raw: ";   print_r($selected_filters_raw);   echo "</pre>";
+    $revenue_size_raw = $selected_filters_raw[10];
+    //$revenue_size_raw = implode(",", $_POST['revenue_size']);
     $revenue_size = $_POST['revenue_size'];
-
+    //echo "<br>FA revenue_size_raw:".$revenue_size_raw;
+    //echo "<br>FA revenue_size before:".$revenue_size;
+    //echo "<pre>bfore revenue_size: ";   print_r($revenue_size);   echo "</pre>";
+    //die();
     $revenue_size_arr	= $_POST['revenue_size'];
     if(sizeof($revenue_size_arr)>0 && $revenue_size_arr[0] !='')
     {
@@ -311,7 +354,7 @@ elseif($action == 'AlertCreate')
         }
     }
     $revenue_size = $revenue_size_id_arr;
-
+    //echo "<br>FA revenue_size after:".$revenue_size;
 
     $employee_size = $_POST['employee_size'];
 
@@ -365,7 +408,7 @@ elseif($action == 'AlertCreate')
     {
 
         //$alert_query = "insert into " . TABLE_ALERT . " (user_id,title,type,country,state,city,zip_code,company,company_website,industry_id,revenue_size,employee_size,delivery_schedule,speaking,awards,publication,media_mention,board,jobs,fundings,monthly_budget,exp_date,alert_date,add_date) values ('$user_id','$title','$type','$country','$state','$city','$zip_code','$company','$company_website','$industry','$revenue_size','$employee_size','$delivery_schedule','$speaking','$awards','$publication','$media_mentions','$board','$jobs','$fundings','$monthly_budget','$exp_date','$alert_date','$add_date')";
-        $alert_query = "insert into " . TABLE_ALERT . " (user_id,title,type,country,state,city,zip_code,company,company_website,industry_id,revenue_size,employee_size,delivery_schedule,mgt_change,speaking,awards,publication,media_mention,board,jobs,fundings,monthly_budget,exp_date,alert_date,add_date) values ('$user_id','$title','$type','$country','$state','$city','$zip_code','$company','$company_website','$industry','$revenue_size','$employee_size','$delivery_schedule','$mgtchanges','$speaking','$awards','$publication','$media_mentions','$board','$jobs','$fundings','$monthly_budget','$exp_date','$alert_date','$add_date')";
+        $alert_query = "insert into " . TABLE_ALERT . " (user_id,title,type,country,state,city,zip_code,company,company_website,industry_id,revenue_size,employee_size,delivery_schedule,mgt_change,speaking,awards,publication,media_mention,board,jobs,fundings,monthly_budget,exp_date,alert_date,add_date,raw_revenue) values ('$user_id','$title','$type','$country','$state','$city','$zip_code','$company','$company_website','$industry','$revenue_size','$employee_size','$delivery_schedule','$mgtchanges','$speaking','$awards','$publication','$media_mentions','$board','$jobs','$fundings','$monthly_budget','$exp_date','$alert_date','$add_date','$revenue_size_raw')";
         $action_msg = 'added';
     }
     elseif($selected_alert > 0)
@@ -373,7 +416,8 @@ elseif($action == 'AlertCreate')
         $alert_query = "UPDATE " . TABLE_ALERT . " set title = '$title',type = '$type',country = '$country',state = '$state',city = '$city',zip_code = '$zip_code',company = '$company',company_website = '$company_website',industry_id = '$industry',revenue_size = '$revenue_size',employee_size = '$employee_size',delivery_schedule = '$delivery_schedule',mgt_change = '$mgtchanges',speaking = '$speaking',awards = '$awards',publication = '$publication',media_mention = '$media_mentions',board = '$board',jobs = '$jobs',fundings = '$fundings' where alert_id = $selected_alert";
         $action_msg = 'updated';
     }    
-        
+    //echo "<br>FA alert_query:".$alert_query;
+    //die();  
     com_db_query($alert_query);
     $alert_id = com_db_insert_id();
 

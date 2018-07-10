@@ -272,6 +272,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
                 <ul>
                     <li>
                         <?PHP
+                        //echo "<pre>SS:";   print_r($_SESSION);   echo "</pre>";
                         if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
                         {    
                         ?>

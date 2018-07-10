@@ -201,7 +201,7 @@ com_db_connect_hre2() or die('Unable to connect to database server!');
 //if ($link) mysql_select_db("exec");
 //com_db_connect() or die('Unable to connect to database server!');
 //$alert_query = "select a.* from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=0 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."'   and a.status=0 and a.delivery_schedule <>'No Updates' and a.user_id = 422";//limit 0,20
-$alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates';";  
+$alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates'";  
 
 //$alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates' and a.user_id = 1963;";  
 if($debug == 1)
@@ -746,8 +746,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
     //  TODO - add $alert_metch_str and join tables so that searching filters can apply
     if($alert_row['speaking'] == 1)
     {    
+        
+        
+        
         //$speakingQuery = "select distinct(personal_id) from ".TABLE_PERSONAL_SPEAKING." where personal_id>0 and event_date >'". $before_date ."' and event_date <'". $future_date ."'  and status=0";
-        $speakingQuery = "select distinct(ps.personal_id),pm.personal_image,pm.first_name,pm.last_name,if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority from ".$TABLE_PERSONAL_SPEAKING." as ps,".
+        $speakingQuery = "select distinct(ps.personal_id),pm.personal_image,pm.first_name,pm.last_name from ".$TABLE_PERSONAL_SPEAKING." as ps,".
         $TABLE_PERSONAL_MASTER." as pm,"
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
@@ -761,8 +764,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             $speakingQuery .= " and pm.personal_id not in ($sent_personal_id)";
 
         //$order_by = " order by cm.company_employee desc";
-        //$order_by = " order by ps.add_date desc";
-        $order_by = " order by priority asc";
+        $order_by = " order by ps.add_date desc";
         $speakingQuery .= $order_by; 
         
         if($def_trigger_num != '')
@@ -808,7 +810,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
     
     if($alert_row['fundings'] == 1)
     {    
-        $fundingsQuery = "select distinct(cf.company_id),cm.company_name,cm.company_logo,if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority from ".$TABLE_COMPANY_FUNDING	." as cf,"
+        $fundingsQuery = "select distinct(cf.company_id),cm.company_name,cm.company_logo from ".$TABLE_COMPANY_FUNDING	." as cf,"
         .$TABLE_COMPANY_MASTER. " as cm,"
         .$TABLE_PERSONAL_MASTER. " as pm,"
         .$TABLE_MOVEMENT_MASTER. " as mm 
@@ -823,8 +825,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             $fundingsQuery .= " and cf.company_id not in ($sent_funding_id)";
         
         //$order_by = " order by cm.company_employee desc";
-        //$order_by = " order by cf.funding_date desc";
-        $order_by = " order by priority asc";
+        $order_by = " order by cf.funding_date desc";
         $fundingsQuery .= $order_by; 
         
         
@@ -891,7 +892,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
     
     if($alert_row['awards'] == '1')
     {        
-        $awardsQuery = "select distinct(pa.personal_id),pm.personal_image,pm.first_name,pm.last_name,if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority from ".$TABLE_PERSONAL_AWARDS." as pa,"
+        $awardsQuery = "select distinct(pa.personal_id),pm.personal_image,pm.first_name,pm.last_name from ".$TABLE_PERSONAL_AWARDS." as pa,"
         .$TABLE_PERSONAL_MASTER." as pm,"
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
@@ -906,8 +907,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             $awardsQuery .= " and pm.personal_id not in ($sent_personal_id)";
         
         //$order_by = " order by cm.company_employee desc";
-        //$order_by = " order by pa.awards_date desc";
-        $order_by = " order by priority asc";
+        $order_by = " order by pa.awards_date desc";
         $awardsQuery .= $order_by; 
         
         if($def_trigger_num != '')
@@ -957,7 +957,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
     $media_personal = array();
     if($alert_row['media_mention'] == 1)
     {    
-        $mediaQuery = "select distinct(pm.personal_id),pm.personal_image,pm.first_name,pm.last_name,if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority from ".$TABLE_PERSONAL_MEDIA_MENTION." as pmm,"
+        $mediaQuery = "select distinct(pm.personal_id),pm.personal_image,pm.first_name,pm.last_name from ".$TABLE_PERSONAL_MEDIA_MENTION." as pmm,"
         .$TABLE_PERSONAL_MASTER. " as pm,"
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
@@ -971,8 +971,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             $mediaQuery .= " and pm.personal_id not in ($sent_personal_id)";
         
         //$order_by = " order by cm.company_employee desc";
-        //$order_by = " order by pmm.pub_date desc";
-        $order_by = " order by priority asc";
+        $order_by = " order by pmm.pub_date desc";
         $mediaQuery .= $order_by; 
         
         if($def_trigger_num != '')
@@ -1023,7 +1022,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
     
     if($alert_row['board'] == 1)
     {    
-        $boardQuery = "select distinct(pb.personal_id),pm.personal_image,pm.first_name,pm.last_name,if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority from ".$TABLE_PERSONAL_BOARD." as pb,"
+        $boardQuery = "select distinct(pb.personal_id),pm.personal_image,pm.first_name,pm.last_name from ".$TABLE_PERSONAL_BOARD." as pb,"
         .$TABLE_PERSONAL_MASTER ." as pm,"
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
@@ -1038,8 +1037,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             $boardQuery .= " and pm.personal_id not in ($sent_personal_id)";
         
         //$order_by = " order by cm.company_employee desc";
-        //$order_by = " order by pb.board_date desc";
-        $order_by = " order by priority asc";
+        $order_by = " order by pb.board_date desc";
         
         $boardQuery .= $order_by; 
         
@@ -1258,9 +1256,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             cm.company_website,cm.address,cm.address2,cm.city,cm.zip_code,cm.phone as cphone,
             cm.fax,cm.about_company,m.name as movement_name,so.source as source,
             s.short_name as state,ct.countries_name as country,i.title as company_industry,
-            r.name as company_revenue,e.name as company_employee,cm.company_logo,'' as job_id,'' as funding_id,cm.company_id,1 as res_type,
-            if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority 
-            from " 
+            r.name as company_revenue,e.name as company_employee,cm.company_logo,'' as job_id,'' as funding_id,cm.company_id,1 as res_type from " 
             .$TABLE_MOVEMENT_MASTER. " as mm, "
             .$TABLE_PERSONAL_MASTER. " as pm, "
             .$TABLE_COMPANY_MASTER. " as cm, " 
@@ -1281,9 +1277,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             cm.company_website,cm.address,cm.address2,cm.city,cm.zip_code,cm.phone as cphone,
             cm.fax,cm.about_company,m.name as movement_name,so.source as source,
             s.short_name as state,ct.countries_name as country,i.title as company_industry,
-            r.name as company_revenue,e.name as company_employee,cm.company_logo,'' as job_id, '' as 'funding_id',cm.company_id,1 as res_type,  
-            if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority 
-            from " 
+            r.name as company_revenue,e.name as company_employee,cm.company_logo,'' as job_id, '' as 'funding_id',cm.company_id,1 as res_type  from " 
             .$TABLE_MOVEMENT_MASTER. " as mm, "
             .$TABLE_PERSONAL_MASTER. " as pm, "
             .$TABLE_COMPANY_MASTER. " as cm, " 
@@ -1377,8 +1371,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         if($debug == 1)
             echo "<br><br>sent_contact_id TWO: ".$sent_contact_id;
 
-        //$order_by_clause = " order by move_id desc";
-        $order_by_clause = " order by priority asc";
+        $order_by_clause = " order by move_id desc";
         //$order_by_clause = " order by cm.company_employee desc";
 		  
 		  
@@ -6341,7 +6334,7 @@ $messageFooter = '<div style="font-size:0pt; line-height:0pt; height:20px"><img 
                     <strong style="font-size: 15px; line-height: 19px; color:#e0e0e0">Actionable Information Advisory Inc., '.$site_company_address.', '.$site_company_state.', '. $site_company_zip.'</strong>
                     <div style="font-size:0pt; line-height:0pt; height:10px"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="10" style="height:10px" alt="" /></div>
                     This newsletter was sent to you from Execfile.<br />
-                    Rather not receive our newsletter anymore? <a href="mailto:unsub@alertfetch.com?subject=unsubscribe" target="_blank" class="link3-u" style="color:#adadad; text-decoration:underline"><span class="link3-u" style="color:#adadad; text-decoration:underline">Unsubscribe instantly<img src="https://www.execfile.com/tracker.php?image=https://www.execfile.com/tracking.gif&last_inserted_alert='.$email_alert_id.'" alt="" /></span></a>.
+                    Rather not receive our newsletter anymore? <a href="mailto:unsub@alertfetch.com?subject=unsubscribe" target="_blank" class="link3-u" style="color:#adadad; text-decoration:underline"><span class="link3-u" style="color:#adadad; text-decoration:underline">Unsubscribe instantly</span></a>.
                     <div class="hide-for-mobile"><div style="font-size:0pt; line-height:0pt; height:50px"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="50" style="height:50px" alt="" /></div></div>
                     <div style="font-size:0pt; line-height:0pt;" class="mobile-br-25"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="0" alt="" /></div>
                 </td>
@@ -6350,7 +6343,6 @@ $messageFooter = '<div style="font-size:0pt; line-height:0pt; height:20px"><img 
         </td>
     </tr>
 </table>';
-//$messageFooter .= '<img src=tracker.php?image=tracking.gif&last_inserted_alert='.$email_alert_id.' alt="">';
 //}
             
 
@@ -6414,14 +6406,9 @@ else
             }
             else 
             {
-                
                 $alert_info_query = "INSERT INTO " . TABLE_ALERT_SEND_INFO . "(user_id,alert_id,contact_id,job_id,funding_id,personal_id,email_content,email_details,email_id,sent_date) values('".$user_id."','". $alert_id."','".$total_contact_id."','".$total_job_id."','".$total_funding_id."','".$total_personal_id."','".$emailContent."','$emailDetails','$email_id','".$sent_date."')";	
-                echo "<br>alert_info_query: ".$alert_info_query;	
+                //echo "<br>alert_info_query: ".$alert_info_query;	
                 com_db_query($alert_info_query);
-                
-                $last_inserted_alert = com_db_insert_id();
-                echo "<br>last inserted alert id: ".$last_inserted_alert;	
-                
 
                 //For next Date
                 $next_alert_date='';

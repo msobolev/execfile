@@ -8,6 +8,7 @@ $items_per_page = isset($_REQUEST["items_per_page"]) ? $_REQUEST["items_per_page
 $p = isset($_REQUEST["p"]) ? $_REQUEST["p"] : 1;
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
 $msg = (isset($_GET['msg'])) ? msg_decode($_GET['msg']) : '';
+$this_root_path = "https://www.execfile.com";
 //echo "<br>After form submit";
 /*
 if($action == 'UserSearchResult' || $_SESSION['sess_action']=='UserSearchResult')
@@ -591,6 +592,23 @@ function handleSelect(elm)
     document.getElementById("filters_frm").submit();
 }
 
+
+
+
+function show_all_alerts()
+{
+    //document.getElementsByClassName('hide_row').style.display = 'block';
+    var max_id = document.getElementById("max_alert_id").value;
+    //alert("MAX ID: "+max_id);
+    for(var c=6;c<max_id;c++)
+    {
+        if(document.getElementById('hide_col1_'+c))
+        {    
+            document.getElementById('hide_col1_'+c).style.display = 'block';
+            //document.getElementById('hide_col2_'+c).style.display = 'block';
+        }    
+    }    
+}
 </script>
 
  <tr>
@@ -1014,44 +1032,112 @@ elseif($action=='TotalAlert'){
 		  <td align="left" valign="top" class="right-border">
 		 <!--start iner table  -->
          <?php
-		 $download_result = com_db_query("select * from " .TABLE_ALERT_SEND_INFO . " where user_id='".$uID."'");
+		 $download_result = com_db_query("select * from " .TABLE_ALERT_SEND_INFO . " where user_id='".$uID."' order by info_id desc;");
 		 if($download_result){
 		 	$download_num = com_db_num_rows($download_result);
 		 }else{
 		 	$download_num=0;
 		 }
 		 ?>
-          <table width="20%" align="left" cellpadding="5" cellspacing="5" border="0">
+          <table width="70%" align="left" cellpadding="5" cellspacing="5" border="0">
 			<tr>
-			  <td colspan="2" align="left" class="page-text" valign="top">&nbsp;</td>
+			  <td align="left" class="page-text" valign="top">&nbsp;</td>
 			</tr>
 			<tr>
-			  <td width="14%" align="left" valign="top"><span class="right-box-title-text">#</span></td>
-			  <td width="86%" align="left" valign="top"><span class="right-box-title-text">&nbsp;&nbsp;Date</span></td>	
-			</tr>
-			<?PHP if($download_num > 0){
-				$dd=1;
-				while($download_row = com_db_fetch_array($download_result)){
+                            <td>
+                                <table width="100%">
+                                    <tr>
+                                        <td width="14%" align="left" valign="top"><span class="right-box-title-text">#</span></td>
+                                        <td width="35%" align="left" valign="top"><span class="right-box-title-text">Date</span></td>	
+                                        <td width="20%" align="left" valign="top"><span class="right-box-title-text">Opened</span></td>	
+                                        <td width="25%" align="left" valign="top"><span class="right-box-title-text">Email ID</span></td>	
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>    
+			<?PHP 
+                        if($download_num > 0)
+                        {
+                            $dd=1;
+                            while($download_row = com_db_fetch_array($download_result))
+                            {
 				$download_date = $download_row['sent_date'];
                                 $download_date = gmdate("Y-m-d", $download_date);
+                                
+                                $this_email_id = $download_row['email_id'];
+                                $tracking_result = com_db_query("select * from exec_alert_tracker where alert_email_id='".$this_email_id."'");
+                                if($tracking_result)
+                                {
+                                    $tracking_num = com_db_num_rows($tracking_result);
+                                    if($tracking_num > 0)
+                                    {
+                                        $email_opened = 1;
+                                    }
+                                    else
+                                        $email_opened = 0;
+                                }
+                                else
+                                {
+                                    $tracking_num = 0;
+                                    $email_opened = 0;
+                                }
+                                
 			?>
-		
 			<tr>
-			  <td width="14%" align="left" valign="top" class="left-box-text"><?=$dd;?></td>
-			  <td width="86%" align="left" valign="top" class="left-box-text"><a href="javascript:popupDownload('popup-download.php?dID=<?=$download_row['download_id']?>')"><?=$download_date?></a></td>	
-			 
+                            <?PHP
+                            $disp = "";
+                            $hidden_class = "";
+
+
+                            if($dd > 5)
+                            {
+                                $disp = 'display:none;';
+                                $hidden_id_one = "id=hide_col1_".$dd;
+                                $hidden_id_two = "id=hide_col2_".$dd;
+
+                                if($dd == 6)
+                                {
+                                    echo "<tr><td style=padding-top:10px;padding-bottom:10px;cursor:pointer; onclick=show_all_alerts(); colspan=2><b><u>Show More</u></b></td></tr>";
+                                    //echo "<div $hidden_class style=$disp>";
+                                }    
+
+                            }  
+                            ?>
+                            
+                            
+                            <td style="<?=$disp?>" <?=$hidden_id_one?> align="left" valign="top" class="left-box-text">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="14%"><?=$dd;?></td>
+                                        <!-- <td align="left" valign="top" class="left-box-text"><a href="javascript:popupDownload('popup-download.php?dID=<?=$download_row['download_id']?>')"><?=$download_date?></a></td> -->	 
+                                        <td width="35%" align="left" valign="top" class="left-box-text"><?=$download_date?></a></td>
+                                        <td width="20%" align="left" valign="top" class="left-box-text">(<?=$email_opened?>)</td>
+                                        <td width="25%" align="left" valign="top" class="left-box-text"><a href="<?=$this_root_path?>/alert-email-show.php?emailid=<?=$this_email_id?>" >Link</td>
+                                    </tr>
+                                </table>
+                            </td>    
+                        </tr>
+			<?PHP
+                        
+                                  
+                        
+                        
+                                $dd++;
+                            } 
+                        }
+                        else
+                        {	?>
+			<tr>
+			  <td  align="left" class="page-text" valign="top">Record not found</td>
 			</tr>
-			<?PHP 	$dd++;
-					} 
-				}else{	?>
+			<?PHP } 
+                        
+                        
+                        echo "<input type=hidden name=max_alert_id id=max_alert_id value=$dd>";
+                        
+                        ?>	
 			<tr>
-			  <td colspan="2" align="left" class="page-text" valign="top">Record not found</td>
-			</tr>
-			<?PHP } ?>	
-			
-			<tr>
-				<td align="left" valign="top">&nbsp;</td> 
-				<td align="left" valign="top"><input type="button" class="submitButton" value="Back" onclick="window.location='user.php?p=<?=$p;?>&uID=<?=$uID;?>&selected_menu=user'" /></td>
+                            <td align="left" valign="top"><input type="button" class="submitButton" value="Back" onclick="window.location='user.php?p=<?=$p;?>&uID=<?=$uID;?>&selected_menu=user'" /></td>
 			</tr>
 
 			</table>

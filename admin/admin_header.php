@@ -8,4 +8,8 @@
     <a href="change_pw.php">Change Admin Password</a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="user.php">Users</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="admin_email.php">Admin Email</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="email_details.php">Admitted Email</a>
 </div>

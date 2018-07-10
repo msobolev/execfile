@@ -141,6 +141,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
 {
     //echo "<br>searchnow: ".$id;
     //echo "<br>Type: ".$type;
+    //echo "<br>func: ".$func;
     
     //echo "<br>LAST PAGE: ".$_SERVER['HTTP_REFERER'];
     //$show_time = 1;
@@ -385,7 +386,20 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }
         else
             $revenue_ids = $revenue;
-        $revenue_clause .= " and company_revenue in (".$revenue_ids.")";
+        //$revenue_clause .= " and company_revenue in (".$revenue_ids.")";
+        
+        // added on 4th june 2018
+        // case when user comes from setting page through saved list link
+        // revenue value shd remain as in DB
+        if(isset($_GET['list']) && $_GET['list'] != '')
+        {
+            $revenue_clause .= " and company_revenue in (".$revenue.")";
+            //echo "<br>in if: ".$revenue_clause;
+        }
+        else
+        {    
+            $revenue_clause .= " and company_revenue in (".$revenue_ids.")";
+        }    
     } 
 
     
@@ -406,9 +420,93 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $personal_name_arr = explode(" ",$searchnow);
         //echo "<br>Size personal_name_arr:".sizeof($personal_name_arr);
         $searched_first_name = trim($personal_name_arr[0]);
+        
+        
+        
+        // handling name variations
+        
+        $getting_secondary_from_primary = "select GROUP_CONCAT(CONCAT('''', secondary_name, '''' )) as name_variations from cto_personal_name_variations where primary_name = '".$searched_first_name."' or secondary_name = '".$searched_first_name."'";
+        //echo "<br>getting_secondary_from_primary:".$getting_secondary_from_primary;
+
+        $secondaryResult = com_db_query($getting_secondary_from_primary);
+        $numNickRow = com_db_num_rows($secondaryResult);
+        //echo "<br>numNickRow:".$numNickRow;
+        if($numNickRow > 0)
+        {
+            //echo "<br>within if One";
+            // case 1 - secondary name donesn't exist and primary name exists . eg. first name = Andrew
+            $sec_row = com_db_fetch_array($secondaryResult);
+            //$primary_name_q = "select GROUP_CONCAT(CONCAT('''', secondary_name, '''' )) as name_variations from cto_personal_name_variations where secondary_name in ('".$sec_row['name_variations']."') OR primary_name = '".$first_name."'";
+            $primary_name_q = "select GROUP_CONCAT(CONCAT('''', secondary_name, '''' )) as name_variations from cto_personal_name_variations where  primary_name = '".$searched_first_name."'";
+            //echo "<br>primary_name_q:".$primary_name_q;
+            $primary_name_res = com_db_query($primary_name_q);
+            $primary_count = com_db_num_rows($primary_name_res);
+            $sec_name_row = com_db_fetch_array($primary_name_res);
+            //echo "<br>primary_count:".$primary_count;
+            //echo "<br>Variations:".$sec_name_row['name_variations'];
+            //if($primary_count > 0)
+            if($sec_name_row['name_variations'] != '')    
+            {   
+                //echo "<br>within if two";
+
+                //echo "<br>primary_count:".$primary_count;
+                //$secondary_name_alias = "cto_personal_name_variations as pv,";
+                //$secondary_name_join = " and pm.first_name = pv.primary_name";
+
+                $secondary_name_alias = "";
+                $secondary_name_join = "";
+
+
+                //$primary_name_clause = " OR primary_name = '".$first_name."' OR pm.first_name in (".$sec_name_row['name_variations'].")";
+                $primary_name_clause = " OR first_name = '".$searched_first_name."' OR first_name in (".$sec_name_row['name_variations'].")";
+                //$secondary_name_clause = " OR secondary_name in (".$sec_name_row['name_variations'].")";
+                $secondary_name_clause = "";
+            }
+            else
+            {
+                //echo "<br>within else";
+                // case 1 - secondary name exist and personal first name exists . eg. first name = Andy
+                $personal_first_q = "select GROUP_CONCAT(CONCAT('''', primary_name, '''' )) as name_variations from cto_personal_name_variations where secondary_name = '".$searched_first_name."' OR primary_name = '".$searched_first_name."'";
+                //echo "<br>personal_first_q:".$personal_first_q;
+                $personal_first_res = com_db_query($personal_first_q);
+                $sec_count = com_db_num_rows($personal_first_res);
+                if($sec_count > 0)
+                {
+                    $sec_name_row = com_db_fetch_array($personal_first_res);
+                    //echo "<br>sec_count:".$sec_count;
+                    //$secondary_name_alias = "cto_personal_name_variations as pv,";
+                    //$secondary_name_join = " and pm.first_name = pv.primary_name";
+
+                    $secondary_name_alias = "";
+                    $secondary_name_join = "";
+
+                    $primary_name_clause = "";
+
+                    if($sec_name_row['name_variations'] != '')
+                        $primary_name_clause = " OR first_name in (".$sec_name_row['name_variations'].")";
+
+
+
+
+                    $secondary_name_clause = " OR first_name = '".$searched_first_name."'";
+                }    
+
+            }    
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if($personal_name_arr[1] != '')
         {    
-            $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]."'))";
+            //$company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]."'))";
+            $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR ((first_name = '".$searched_first_name."' $primary_name_clause $secondary_name_clause ) and last_name = '".$personal_name_arr[1]."'))";
             if(sizeof($personal_name_arr) == 3)
             {    
                 $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]." ".$personal_name_arr[2]."') OR (first_name = '".$personal_name_arr[0]." ".$personal_name_arr[1]."' and last_name = '".$personal_name_arr[2]."') OR (first_name = '".$personal_name_arr[0]."' and middle_name = '".$personal_name_arr[1]."' and last_name = '".$personal_name_arr[2]."'))";
@@ -2335,13 +2433,17 @@ function get_all_industries()
     //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
     //$conn = com_db_connect_hre2() or die('Unable to connect to database server!');
     
-    $site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
-    mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
+    //$site = mysql_connect("localhost","root","ecbu4!!exlmnnb",TRUE) or die("Database ERROR ".mysql_error());
+    //mysql_select_db("hre2",$site) or die ("ERROR: Database not found ");
+    
+    
+    $cto = mysql_connect(CTO_SERVER_IP,CTO_DB_USER_NAME,CTO_DB_PASSWORD) or die("Database ERROR ".mysql_error());
+    mysql_select_db("ctou2",$cto) or die ("ERROR: Database not found ");      
     
     
     $data = 0;
     //echo "<br>Industry: SELECT industry_id,parent_id,title FROM hre_industry";
-    $indResult = mysql_query("SELECT industry_id,parent_id,title FROM hre_industry where status = 0");
+    $indResult = mysql_query("SELECT industry_id,parent_id,title FROM cto_industry where status = 0");
 //echo "<br>Before while";
     while($indRow = mysql_fetch_array($indResult))
     {
@@ -4966,5 +5068,36 @@ function get_org_chart_data($company)
     //    die();
     return $chart_arr;
 }
+
+
+function get_db_reveunue_against_raw($revenue)
+{
+    $revenue_ids = '';
+    if($revenue != '')        
+    {
+        if(strpos($revenue,",") > -1)
+        {        
+            $revenue_limits = explode(",", $revenue);
+
+            $new_revenue_id = "";
+            if($revenue_limits[0] < $revenue_limits[1])
+            {
+                $initial_revenue_id = 2;
+                //for($r=$revenue_limits[0];$r<=$revenue_limits[1];$r++)
+                for($r=$revenue_limits[0];$r<$revenue_limits[1];$r++)
+                {
+                    $new_revenue_id = $r+$initial_revenue_id;
+                    $revenue_ids .= $new_revenue_id.",";
+                }
+            }
+            $revenue_ids = trim($revenue_ids,","); 
+        }
+        else
+            $revenue_ids = $revenue;
+        
+        return  $revenue_ids;
+    }
+}
+
 ?>
 
