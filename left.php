@@ -6,10 +6,18 @@
 $all_states = get_all_states();
 $all_industries = get_all_industries();
 //echo "<pre>all_industries: ";   print_r($all_industries);   echo "</pre>";
+$disable_click = "";
+$disabled_click_val = 0;
+if($_SESSION['combine_site'] == 'clo_lite')
+{
+    //echo "<br>within";
+    $disable_click = "style=pointer-events:none;";
+    $disabled_click_val = 1;
+} 
 ?>
 <div class="sidebar">
     <ul class="widgets">
-        <li class="widget widget-search">
+        <li class="widget widget-search" <?=$disable_click?>>
             <div class="widget-head">
                 <span class="ico-widget">
                     <i class="ico-search"></i>
@@ -22,13 +30,22 @@ $all_industries = get_all_industries();
             
             <?PHP
             $searchnow_display = "";
+            
             if($_GET['searchnow'] != '')
             {    
                 $searchnow_display = 'style=display:block;';
             } 
+            
+            if($disabled_click_val == 1)
+            { 
+                $searchnow_display = 'style=display:none;';
+            }
+            //echo "<br>combine_site:".$_SESSION['combine_site'];
+               
+            
             ?>
             
-            <div class="widget-body" <?=$searchnow_display?>>
+            <div class="widget-body"  <?=$searchnow_display?>>
                 <div class="search">
                     <div class="ui-widget form-search">
                         <!-- <form class="form-search"> -->
@@ -40,8 +57,15 @@ $all_industries = get_all_industries();
             </div><!-- /.widget-body -->
         </li><!-- /.widget -->
 
+        
+        <?PHP
+        //if( $_SESSION['combine_site'] == 'clo_lite')
+        //    $func_display = 'style=display:none;';
+        ?>
+        
+        
         <li class="widget widget-function">
-            <div class="widget-head">
+            <div class="widget-head" <?=$disable_click?>>
                 <span class="ico-widget">
                     <i class="ico-function"></i>
                 </span>
@@ -56,8 +80,12 @@ $all_industries = get_all_industries();
             $func_display = "";
             if($_SESSION['combine_site'] == 'cto/ciso')
             {    
-                $func_display = 'style=display:block;';
+                $func_display = 'style=display:none;';
             } 
+            
+           
+             
+            
             ?>
             <div class="widget-body" <?=$func_display?>>
                 <nav class="widget-nav">
@@ -155,7 +183,7 @@ $all_industries = get_all_industries();
             </div><!-- /.widget-body -->
         </li><!-- /.widget -->
 
-        <li class="widget widget-alerts">
+        <li class="widget widget-alerts" <?=$disable_click?>>
             <div class="widget-head">
                     <span class="ico-widget">
                             <i class="ico-bell-white"></i>
@@ -206,6 +234,69 @@ $all_industries = get_all_industries();
                 </ul><!-- /.list-alerts -->
             </div><!-- /.widget-body -->
         </li><!-- /.widget -->
+        
+        
+        <?PHP
+        if($_SESSION['site'] == 'clo' && 1 == 2)
+        {   
+        ?>
+        <li class="widget widget-alerts" <?=$disable_click?>>
+            <div class="widget-head">
+                    <span class="ico-widget">
+                            <i class="ico-title-white"></i>
+                    </span>
+
+                    <h3 class="widget-title">
+                            Title
+                    </h3><!-- /.widget-title -->
+            </div><!-- /.widget-head -->
+
+            <?PHP
+            $title_level_display = "";
+            if(isset($_GET['title_level']) && $_GET['title_level'] != '')
+            {
+                $chief_checked = "";
+                $vp_checked = "";
+                $dir_checked = "";
+                if(strpos($_GET['title_level'],'chief') > -1)
+                    $chief_checked = "checked";
+                if(strpos($_GET['title_level'],'vp') > -1)
+                    $vp_checked = "checked";
+                if(strpos($_GET['title_level'],'director') > -1)
+                    $dir_checked = "checked";
+                
+                
+                if($_GET['title_level'] != '')
+                {    
+                    $title_level_display = 'style=display:block;';
+                } 
+                
+                
+            }
+            
+            ?>
+            
+            <div class="widget-body" <?=$title_level_display?>>
+                <ul class="list-alerts">
+                    <li>
+                        <a href="#"><input <?=$chief_checked?> onclick="update_search()" type="checkbox" id="title_level" name="title_level" value="chief">&nbsp;&nbsp;C Level</a>
+                    </li>
+                    <li>
+                        <a href="#"><input <?=$vp_checked?> onclick="update_search()" type="checkbox" id="title_level" name="title_level" value="vp">&nbsp;&nbsp;VP Level</a> 
+                    </li>
+                    <li>
+                        <a href="#"><input <?=$dir_checked?> onclick="update_search()" type="checkbox" id="title_level" name="title_level" value="director">&nbsp;&nbsp;Director Level</a>
+                    </li>
+                    
+                </ul><!-- /.list-alerts -->
+            </div><!-- /.widget-body -->
+        </li><!-- /.widget -->
+        <?PHP
+        }
+        ?>
+        
+        
+        
 
         <li id="timeframe_left" class="widget widget-calendar">
             <div id="date_tab"  class="widget-head">
@@ -239,7 +330,7 @@ $all_industries = get_all_industries();
             </div><!-- /.widget-body -->
         </li><!-- /.widget -->
 
-        <li class="widget widget-slider">
+        <li class="widget widget-slider" <?=$disable_click?>>
             <div id="company_tab"  class="widget-head">
                 <span class="ico-widget">
                     <i class="ico-building"></i>
@@ -268,7 +359,8 @@ $all_industries = get_all_industries();
                 $company_display = 'style=display:block;';
             }
             
-            
+            if($disabled_click_val == 1)
+                $company_display = 'style=display:none;';
             ?>
             
             <div  class="widget-body" <?=$company_display?>>
@@ -466,7 +558,7 @@ $all_industries = get_all_industries();
             </div><!-- /.widget-body -->
         </li><!-- /.widget -->
 
-        <li class="widget widget-location">
+        <li class="widget widget-location" <?=$disable_click?>>
             <div class="widget-head">
                 <span class="ico-widget">
                     <i class="ico-location"></i>
@@ -490,6 +582,12 @@ $all_industries = get_all_industries();
             } 
              
              
+            if($disabled_click_val == 1)
+            {    
+                $location_display = 'style=display:none;';
+                $location_only_display = 'display:none;';
+            }
+            
             ?>
             
             

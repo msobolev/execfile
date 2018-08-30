@@ -93,6 +93,11 @@
 .logo-mobile { background-image: url(images/sprite.png); background-position: 0 -98px; width: 148px; height: 27px; display: inline-block; vertical-align: middle; font-size: 0; }
 .logo { background-image: url(images/sprite.png); background-position: 0 0; width: 197px; height: 36px; display: inline-block; vertical-align: middle; font-size: 0; }
 
+.ico-title-white { background-image: url(images/by_title_icon_2.png);  width: 21px; height: 21px; display: inline-block; vertical-align: middle; font-size: 0; }
+
+
+
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.ico-arrow-down { background-image: url(images/sprite.@2x.png); background-position: -178.5px -105px; background-size: 197px 189px; width: 13px; height: 7px; display: inline-block; vertical-align: middle; font-size: 0; }
 	.ico-arrow-left { background-image: url(images/sprite.@2x.png); background-position: -158.5px -105px; background-size: 197px 189px; width: 8px; height: 13px; display: inline-block; vertical-align: middle; font-size: 0; }

@@ -59,6 +59,16 @@
                                 var from_date = $("#from").val();
                                 var companyval = "";
                                 var searchnow = "";
+                                
+                                var selected_title = '';
+                                $('input[name="title_level"]:checked').each(function() {
+                                    //console.log(this.value);
+                                    selected_title += this.value+",";
+                                });
+                                
+                                
+                                
+                                
                                 var type = "all";
                                 if ($("#type").val() != '')
                                 {
@@ -95,7 +105,7 @@
                                 //alert("SEARCH NOW: "+searchnow);
                                 //window.location.href = "http://stackoverflow.com";
                                 //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size;
-                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&mweb="+mweb;
+                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                 
 			}
 		});
@@ -116,6 +126,17 @@
                                 //var type = $("#type").val();
                                 var companyval = "";
                                 var searchnow = "";
+                                
+                                
+                                var selected_title = '';
+                                $('input[name="title_level"]:checked').each(function() {
+                                    //console.log(this.value);
+                                    selected_title += this.value+",";
+                                });
+
+                                
+                                
+                                
                                 var type = "all";
                                 if ($("#type").val() != '')
                                 {
@@ -154,7 +175,7 @@
                                 //alert("SEARCH NOW: "+searchnow);
                                 //window.location.href = "http://stackoverflow.com";
                                 //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size;
-                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&mweb="+mweb;
+                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                 
 			}
 		});
@@ -263,6 +284,11 @@
                                             //var lower_revenue = parseInt(trueValues[0]);
                                             //var upper_revenue = parseInt(trueValues[1]);
                                             
+                                            var selected_title = '';
+                                            $('input[name="title_level"]:checked').each(function() {
+                                                //console.log(this.value);
+                                                selected_title += this.value+",";
+                                            });
                                             
                                             var from_date = $("#from").val();
                                             var to_date = $("#to").val();
@@ -310,7 +336,7 @@
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -322,7 +348,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -414,7 +440,13 @@
                                             //var lower_revenue = parseInt(trueValues[0]);
                                             //var upper_revenue = parseInt(trueValues[1]);
                                             
-                                            
+                                            var selected_title = '';
+                                            $('input[name="title_level"]:checked').each(function() {
+                                                //console.log(this.value);
+                                                selected_title += this.value+",";
+                                            });
+
+    
                                             var from_date = $("#from").val();
                                             var to_date = $("#to").val();
                                             //var type = $("#type").val(); 
@@ -468,7 +500,7 @@
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -479,7 +511,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -566,7 +598,12 @@
                                             //var lower_revenue = parseInt(trueValues[0]);
                                             //var upper_revenue = parseInt(trueValues[1]);
                                             
-                                            
+                                            var selected_title = '';
+                                            $('input[name="title_level"]:checked').each(function() {
+                                                //console.log(this.value);
+                                                selected_title += this.value+",";
+                                            });
+
                                             var from_date = $("#from").val();
                                             var to_date = $("#to").val();
                                             //var type = $("#type").val(); 
@@ -608,7 +645,7 @@
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -619,7 +656,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }

@@ -141,6 +141,7 @@ if($msg != '')
                         <option <?PHP if($user_details['site'] == 'clo') echo "selected"; else echo ""; ?> value="clo">CLO</option>
                         <option <?PHP if($user_details['site'] == 'cfo') echo "selected"; else echo ""; ?> value="cfo">CFO</option>
                         <option <?PHP if($user_details['site'] == 'cto/ciso') echo "selected"; else echo ""; ?> value="cto/ciso">CTO/CISO</option>
+                        <option <?PHP if($user_details['site'] == 'clo_lite') echo "selected"; else echo ""; ?> value="clo_lite">CLO Lite</option>
                     </select>    
                 </div><!-- /.form-controls -->
             </div><!-- /.form-row -->

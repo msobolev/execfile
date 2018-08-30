@@ -4,7 +4,7 @@ require('../functions.php');
 require('../config.php');
 com_db_connect_hre2() or die('Unable to connect to database server!');
 require('admin_header.php');
-$items_per_page = isset($_REQUEST["items_per_page"]) ? $_REQUEST["items_per_page"] : 20;
+$items_per_page = isset($_REQUEST["items_per_page"]) ? $_REQUEST["items_per_page"] : 10;
 $p = isset($_REQUEST["p"]) ? $_REQUEST["p"] : 1;
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
 $msg = (isset($_GET['msg'])) ? msg_decode($_GET['msg']) : '';
@@ -125,7 +125,8 @@ else
     
     
     
-    $sql_query = "select * from " . TABLE_USER . " $where_clause order by user_id desc";
+    //$sql_query = "select * from " . TABLE_USER . " $where_clause order by user_id desc";
+    $sql_query = "select * from " . TABLE_USER . " $where_clause and user_id in (3402,3350,3343) order by user_id desc";
     
     $_SESSION['sess_action']='';
 //}
@@ -698,58 +699,105 @@ function show_all_alerts()
                                 $subscription_name = "";
 				//$subscription_name = com_db_GetValue("select subscription_name from " . TABLE_SUBSCRIPTION . " where sub_id='".$data_sql['subscription_id']."'");
 				$tot_alert = com_db_GetValue("select count(alert_id) as cnt from " .TABLE_ALERT ." where user_id='".$data_sql['user_id']."'");
-			?>          
-			  <tr>
-				<td height="30" align="center" valign="middle" class="right-border-left"><?=$i;?></td>
-				<!-- <td height="30" align="center" valign="middle" class="right-border"><input type="checkbox" id="user_id-<?=$i;?>" name="nid[]" value="<?=$data_sql['user_id'];?>" /></td> -->
-				<td height="30" align="left" valign="middle" class="right-border-text"><a href="user.php?action=detailes&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=com_db_output($data_sql['first_name']).' '.com_db_output($data_sql['last_name'])?></a></td>
-				<!-- <td height="30" align="left" valign="middle" class="right-border-text"><?=$subscription_name;?> -->
-					
-				</td>
-				<td height="30" align="center" valign="middle" class="right-border-text" style="text-align:center;">
-                                    <a href="user.php?action=TotalAlert&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=com_db_GetValue("select count(user_id) from " . TABLE_ALERT_SEND_INFO . " where user_id='".$data_sql['user_id']."'")?></a>
-				<!--
-                                <?PHP //if($tot_alert > 0){ ?>
-				<a href="user.php?action=CreateAlert&selected_menu=user&uID=<?=$data_sql['user_id'];?>">Create Alert</a> (<?=$tot_alert?>)<br />
-				<a href="javascript:popupAlert('alert-pop.php?uID=<?=$data_sql['user_id'];?>')">Change Status</a>
-				<?PHP //} else { 
-				//echo '<a href="user.php?action=CreateAlert&selected_menu=user&uID='.$data_sql['user_id'].'">Create Alert</a>';
-					//} ?>
-                                -->        
-				</td>
-                                <td height="30" align="center" valign="middle" class="right-border"><a href="user.php?action=TotalLogin&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=com_db_GetValue("select count(user_id) from " . TABLE_LOGIN_HISTORY . " where user_id='".$data_sql['user_id']."'")?></a></td>
-				<td height="30" align="left" valign="middle" class="right-border"><a href="user.php?action=TotalDownload&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=com_db_GetValue("select count(user_id) from " . TABLE_DOWNLOAD . " where user_id='".$data_sql['user_id']."'")?></a></td>
-				<td height="30" align="left" valign="middle" class="right-border"><a href="user.php?action=TotalSearch&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=com_db_GetValue("select count(user_id) from " . TABLE_SEARCH_HISTORY . " where user_id='".$data_sql['user_id']."'")?></a></td>
-                                <td height="30" align="center" valign="middle" class="right-border"><?=$added_date;?></td>
+			
+                                
+                                $this_user_alerts = com_db_GetValue("select count(user_id) from " . TABLE_ALERT_SEND_INFO . " where user_id='".$data_sql['user_id']."'");
+                                $this_user_login = com_db_GetValue("select count(user_id) from " . TABLE_LOGIN_HISTORY . " where user_id='".$data_sql['user_id']."'");
+                                $this_user_download = com_db_GetValue("select count(user_id) from " . TABLE_DOWNLOAD . " where user_id='".$data_sql['user_id']."'");
+                                $this_user_search = com_db_GetValue("select count(user_id) from " . TABLE_SEARCH_HISTORY . " where user_id='".$data_sql['user_id']."'");
+                                
+                                
+                                $this_user_opened_older_14_days = "select count(user_id) from " . TABLE_ALERT_SEND_INFO . " AS a, exec_alert_tracker AS t where user_id='".$data_sql['user_id']."' AND a.email_id = t.alert_email_id AND FROM_UNIXTIME( sent_date ) < DATE( NOW( ) ) - INTERVAL 14 DAY";
+                                
+                                $this_user_download_older_14_days_q = "select count(user_id) from " . TABLE_DOWNLOAD . " where user_id='".$data_sql['user_id']."' and add_date  <= DATE(NOW()) - INTERVAL 14 DAY";
+                                $this_user_download_older_14_days = com_db_GetValue($this_user_download_older_14_days_q);
+                                
+                                $this_user_searches_older_14_days_q = "select count(user_id) from " . TABLE_SEARCH_HISTORY . " where user_id='".$data_sql['user_id']."' and add_date  < DATE(NOW()) - INTERVAL 14 DAY";
+                                $this_user_searches_older_14_days = com_db_GetValue($this_user_searches_older_14_days_q);
+                                
+                                
+                                
+                                
+                                
+                                $last_14_days_download_q = "select count(user_id) from " . TABLE_DOWNLOAD . " where user_id='".$data_sql['user_id']."' and add_date  >= DATE(NOW()) - INTERVAL 14 DAY";
+                                $last_14_days_download = com_db_GetValue($last_14_days_download_q);
+                                //echo "<br><br>last_14_days_download:".$last_14_days_download;
+                                //echo "<br>last_14_days_download_q:".$last_14_days_download_q;
+
+                                
+                                $last_14_days_searches_q = "select count(user_id) from " . TABLE_SEARCH_HISTORY . " where user_id='".$data_sql['user_id']."' and add_date  >= DATE(NOW()) - INTERVAL 14 DAY";
+                                $last_14_days_searches = com_db_GetValue($last_14_days_searches_q);
+                                //echo "<br>last_14_days_searches:".$last_14_days_searches;
+                                //echo "<br>last_14_days_searches_q:".$last_14_days_searches_q;
+                                
+                                $last_14_days_opened_q = "select count(user_id) from " . TABLE_ALERT_SEND_INFO . " AS a, exec_alert_tracker AS t where user_id='".$data_sql['user_id']."' AND a.email_id = t.alert_email_id AND FROM_UNIXTIME( sent_date ) >= DATE( NOW( ) ) - INTERVAL 14 DAY";
+                                $last_14_days_opened = com_db_GetValue($last_14_days_opened_q);
+                                //echo "<br>last_14_days_opened:".$last_14_days_opened;
+                                //echo "<br>last_14_days_opened_q:".$last_14_days_opened_q;
+                                
+                                //echo "<br>this_user_alerts:".$this_user_alerts;
+                                //echo "<br>this_user_download:".$this_user_download;
+                                //echo "<br>this_user_search:".$this_user_search;
+                                
+                                $backgroundColor = "";
+                                $parameter_count = 0;
+                                $parameter_count_older = 0;
+                                if($last_14_days_download > 0)
+                                    $parameter_count++;
+                                if($last_14_days_searches > 0)
+                                    $parameter_count++;
+                                if($last_14_days_opened > 0)
+                                    $parameter_count++;
+                                
+                                
+                                if($this_user_opened_older_14_days > 0)
+                                    $parameter_count_older++;
+                                if($this_user_download_older_14_days > 0)
+                                    $parameter_count_older++;
+                                if($this_user_searches_older_14_days > 0)
+                                    $parameter_count_older++;
+                                
+                                
+                               
+                                /*
+                                echo "<br><br><br>last_14_days_download:".$last_14_days_download;
+                                echo "<br>last_14_days_searches:".$last_14_days_searches;
+                                echo "<br>last_14_days_opened:".$last_14_days_opened;
+                                echo "<br>this_user_alerts:".$this_user_alerts;
+                                echo "<br>this_user_download:".$this_user_download;
+                                echo "<br>this_user_search:".$this_user_search;
+                                echo "<br>user_id:".$data_sql['user_id'];
+                                */
+                                
+                                //if($last_14_days_download > 0 && $last_14_days_searches > 0 && $last_14_days_opened > 0)
+                                if($parameter_count > 1)
+                                    $backgroundColor = "background-color:#A8FF33";
+                                elseif($parameter_count_older > 1)   // elseif($this_user_alerts == 0 && $this_user_download == 0 && $this_user_search == 0)
+                                    $backgroundColor = "background-color:yellow";
+                                elseif($this_user_alerts == 0 && $this_user_download == 0 && $this_user_search == 0) //elseif($this_user_alerts > 0  && $this_user_download > 0 && $this_user_search > 0)
+                                    $backgroundColor = "background-color:red";
+                                //echo "<br>backgroundColor:".$backgroundColor;
+                            ?>          
+                            <tr>
+				<td style="<?=$backgroundColor?>" height="30" align="center" valign="middle" class="right-border-left"><?=$i;?></td>
+				<td style="<?=$backgroundColor?>" height="30" align="left" valign="middle" class="right-border-text"><a href="user.php?action=detailes&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=com_db_output($data_sql['first_name']).' '.com_db_output($data_sql['last_name'])?></a></td>
 				
-                
-                                <!--
-                                <td height="30" align="center" valign="middle" class="left-border">
-                                    <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                      <tr> 
-                                        <?php if($status==0){ ?>
-                                        <td width="29%" align="center" valign="middle"><a href="#"><img src="images/icon/active-icon.gif" width="16" height="16" alt="" title="" border="0" onclick="confirm_artivate('<?=$data_sql['user_id'];?>','<?=$p;?>','<?=$status;?>');" /></a><br />
-                                          Status</td>
-                                        <?php } elseif($status==1){ ?>
-                                        <td width="24%" align="center" valign="middle"><a href="#"><img src="images/icon/inactive-icon.gif" width="16" height="16" alt="" title="" border="0" onclick="confirm_artivate('<?=$data_sql['user_id'];?>','<?=$p;?>','<?=$status;?>');" /></a><br />
-                                          Status</td>
-                                        <?php } ?>
-                                        <td width="23%" align="center" valign="middle"><a href="#"><img src="images/small-edit-icon.gif" width="16" height="16" alt="Edit" title="Edit" border="0" onclick="window.location='user.php?selected_menu=user&p=<?=$p;?>&uID=<?=$data_sql['user_id'];?>&action=edit'" /></a><br />
-                                          Edit</td>
-                                        <td width="24%" align="center" valign="middle"><a href="#"><img src="images/small-delet-icon.gif" width="16" height="16" alt="Delete" title="Delete" border="0" onclick="confirm_del('<?=$data_sql['user_id'];?>','<?=$p;?>')" /></a><br />
-                                          Delete</td>
-                                      </tr>
-                                    </table>				
-                                </td>
-                                -->
-         	</tr> 
+				<td style="<?=$backgroundColor?>" height="30" align="center" valign="middle" class="right-border-text" style="text-align:center;">
+                                    <a href="user.php?action=TotalAlert&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=$this_user_alerts?></a>
+				</td>
+                                <td style="<?=$backgroundColor?>" height="30" align="center" valign="middle" class="right-border"><a href="user.php?action=TotalLogin&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=$this_user_login?></a></td>
+				<td style="<?=$backgroundColor?>" height="30" align="left" valign="middle" class="right-border"><a href="user.php?action=TotalDownload&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=$this_user_download?></a></td>
+				<td style="<?=$backgroundColor?>" height="30" align="left" valign="middle" class="right-border"><a href="user.php?action=TotalSearch&selected_menu=user&uID=<?=$data_sql['user_id'];?>"><?=$this_user_search?></a></td>
+                                <td style="<?=$backgroundColor?>" height="30" align="center" valign="middle" class="right-border"><?=$added_date;?></td>
+                                
+                            </tr> 
 			<?php
 			$i++;
-				}
+                            }
 			
 			}
 			?>     
-         </table> 
+                    </table> 
 		</form>
 		
 		
@@ -763,7 +811,7 @@ function show_all_alerts()
     </table></td>
   </tr>
  <tr>
-    <td align="center" valign="top"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <td align="center" valign="top"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="padding-bottom:170px;">
      
       <tr>
         <td width="666" align="right" valign="top"><table width="200" border="0" align="right" cellpadding="0" cellspacing="0">

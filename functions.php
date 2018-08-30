@@ -137,9 +137,9 @@ function update_user_counts($unread_movements_count,$unread_speaking_count,$unre
 
 
 
-function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zip='',$searchnow = '',$city = '',$company = '',$industries_ids = '',$state_ids ='',$revenue = '',$employee_size = '',$display_type = '')
+function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zip='',$searchnow = '',$city = '',$company = '',$industries_ids = '',$state_ids ='',$revenue = '',$employee_size = '',$title_level = '',$display_type = '')
 {
-    //echo "<br>searchnow: ".$id;
+    //echo "<br>FAR title_level: ".$title_level;
     //echo "<br>Type: ".$type;
     //echo "<br>func: ".$func;
     
@@ -365,6 +365,35 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     $state_clause = "";
     $industries_clause = "";
     
+    $title_clause = "";
+    
+    if($title_level != '')
+    {
+        //$title_level = trim($title_level,",");
+        
+        $cheif_pos = strpos($title_level,'chief');
+        $vp_pos = strpos($title_level,'vp');
+        $director_pos = strpos($title_level,'director');
+        
+        
+        if($cheif_pos > -1 && $vp_pos > -1 && $director_pos > -1)
+            $title_clause .= " and (title like '%chief%' OR title like '%vp%' OR title like '%vice president%' OR title like '%director%')";
+        elseif($cheif_pos > -1 && $vp_pos > -1)
+            $title_clause .= " and (title like '%chief%' OR title like '%vp%' OR title like '%vice president%')";
+        elseif($cheif_pos > -1 && $director_pos > -1)
+            $title_clause .= " and (title like '%chief%' OR title like '%director%')";
+        elseif($vp_pos > -1 && $director_pos > -1)
+            $title_clause .= " and (title like '%vp%' OR title like '%vice president%' OR title like '%director%')";
+        elseif($cheif_pos > -1)
+            $title_clause .= " and title like '%chief%'";
+        elseif($vp_pos > -1)
+            $title_clause .= " and (title like '%vp%' OR title like '%vice president%')";
+        elseif($director_pos > -1)
+            $title_clause .= " and title like '%director%'";
+        
+    }    
+    //echo "<br>FAR title_clause:".$title_clause;
+    
     if($revenue != '')        
     {
         if(strpos($revenue,",") > -1)
@@ -417,6 +446,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     {
         //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
         //$company_personal_clause = " and cm.company_name = '".$searchnow."'";
+        $searchnow = trim($searchnow);
         $personal_name_arr = explode(" ",$searchnow);
         //echo "<br>Size personal_name_arr:".sizeof($personal_name_arr);
         $searched_first_name = trim($personal_name_arr[0]);
@@ -500,11 +530,12 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         
         
-        
-        
+        //echo "<pre>personal_name_arr:";   print_r($personal_name_arr);   echo "</pre>";
+        //echo "<br>Size of arr:".sizeof($personal_name_arr);
         
         if($personal_name_arr[1] != '')
-        {    
+        {   
+            //echo "in if";
             //$company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR (first_name = '".$searched_first_name."' and last_name = '".$personal_name_arr[1]."'))";
             $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR ((first_name = '".$searched_first_name."' $primary_name_clause $secondary_name_clause ) and last_name = '".$personal_name_arr[1]."'))";
             if(sizeof($personal_name_arr) == 3)
@@ -518,7 +549,8 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }    
         else    
         {     
-            $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR first_name = '".$searched_first_name."' OR last_name = '".$searched_first_name."')";
+            //echo "in else";
+            $company_personal_clause = " and (company_name LIKE '%".$searchnow."%' OR first_name = '".$searched_first_name."' $primary_name_clause $secondary_name_clause OR last_name = '".$searched_first_name."')";
         }
       //  if($type == '')
       //      $type = 'all';
@@ -526,13 +558,37 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     //echo "<br>FA company : ".$company;
     if($company != '')
     {    
+        //echo "<br>If one";
+        
         $web_arr = array();
         $web_arr = explode("<br />",$company);
+        //echo "<pre>web_arr:";   print_r($web_arr);   echo "</pre>";
+        //echo "<br>count webarr:".count($web_arr);
         if(count($web_arr) > 0)
         {
+            //echo "<br>If two";
             $company_personal_clause = " and (company_website in (";
             foreach($web_arr as $ind => $web_value)
             {
+                
+                
+                // Updated to handle secondary urls
+                $getting_primary_url = "select cm.company_website as secondary_url from ".$table_company_master." as cm,cto_company_websites as cw where cm.company_id = cw.company_id and cw.company_website = '".$web_value."'";
+                //echo "<br>getting_primary_url:".$getting_primary_url;
+                $secondary_url_rs = mysql_query($getting_primary_url);
+                $sec_count = mysql_num_rows($secondary_url_rs);
+                //echo "<br>sec_count:".$sec_count;
+                //echo "<br>company BEFORE:".$company;
+                if($sec_count > 0)
+                {
+                    //echo "<br>within if";
+                    $sec_url_row = mysql_fetch_array($secondary_url_rs);
+                    $web_value = $sec_url_row['secondary_url'];
+                }    
+                //echo "<br>company AFTER:".$company;
+
+                
+                
                 //$array = preg_split('/\s*\R\s*/m', trim($web_value), NULL, PREG_SPLIT_NO_EMPTY);
 
                 $web_value = nl2br($web_value);
@@ -589,6 +645,21 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }    
         elseif($company != '')
         {
+            
+            $getting_primary_url = "select cm.company_website as secondary_url from ".$table_company_master." as cm,cto_company_websites as cw where cm.company_id = cw.company_id and cw.company_website = '".$company."'";
+            //echo "<br>getting_primary_url:".$getting_primary_url;
+            $secondary_url_rs = mysql_query($getting_primary_url);
+            $sec_count = mysql_num_rows($secondary_url_rs);
+            //echo "<br>sec_count:".$sec_count;
+            //echo "<br>company BEFORE:".$company;
+            if($sec_count > 0)
+            {
+                //echo "<br>within if";
+                $sec_url_row = mysql_fetch_array($secondary_url_rs);
+                $company = $sec_url_row['secondary_url'];
+            }    
+            //echo "<br>company AFTER:".$company;
+            
             //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
             $company_personal_clause = " and (company_name LIKE '%".$company."%' || company_website = '".$company."' || company_urls = '".$company."')";
         }
@@ -868,7 +939,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             WHERE 
             movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
-            $revenue_clause $employee_size_clause $ciso_clause $cso_clause    
+            $revenue_clause $employee_size_clause $ciso_clause $cso_clause   $title_clause 
             $invalid_title
             $order_by $limit_clause");       
            
@@ -893,7 +964,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             WHERE 
             movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
-            $revenue_clause $employee_size_clause $ciso_clause $cso_clause    
+            $revenue_clause $employee_size_clause $ciso_clause $cso_clause   $title_clause 
             $invalid_title
             $order_by $limit_clause";
         */ 
@@ -1181,7 +1252,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
              where record_type = 'speaking'
             $where_personal_clause $file_where $from_date_clause $to_date_clause $zip_clause
             $revenue_clause $city_clause $company_personal_clause
-            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
+            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause $title_clause    
             group by speaking_id order by event_date desc  $default_speaking_limit");
         
         $msc = microtime(true)-$msc; 
@@ -1199,7 +1270,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
              where record_type = 'speaking'
             $where_personal_clause $file_where $from_date_clause $to_date_clause $zip_clause
             $revenue_clause $city_clause $company_personal_clause
-            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
+            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause $title_clause    
             group by speaking_id order by event_date desc  $default_speaking_limit";
         */
         
@@ -1455,7 +1526,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             awards_date,add_date as add_date,phone $company_related_fields
             from $table_search_data_awards
             where (record_type = 'awards')
-            $where_personal_clause $from_date_clause $to_date_clause $zip_clause
+            $where_personal_clause $from_date_clause $to_date_clause $zip_clause $title_clause
             $revenue_clause $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause
             group by awards_id $default_awards_limit order by awards_date desc");
         
@@ -1663,7 +1734,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             add_date as add_date $company_related_fields
             from $table_search_data_media
             where record_type = 'media' $from_date_clause $to_date_clause
-            $revenue_clause $zip_clause $city_clause $company_personal_clause $industries_clause
+            $revenue_clause $zip_clause $city_clause $company_personal_clause $industries_clause $title_clause
             $state_clause $employee_size_clause $where_personal_clause $ciso_clause $cso_clause
             GROUP BY mm_id order by pub_date desc $default_media_limit");
         
@@ -1851,7 +1922,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             from ".$table_personal_publication." as ppp,
             ".$table_personal_master." as pm
             ".$company_related_table."
-            where (ppp.personal_id = pm.personal_id $company_related_joins) $from_date_clause $to_date_clause $zip_clause $revenue_clause
+            where (ppp.personal_id = pm.personal_id $company_related_joins) $from_date_clause $to_date_clause $zip_clause $revenue_clause 
             $city_clause $company_personal_clause $industries_clause_pub $state_clause $employee_size_clause  $where_personal_clause $ciso_clause $cso_clause 
             group by personal_id order by publication_date desc $default_pub_limit");
         
@@ -2101,7 +2172,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             FROM 
             $table_search_data_fundings
             WHERE ( record_type = 'fundings'
-            $from_date_clause $to_date_clause $zip_clause $where_personal_clause
+            $from_date_clause $to_date_clause $zip_clause $where_personal_clause $title_clause
             $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
             $revenue_clause) group by funding_id order by funding_add_date desc $default_speaking_limit");
         
@@ -4907,10 +4978,14 @@ function get_org_chart_data($company)
     {
         $cso_clause = " and cmo_user = 1";
     } 
-    else
+    if($_SESSION['site'] == 'cmo')
     {
         $cso_clause = " and cmo_user = 0";
     } 
+    //else
+    //{
+    //    $cso_clause = " and cmo_user = 0";
+    //} 
     
     //$table_name = 'hre_search_data';
     
@@ -4945,7 +5020,8 @@ function get_org_chart_data($company)
     */
     
     //$get_personal_q = "select d.`personal_id`,d.`first_name`,d.`last_name`,d.`level`,d.`level_order`,d.`personal_image`,d.`company_name`,d.`title` from `hre_search_data` AS d where d.`company_website` like '$company' order by level_order asc"; 
-    $get_personal_q = "SELECT company_id,personal_id,first_name,last_name,level,level_order,personal_image,company_name,title FROM ".$table_name." WHERE (company_website =  '".$company."' || company_name = '".$company."'  || company_urls = '".$company."')  $ciso_clause $cso_clause ORDER BY level_order ASC LIMIT 0 , 30";
+    //$get_personal_q = "SELECT company_id,personal_id,first_name,last_name,level,level_order,personal_image,company_name,title FROM ".$table_name." WHERE (company_website =  '".$company."' || company_name = '".$company."'  || company_urls = '".$company."')  $ciso_clause $cso_clause ORDER BY level_order ASC LIMIT 0 , 30";
+    $get_personal_q = "SELECT company_id,personal_id,first_name,last_name,level,level_order,personal_image,company_name,title FROM ".$table_name." WHERE (company_website =  '".$company."' || company_name = '".$company."'  || company_urls = '".$company."')  $ciso_clause $cso_clause and movement_type in (1,2) ORDER BY effective_date desc LIMIT 0 , 30";
        
     //echo "<br>get_personal_q: ".$get_personal_q;
     //die();
@@ -4974,23 +5050,57 @@ function get_org_chart_data($company)
         //if($pRow['level'] == 0)
         //    $pRow['level'] = 3;
        
-        if($pRow['level'] == '' || $pRow['level'] == 0)
+        //echo "<br>TITLE:".$pRow['title'];
+    
+        //echo "<pre>pRow:";   print_r($pRow);   echo "</pre>";
+        
+        //echo "<br><br><br>Name:".$pRow['first_name']." ".$pRow['last_name'];
+        //echo "<br>Title:".strtolower($pRow['title']);
+        //echo "<br>Level:".$pRow['level'];
+        //echo "<br>Director pos in title:".strpos(strtolower($pRow['title']),'director');
+        $custom_level_order = "";
+        if(($pRow['level'] == '' || $pRow['level'] == 0))
         {    
+            //echo "<br>Within if";
             $pRow['level'] = $max_level;
             //if($pRow['level_order'] == '')
             //{
             //    $pRow['level_order'] = 'z';
             //}    
+            
+            //echo "<br>Strpos:".strpos(strtolower($pRow['title']),' chief ');
+            if(strpos(strtolower($pRow['title']),'chief')  > -1)
+            {        
+                $pRow['level'] = 1;
+                $custom_level_order = 'a';
+            }    
+            elseif(strpos(strtolower($pRow['title']),'vice president')  > -1)
+            {        
+                $pRow['level'] = 2;
+                $custom_level_order = 'a';
+            }    
+            elseif(strpos(strtolower($pRow['title']),'director')  > -1)
+            {        
+                $pRow['level'] = 3;
+                $custom_level_order = 'a';
+            }    
+            
+            
+            //echo "<br>Updated Level:".$pRow['level'];
+            //echo "<br>Company:".$pRow['company_id'];
         }
         
-        if($pRow['level'] > 0 || 1 == 1)
+        //if($pRow['level'] > 0 || 1 == 1)
+        if($pRow['level'] > 0)
         {    
             //echo "<br>Level: ".$pRow['level'];
             
-            $get_current_comp = "select company_id from $table_name where personal_id = ".$pRow['personal_id']." order by move_id desc limit 0,1";
+            $get_current_comp = "select company_id from $table_name where personal_id = ".$pRow['personal_id']." order by effective_date desc limit 0,1";
+            //echo "<br>get_current_comp:".$get_current_comp;
             $get_current_res = mysql_query($get_current_comp);
             $cRow = mysql_fetch_array($get_current_res);
-            if($cRow['company_id'] == $pRow['company_id'])
+            //echo "<br>cCompany:".$cRow['company_id'];
+            if($cRow['company_id'] == $pRow['company_id'] || 1 == 1)
             {
                 $personal_id = $pRow['personal_id'];
                 $first_name = $pRow['first_name'];
@@ -5007,7 +5117,14 @@ function get_org_chart_data($company)
                 $chart_arr[$personal_id]['title'] = $title;
                 $chart_arr[$personal_id]['company_name'] = $company_name;
                 $chart_arr[$personal_id]['level'] = $level;
+                
+                
+                if(($level_order == '' || $level_order == 0) && $custom_level_order != '')
+                    $level_order = $custom_level_order;
+                
                 $chart_arr[$personal_id]['level_order'] = $level_order;
+                
+                
                 $chart_arr[$personal_id]['personal_image'] = $personal_image;
                 //$chart_arr[]
 

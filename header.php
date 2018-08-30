@@ -185,6 +185,17 @@ function zipKeyPress(e)
         var zip_val = $('#zip').val();
         if(zip_val != '')
         {    
+            
+            var selected_title = '';
+            $('input[name="title_level"]:checked').each(function() {
+                //console.log(this.value);
+                selected_title += this.value+",";
+            });
+
+            
+            
+            
+            
             var from_date = $("#from").val();
             var to_date = $("#to").val();
             var type = $("#type").val();
@@ -204,7 +215,7 @@ function zipKeyPress(e)
             var hidden_employee_size = $("#hidden_employee_size").val();
             var mweb = $('#mweb').val();
             //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&industries="+hidden_industries+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size;
-            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&industries="+hidden_industries+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&mweb"+mweb;
+            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&industries="+hidden_industries+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&title_level="+selected_title+"&mweb"+mweb;
         }    
     }    
 }
@@ -218,9 +229,20 @@ function searchKeyPress(e)
         //alert("HERE Search now : "+searchnow);
         if(searchnow != '')
         {    
+            
+            var selected_title = '';
+            $('input[name="title_level"]:checked').each(function() {
+                //console.log(this.value);
+                selected_title += this.value+",";
+            });
+            
+            
+            
+            
             var from_date = $("#from").val();
             var to_date = $("#to").val();
             var type = "all";
+            var zip_val = $('#zip').val();
             var hidden_industires = '';
             if ($("#type").val() != '')
             {
@@ -250,7 +272,7 @@ function searchKeyPress(e)
             //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size;
             //window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&org=1";
            
-            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+org;
+            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&searchnow="+searchnow+"&industries="+hidden_industires+"&revenue="+hidden_revenue+"&states="+hidden_states+"&city="+city_val+"&employee_size="+hidden_employee_size+"&title_level="+selected_title+org;
         }    
     }    
 }
@@ -266,6 +288,18 @@ function companyKeyPress(e)
         //alert("HERE Search now : "+searchnow);
         if(searchnow != '')
         {    
+            
+            var selected_title = '';
+            $('input[name="title_level"]:checked').each(function() {
+                //console.log(this.value);
+                selected_title += this.value+",";
+            });
+            
+            
+            
+            
+            
+            
             var from_date = $("#from").val();
             var to_date = $("#to").val();
             var type = "all";
@@ -287,7 +321,7 @@ function companyKeyPress(e)
             var hidden_employee_size = $("#hidden_employee_size").val();
             var mweb = $('#mweb').val();
             
-            if(from_date == '' && to_date == '' && type == 'all' && zip_val == '' && city_val == '' && industries == '' && hidden_states == '' && hidden_revenue == '' && hidden_employee_size == '')
+            if(from_date == '' && to_date == '' && type == 'all' && zip_val == '' && city_val == '' && industries == '' && hidden_states == '' && hidden_revenue == '' && hidden_employee_size == '' && selected_title == '')
             {
                 //window.location.href = "http://www.execfile.com/home.php?function=hr&company="+searchnow+"&org=1";
                 window.location.href = "http://www.execfile.com/home.php?function=hr&company="+searchnow+"";
@@ -295,7 +329,7 @@ function companyKeyPress(e)
             else
             {
                 //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&companyval="+searchnow+"&states="+hidden_states+"&industries="+industries+"&city="+city_val+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size;
-                window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&companyval="+searchnow+"&states="+hidden_states+"&industries="+industries+"&city="+city_val+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&mweb="+mweb;
+                window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&companyval="+searchnow+"&states="+hidden_states+"&industries="+industries+"&city="+city_val+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&title_level="+selected_title+"&mweb="+mweb;
             }    
         }    
     }    
@@ -309,6 +343,15 @@ function cityKeyPress(e)
         var city_val = $('#city').val();
         if(city_val != '')
         {    
+            
+            var selected_title = '';
+            $('input[name="title_level"]:checked').each(function() {
+                //console.log(this.value);
+                selected_title += this.value+",";
+            });
+            
+            
+            
             var from_date = $("#from").val();
             var to_date = $("#to").val();
             var type = "all";
@@ -328,10 +371,18 @@ function cityKeyPress(e)
             var hidden_revenue = $("#hidden_revenue").val();
             var hidden_employee_size = $("#hidden_employee_size").val();
             
+            var companyval = "";
+            if ($("#field-company-name").val() != '')
+            {
+                companyval = $("#field-company-name").val();
+            }
+
+            
+            
             var mweb = $('#mweb').val();
             
             //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&states="+hidden_states+"&industries="+industries+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size;
-            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&states="+hidden_states+"&industries="+industries+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&mweb="+mweb;
+            window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&states="+hidden_states+"&industries="+industries+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
         }    
     }    
 }
@@ -340,6 +391,19 @@ function cityKeyPress(e)
 
 function update_search()
 { 
+    //alert($("#title_level_c").val());
+    //alert($("#title_level_vp").val());
+    //alert($("#title_level_dir").val());
+    var selected_title = '';
+    $('input[name="title_level"]:checked').each(function() {
+        //console.log(this.value);
+        selected_title += this.value+",";
+    });
+    //alert("Selected_title:"+selected_title);
+    
+    //return false;
+    
+    
     var industries = '';
     $("input:checkbox[class=industry_chk]:checked").each(function () 
     {
@@ -374,6 +438,8 @@ function update_search()
     var mweb = $('#mweb').val();
     // window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size;
     window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&companyval="+companyval+"&mweb="+mweb;
+    
+    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
 }
 
 
@@ -387,7 +453,16 @@ function update_state_search()
         var selected_states = $(this).attr("id");
         var state_id = selected_states.replace("state-", "");
         states += state_id+",";
-    });        
+    });      
+    
+    var selected_title = '';
+    $('input[name="title_level"]:checked').each(function() {
+        //console.log(this.value);
+        selected_title += this.value+",";
+    });
+    
+    
+    
     //alert("States: "+states);
     var from_date = $("#from").val();
     var to_date = $("#to").val();
@@ -404,7 +479,7 @@ function update_state_search()
     var hidden_employee_size = $("#hidden_employee_size").val();
     var mweb = $('#mweb').val();
     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&industries="+industries+"&states="+states+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size;
-    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&industries="+industries+"&states="+states+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&mweb="+mweb;
+    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&zip="+zip_val+"&city="+city_val+"&industries="+industries+"&states="+states+"&revenue="+hidden_revenue+"&employee_size="+hidden_employee_size+"&title_level="+selected_title+"&mweb="+mweb;
         
 }
 
@@ -538,6 +613,11 @@ if(isset($_GET['rem']) && $_GET['rem'] != '')
     }    
     
     
+    if(strpos($_GET['rem'],"LEVEL:") > -1)
+        $_GET['title_level'] = '';
+    
+    
+    
     if(strpos($_GET['rem'],"IND:") > -1)
         $_GET['industries'] = '';
 
@@ -562,6 +642,7 @@ if(isset($_GET['rem']) && $_GET['rem'] != '')
     {        
         $_GET['searchnow'] = '';
         $_GET['companyval'] = '';
+        $_GET['company'] = '';
     }
 
      elseif(strpos($_GET['rem'],"mil") > -1 || strpos($_GET['rem'],"bil") > -1)
@@ -571,6 +652,8 @@ if(isset($_GET['rem']) && $_GET['rem'] != '')
 $pg_int_parameters = "";
 
 $only_company = 0;
+
+$title_level = '';
 
 if(isset($_GET['from_date']) && $_GET['from_date'] != '')
 {
@@ -720,6 +803,17 @@ if(isset($_GET['company']) && $_GET['company'] != '')
         $_GET['companyval'] = $_GET['company'];
     
 }
+
+
+if(isset($_GET['title_level']) && $_GET['title_level'] != '')
+{
+    $title_level = $_GET['title_level'];
+    $pg_int_parameters .= "&title_level=".$title_level;
+    $only_company = 0;
+}
+//echo "<br>GET title_level:".$_GET['title_level'];
+//echo "<br>title_level:".$title_level;
+
 include("left.php"); 
 //echo "<br>only_company THREE: ".$only_company;
 if(isset($_GET['type']) && $_GET['type'] != '' && $_GET['type'] != 'all')
@@ -799,12 +893,12 @@ if($home_pos > 0)
     //echo "<br>Func: ".$func;
     //echo "<br>revenue: ".$revenue;
     //echo "<br>Filtered count First: ".$filtered_count;
-    $all_data = get_all_data('',"$type",$func,$from_date,$to_date,$zip,$searchnow,$city,$companyval,$industries_ids,$state_ids,$revenue,$employee_size);
+    $all_data = get_all_data('',"$type",$func,$from_date,$to_date,$zip,$searchnow,$city,$companyval,$industries_ids,$state_ids,$revenue,$employee_size,$title_level);
     
     $all_data_count = count($all_data);
     //echo "<br>all_data_count ONE: ".$all_data_count;
     //echo "<br>TYPE:".$type.":";
-    if(($type == 'all' || $type == '') && $revenue == '' && $employee_size == '' && $industries == '' && $states_para == '' && $city == '' && $zip == '' && $from_date_initial == '' && $to_date_initial == '' && $_GET['companyval'] == '' && $_GET['searchnow'] == '')
+    if(($type == 'all' || $type == '') && $revenue == '' && $employee_size == '' && $industries == '' && $states_para == '' && $city == '' && $zip == '' && $from_date_initial == '' && $to_date_initial == '' && $_GET['companyval'] == '' && $_GET['searchnow'] == '' && $title_level == '')
     {
         //echo "<br>FAR In if";
         $all_data_count = $all_data_count;
@@ -841,7 +935,7 @@ if((strpos($_SERVER['HTTP_REFERER'],'login.php') > -1 || strpos($_SERVER['HTTP_R
 
 //
 //$form_hidden_values = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".":".$revenue.":".":".$employee_size;
-$form_hidden_values = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".$revenue.":".$employee_size;
+$form_hidden_values = $type.":".$func.":".$from_date.":".$to_date.":".$zip.":".$searchnow.":".$city.":".$companyval.":".$industries_ids.":".$state_ids.":".$revenue.":".$employee_size.":".$title_level;
 //echo "<br>form_hidden_values: ".$form_hidden_values;
 //echo "REQUEST_URI: ".$_SERVER['REQUEST_URI'];
 $details_pos = strpos($_SERVER['REQUEST_URI'],'details.php');
@@ -959,8 +1053,24 @@ if($details_pos > -1 || $details_html_pos > -1)
                                 </strong>
                              </a> 
                         </li>
+                        
+                        <?PHP
+                        //echo "<br>combine_site:".$_SESSION['combine_site'];
+                        //echo "<pre>session:";   print_r($_SESSION);   echo "</pre>";
+                        $hide_display = "";
+                        $hide_style_display = "";
+                        $dropdown_bottom = "";
+                        if($_SESSION['combine_site'] == 'clo_lite' && $_SESSION['admin_logged_in'] != 1)
+                        {    
+                            $hide_display = 'display:none;';
+                            $hide_style_display = 'style=display:none;';
+                            $dropdown_bottom = "bottom:-94px;";
+                        } 
+                        //echo "<br>hide display:".$hide_display;
+                        ?>
+                        
 
-                        <li  class="alert-holder">
+                        <li style="<?=$hide_display?>"  class="alert-holder">
                             <!-- <a href="alert.php" title="Create Alert" class="alert-notice" > -->
                             <a href="#" title="Create Alert" class="alert-notice"  onclick="javascript:CreateAlert();">
                                 <span>
@@ -975,10 +1085,10 @@ if($details_pos > -1 || $details_html_pos > -1)
                                 <i class="ico-cog"></i>
                             </a>
 
-                            <div class="dropdown">
+                            <div style="<?=$dropdown_bottom?>" class="dropdown">
                                 <ul>
                                     <li><a id="accounts_link" href="accounts.php">Account</a></li>
-                                    <li><a id="settings_link" href="settings.php">Settings</a></li>
+                                    <li ><a <?=$hide_style_display?> id="settings_link" href="settings.php">Settings</a></li>
                                     <li id="logout_li"><a id="logout_link" href="index.php?action=logout">Logout</a></li>
                                 </ul>
                             </div><!-- /.dropdown -->

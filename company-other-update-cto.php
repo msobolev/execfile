@@ -44,6 +44,17 @@ while($cfRow = mysql_fetch_array($cfResult))
 }
 
 
+//adding funding info from CTOS to this site
+mysql_query("TRUNCATE TABLE `cto_company_websites`",$hre);
+$cfResult = mysql_query("select * from cto_company_websites",$cto);
+while($cfRow = mysql_fetch_array($cfResult)){
+    //echo "<br>Q: INSERT INTO hre_company_websites (cwid,company_id,company_website)values(".'"'.$cfRow['cwid'].'","'.$cfRow['company_id'].'","'.$cfRow['company_website'].'"'.")";
+    mysql_query("INSERT INTO cto_company_websites (cwid,company_id,company_website)values(".'"'.$cfRow['cwid'].'","'.$cfRow['company_id'].'","'.$cfRow['company_website'].'"'.")",$hre);
+}
+
+
+
+
 //mysql_query("update hre_company_update_info set end_date_time='".date("Y-m-d : H:i:s")."' where id='".$update_id."'",$hre);
 
 mysql_close($cto);
