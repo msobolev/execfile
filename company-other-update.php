@@ -110,6 +110,35 @@ while($cfRow = mysql_fetch_array($cfResult)){
 }
 
 
+/*
+mysql_query("TRUNCATE TABLE `cto_events`",$hre);
+$esResult = mysql_query("select * from cto_events",$cto);
+while($esRow = mysql_fetch_array($esResult)){
+    echo "<br>INSERT INTO cto_events (event_id,event_name,event_start_date,event_location,event_state,event_logo,event_source,status,add_date,demo_event)values(".'"'.$esRow['event_id'].'","'.$esRow['event_name'].'","'.$esRow['event_start_date'].'","'.$esRow['event_location'].'","'.$esRow['event_state'].'","'.$esRow['event_logo'].'","'.$esRow['event_source'].'"'.'","'.$esRow['status'].'"'.'","'.$esRow['add_date'].'"'.'","'.$esRow['demo_event'].'"'.")";
+	mysql_query("INSERT INTO cto_events (event_id,event_name,event_start_date,event_location,event_state,event_logo,event_source,status,add_date,demo_event)values(".'"'.$esRow['event_id'].'","'.$esRow['event_name'].'","'.$esRow['event_start_date'].'","'.$esRow['event_location'].'","'.$esRow['event_state'].'","'.$esRow['event_logo'].'","'.$esRow['event_source'].'"'.'","'.$esRow['status'].'"'.'","'.$esRow['add_date'].'"'.'","'.$esRow['demo_event'].'"'.")",$hre);
+}
+*/
+
+$table='cto_events';
+$result = mysql_query("DELETE FROM $table  ",$hre);
+$tableinfo = mysql_fetch_array(mysql_query("SHOW CREATE TABLE $table  ",$cto)); // get structure from table on server 1
+mysql_query(" $tableinfo[1] ",$exec); // use found structure to make table on server 2
+$result = mysql_query("SELECT * FROM $table  ",$cto); // select all content		
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC) ) {		
+       mysql_query("INSERT INTO $table (".implode(", ",array_keys($row)).") VALUES ('".implode("', '",array_values($row))."')",$hre); // insert one row into new table
+}
+
+
+$table='cto_organizers';
+$result = mysql_query("DELETE FROM $table  ",$hre);
+$tableinfo = mysql_fetch_array(mysql_query("SHOW CREATE TABLE $table  ",$cto)); // get structure from table on server 1
+mysql_query(" $tableinfo[1] ",$exec); // use found structure to make table on server 2
+$result = mysql_query("SELECT * FROM $table  ",$cto); // select all content		
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC) ) {		
+       mysql_query("INSERT INTO $table (".implode(", ",array_keys($row)).") VALUES ('".implode("', '",array_values($row))."')",$hre); // insert one row into new table
+}
+
+
 //mysql_query("update hre_company_update_info set end_date_time='".date("Y-m-d : H:i:s")."' where id='".$update_id."'",$hre);
 
 mysql_close($cto);

@@ -33,8 +33,31 @@ if(isset($_GET['action']) && $_GET['action'] == 'add')
     $new_password = $_POST['new_password'];
     $text_only = $_POST['text_only'];
     $user_site = $_POST['user_site'];
-    add_user($name,$email,$new_password,$status,'','',$text_only,$user_site);
-    $msg = "User added.";
+    
+    if($email != '')
+    { 
+        $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
+        //echo "<br>check_user: ".$check_user;
+        //die();
+        $check_user_rs = com_db_query($check_user);
+        $check_user_rows = com_db_num_rows($check_user_rs);
+        //echo "<br>check_user_rows: ".$check_user_rows;
+        //die();
+        if($check_user_rows > 0)
+        {
+            $msg = "User already exists.";
+        }
+        else
+        {    
+            if($name == '')
+                $msg = "Full name field is mandatory.";
+            else
+            {    
+                add_user($name,$email,$new_password,$status,'','',$text_only,$user_site);
+                $msg = "User added.";
+            }    
+        }    
+    }
 }    
 
 $user_details = array();
@@ -142,6 +165,7 @@ if($msg != '')
                         <option <?PHP if($user_details['site'] == 'cfo') echo "selected"; else echo ""; ?> value="cfo">CFO</option>
                         <option <?PHP if($user_details['site'] == 'cto/ciso') echo "selected"; else echo ""; ?> value="cto/ciso">CTO/CISO</option>
                         <option <?PHP if($user_details['site'] == 'clo_lite') echo "selected"; else echo ""; ?> value="clo_lite">CLO Lite</option>
+                        <option <?PHP if($user_details['site'] == 'ciso/clo') echo "selected"; else echo ""; ?> value="ciso/clo">CISO/CLO</option>
                     </select>    
                 </div><!-- /.form-controls -->
             </div><!-- /.form-row -->

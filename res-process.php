@@ -19,10 +19,42 @@ $action = $_GET['action'];
 if($action == 'UserLogin')
 { 
     
-    $login_email = $_POST['login_email'];
-    $login_pass	= $_POST['login_pass'];
-
+    
+    $userIp = "";
+    $last_page = "";
+    $last_page = $_SERVER['HTTP_REFERER'];
+    $login_email = secure_input($_POST['login_email']);
+    $login_pass	= secure_input($_POST['login_pass']);
+    $currentDate = date('Y-m-d');
+    $userIp = getRealIpAddr();
+    
+    // Banned IP - added on 13th April 2019
+    if($userIp == '162.213.1.246')
+    {    
+        $url = "login.php?action=LoginEmail&login_email=".$login_email;
+        com_redirect($url);
+    }
+    
+    $getLogin = "select count(*) as loginAttempts from exec_login_log where user_email = '".$login_email."' and add_date = '".$currentDate."' and user_ip = '$userIp' and status != 'success'";
+    $loginRes = com_db_query($getLogin);
+    $loginRow = com_db_fetch_array($loginRes);
+    $loginAttempts = $loginRow['loginAttempts'];
+    
+    if($loginAttempts > 9)
+    {
+        $url = "login.php?action=LoginPassword&login_email=".$login_email."&loginattempts=$loginAttempts";
+        com_redirect($url);
+    }    
+    
+    
     $login_email_lower = strtolower($login_email);
+    
+    
+    $addLoginLog = "insert into exec_login_log(user_email,user_password,user_ip,add_date,last_page) values('$login_email','$login_pass','$userIp','$currentDate','$last_page')";
+    com_db_query($addLoginLog);
+    //$lastLogin = com_db_insert_id();
+    $lastLogin = mysqli_insert_id($link);
+    
     
     // user from cmos shd b logged in
     // updated on 
@@ -174,15 +206,50 @@ if($action == 'UserLogin')
     $user_query = "select * from " . TABLE_USER ." where LOWER(`email`) = '".$login_email_lower."' and status = 1";
 
     echo "<br>user_query: ".$user_query; 
-echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>"; 
+    echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>"; 
     $user_result = com_db_query($user_query);
     //if($user_result)
     //{
+    
+        $password_db_second = "";
         $row_count = com_db_num_rows($user_result);
         echo "<br>row_count: ".$row_count; 
         if($row_count > 0)
         {
             $user_row = com_db_fetch_array($user_result);
+            
+            // special case to allow login if 2 same email address exist
+            //echo "<pre>user_result:";   print_r($user_result);   echo "</pre>";
+            
+            /*
+            if($row_count == 2)
+            {
+                if ($user_result->data_seek($row_count - 1)) 
+                {
+                  $second_row = com_db_fetch_array($user_result);    
+                  $password_db_second = $second_row['password'];
+                  
+                }            
+                
+            } 
+              
+            echo "<pre>second_row:";   print_r($second_row);   echo "</pre>"; 
+            echo "<br>User site:".$user_row['site'];
+            echo "<br>PW second:".$password_db_second;
+            */
+            // Uncomment below to work with hash passwords on execfile
+            //if($password_db_second != '' && strtolower(md5($login_pass)) == $password_db_second)
+            
+            
+            /*
+            if($password_db_second != '' && strtolower($login_pass) == $password_db_second)
+            {
+                $user_row = $second_row;
+            }
+            */
+            echo "<pre>User row:";   print_r($user_row);   echo "</pre>"; 
+            
+            //die();
             $user_name = $user_row['first_name'] .' ' . $user_row['last_name'];
             $user_email = $user_row['email'];
             $password_db = $user_row['password'];
@@ -190,7 +257,12 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
             // Below condition for user who already exist in Execfile
             if($cmo_user == 1 && $login_pass == '')
                 $login_pass = 'ssuupprrppww122';
-            if(strtoupper($login_pass) == strtoupper($password_db) || strtolower($login_pass) == 'ssuupprrppww122')
+            //else // Added on 18th Feb , after hashing user password
+            // Uncomment below to work with hash passwords on execfile
+            //    $login_pass = md5($login_pass);
+            
+            //if(strtoupper($login_pass) == strtoupper($password_db) || strtolower($login_pass) == 'ssuupprrppww122'  || (strtolower($login_pass) == $password_db_second && $login_pass != ''))
+            if($login_pass != '' && (strtoupper(md5($login_pass)) == strtoupper($password_db) || strtolower($login_pass) == 'ssuupprrppww122'))
             {
                 echo "<br>loginsessionid:".$_COOKIE['loginsessionid'];
                 
@@ -235,8 +307,10 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 if($user_row['site'] == '')
                     $user_row['site'] = 'hr';
                 
+                //echo "<br>Row site:".$user_row['site'].":"; die();
                 if($user_row['site'] == 'cto/ciso')
                 {    
+                    //echo "<br>Within if";
                     $_SESSION['site'] = 'cto';
                     $_SESSION['combine_site'] = 'cto/ciso';
                 }
@@ -244,12 +318,18 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 {
                     $_SESSION['site'] = 'clo';
                     $_SESSION['combine_site'] = 'clo_lite';
-                }    
+                }
+                elseif($user_row['site'] == 'ciso/clo' || $user_row['site'] == 'clo/ciso') // Added on 11th Dec 2018
+                {
+                    $_SESSION['site'] = 'clo';
+                    $_SESSION['combine_site'] = 'ciso/clo';
+                }
                 else    
                     $_SESSION['site'] = $user_row['site'];
                 
                 $user_id = $user_row['user_id'];
-
+                //echo "<pre>SESSION:";   print_r($_SESSION);   echo "</pre>";
+                //die();
                 // concurrent login
                 $add_date = date("Y-m-d");
                 $login_time = time();
@@ -262,6 +342,10 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                 com_db_query($sql_login_query);
                 //echo "<br>sql_login_query: ".$sql_login_query;
                 //die();
+                
+                $updateLog = "Update exec_login_log set user_email='$login_email',status = 'success' where l_id = $lastLogin";
+                com_db_query($updateLog);
+                
                 
                 $def_list_query = "SELECT * from user_saved_lists where user_id = $user_id and default_list = 1;";
                 //echo "<br>user_query: ".$user_query; 
@@ -293,6 +377,8 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                     $state_ids =  $filter_arr[9];
                     $revenue =  $filter_arr[11];
                     $employee_size = $filter_arr[13];
+                    
+                    $title_level = $filter_arr[15];
 
                     $mweb = "";
                     if($def_list_row['websites_filter'] != '')
@@ -300,14 +386,19 @@ echo "<pre>COOKIE:";   print_r($_COOKIE);   echo "</pre>";
                         $mweb = $def_list_row['l_id'];
                     }  
 
-                    $list_link = "http://www.execfile.com/home.php?from_date=&to_date=&type=$this_type&zip=$zip_code&city=$city&industries=$industry_ids&states=$state_ids&revenue=$revenue&employee_size=$employee_size&companyval=&mweb=$mweb&def_l=1";
+                    $list_link = "http://www.execfile.com/home.php?from_date=&to_date=&type=$this_type&zip=$zip_code&city=$city&industries=$industry_ids&states=$state_ids&revenue=$revenue&employee_size=$employee_size&companyval=&title_level=$title_level&mweb=$mweb&def_l=1";
 
                 }
                 
                 $user_level = $user_row['level'];
                 $payment_by = $user_row['payment_by'];
                 
-                    if($list_link == '')
+                
+                    if(isset($_GET['os']) && $_GET['os'] == 'stng')
+                    {
+                        com_redirect("accounts.php");
+                    }    
+                    elseif($list_link == '')
                         com_redirect("home.php?funtion=".$_SESSION['site']);
                     else
                         com_redirect($list_link);

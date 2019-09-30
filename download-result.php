@@ -9,12 +9,14 @@ include("functions.php");
 $filter_arr = explode(":",$_POST['selected_filters_hidden']);
 $all_data_count = "";
 
-echo "<br>site:".$filter_arr[1];
-echo "<pre>filter_arr:";   print_r($filter_arr);  echo "</pre>";
+
+//echo "<br>selected_filters_hidden:".$_POST['selected_filters_hidden'];
+//echo "<br>site:".$filter_arr[1];
+//echo "<pre>filter_arr:";   print_r($filter_arr);  echo "</pre>";
 //die();
 
-$all_data = get_all_data('',$filter_arr[0],$filter_arr[1],$filter_arr[2],$filter_arr[3],$filter_arr[4],$filter_arr[5],$filter_arr[6],$filter_arr[7],$filter_arr[8],$filter_arr[9],$filter_arr[10],$filter_arr[11],$filter_arr[12],"file");
-
+$all_data = get_all_data('',$filter_arr[0],$filter_arr[1],$filter_arr[2],$filter_arr[3],$filter_arr[4],$filter_arr[5],$filter_arr[6],$filter_arr[7],$filter_arr[8],$filter_arr[9],$filter_arr[10],$filter_arr[11],$filter_arr[12],$filter_arr[13],"file");
+//die();
 $all_data_count = count($all_data);
 
 //echo "<pre>filter_arr: ";   print_r($filter_arr);   echo "</pre>";
@@ -41,6 +43,7 @@ $media_count = 0;
 $movement_count = 0;
 $funding_count = 0;
 $jobs_count = 0;
+$conferences_count = 0;
 
 $country = 'United States';
 //$movement_type = 'Appointments';
@@ -80,15 +83,18 @@ com_db_query($download_info_query);
 
 
 for($v=0;$v<=$all_data_count;$v++)
+//for($v=75;$v<=75;$v++)
 {
     if($all_data[$v]['type'] == 'speaking')
     {
         $speaking_array[$speaking_count]['personal_id'] = $all_data[$v]['personal_id'];
-        $speaking_array[$speaking_count]['title'] = $all_data[$v]['title'];
-        $speaking_array[$speaking_count]['speaking_link'] = $all_data[$v]['speaking_link'];
-        $speaking_array[$speaking_count]['event'] = $all_data[$v]['event'];
+        $speaking_array[$speaking_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
+        $speaking_array[$speaking_count]['speaking_link'] = str_replace("&","%26",$all_data[$v]['speaking_link']);
+        //$speaking_array[$speaking_count]['speaking_link'] = "";
+        
+        $speaking_array[$speaking_count]['event'] = remove_invalid_chars($all_data[$v]['event']);
         $speaking_array[$speaking_count]['event_date'] = $all_data[$v]['event_date'];
-        $speaking_array[$speaking_count]['company_name'] = $all_data[$v]['company_name'];
+        $speaking_array[$speaking_count]['company_name'] = remove_invalid_chars($all_data[$v]['company_name']);
         $speaking_array[$speaking_count]['company_website'] = $all_data[$v]['company_website'];
         
         $comp_revenue = "";
@@ -107,17 +113,17 @@ for($v=0;$v<=$all_data_count;$v++)
         
         $speaking_array[$speaking_count]['company_revenue'] = $comp_revenue;
         $speaking_array[$speaking_count]['company_employee'] = $comp_emp_size;
-        $speaking_array[$speaking_count]['address'] = $all_data[$v]['address'];
-        $speaking_array[$speaking_count]['address2'] = $all_data[$v]['address2'];
-        $speaking_array[$speaking_count]['city'] = $all_data[$v]['city'];
-        $speaking_array[$speaking_count]['zip_code'] = $all_data[$v]['zip_code'];
-        $speaking_array[$speaking_count]['email'] = $all_data[$v]['email'];
-        $speaking_array[$speaking_count]['phone'] = $all_data[$v]['phone'];
-        $speaking_array[$speaking_count]['first_name'] = $all_data[$v]['first_name'];
-        $speaking_array[$speaking_count]['last_name'] = $all_data[$v]['last_name'];
+        $speaking_array[$speaking_count]['address'] = remove_invalid_chars($all_data[$v]['address']);
+        $speaking_array[$speaking_count]['address2'] = remove_invalid_chars($all_data[$v]['address2']);
+        $speaking_array[$speaking_count]['city'] = remove_invalid_chars($all_data[$v]['city']);
+        $speaking_array[$speaking_count]['zip_code'] = remove_invalid_chars($all_data[$v]['zip_code']);
+        $speaking_array[$speaking_count]['email'] = remove_invalid_chars($all_data[$v]['email']);
+        $speaking_array[$speaking_count]['phone'] = remove_invalid_chars($all_data[$v]['phone']);
+        $speaking_array[$speaking_count]['first_name'] = remove_invalid_chars($all_data[$v]['first_name']);
+        $speaking_array[$speaking_count]['last_name'] = remove_invalid_chars($all_data[$v]['last_name']);
         
         $speaking_array[$speaking_count]['role'] = $all_data[$v]['role'];
-        $speaking_array[$speaking_count]['topic'] = $all_data[$v]['topic'];
+        $speaking_array[$speaking_count]['topic'] = remove_invalid_chars($all_data[$v]['topic']);
         
         if($all_data[$v]['industry_name'] != '')
             $speaking_array[$speaking_count]['industry_title'] = $all_data[$v]['industry_name'];
@@ -133,9 +139,9 @@ for($v=0;$v<=$all_data_count;$v++)
     elseif($all_data[$v]['type'] == 'awards')
     {
         $awards_array[$awards_count]['personal_id'] = $all_data[$v]['personal_id'];
-        $awards_array[$awards_count]['title'] = $all_data[$v]['title'];
-        $awards_array[$awards_count]['awards_link'] = $all_data[$v]['awards_link'];
-        $awards_array[$awards_count]['awards_title'] = $all_data[$v]['awards_title'];
+        $awards_array[$awards_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
+        $awards_array[$awards_count]['awards_link'] = str_replace("&","%26",$all_data[$v]['awards_link']);
+        $awards_array[$awards_count]['awards_title'] = remove_invalid_chars($all_data[$v]['awards_title']);
         $awards_array[$awards_count]['awards_date'] = $all_data[$v]['awards_date'];
         
         $comp_revenue = "";
@@ -153,23 +159,23 @@ for($v=0;$v<=$all_data_count;$v++)
             $comp_emp_size = $all_data[$v]['employee_size_name'];
         
         
-        $awards_array[$awards_count]['company_name'] = $all_data[$v]['company_name'];
+        $awards_array[$awards_count]['company_name'] = remove_invalid_chars($all_data[$v]['company_name']);
         $awards_array[$awards_count]['company_website'] = $all_data[$v]['company_website'];
         $awards_array[$awards_count]['company_revenue'] = $comp_revenue;
         $awards_array[$awards_count]['company_employee'] = $comp_emp_size;
-        $awards_array[$awards_count]['address'] = $all_data[$v]['address'];
-        $awards_array[$awards_count]['address2'] = $all_data[$v]['address2'];
-        $awards_array[$awards_count]['city'] = $all_data[$v]['city'];
-        $awards_array[$awards_count]['zip_code'] = $all_data[$v]['zip_code'];
-        $awards_array[$awards_count]['email'] = $all_data[$v]['email'];
-        $awards_array[$awards_count]['phone'] = $all_data[$v]['phone'];
-        $awards_array[$awards_count]['first_name'] = $all_data[$v]['first_name'];
-        $awards_array[$awards_count]['last_name'] = $all_data[$v]['last_name'];
+        $awards_array[$awards_count]['address'] = remove_invalid_chars($all_data[$v]['address']);
+        $awards_array[$awards_count]['address2'] = remove_invalid_chars($all_data[$v]['address2']);
+        $awards_array[$awards_count]['city'] = remove_invalid_chars($all_data[$v]['city']);
+        $awards_array[$awards_count]['zip_code'] = remove_invalid_chars($all_data[$v]['zip_code']);
+        $awards_array[$awards_count]['email'] = remove_invalid_chars($all_data[$v]['email']);
+        $awards_array[$awards_count]['phone'] = remove_invalid_chars($all_data[$v]['phone']);
+        $awards_array[$awards_count]['first_name'] = remove_invalid_chars($all_data[$v]['first_name']);
+        $awards_array[$awards_count]['last_name'] = remove_invalid_chars($all_data[$v]['last_name']);
         
-        $awards_array[$awards_count]['awards_title'] = $all_data[$v]['awards_title'];
+        $awards_array[$awards_count]['awards_title'] = remove_invalid_chars($all_data[$v]['awards_title']);
         $awards_array[$awards_count]['awards_given_by'] = $all_data[$v]['awards_given_by'];
         $awards_array[$awards_count]['awards_date'] = $all_data[$v]['awards_date'];
-        $awards_array[$awards_count]['awards_link'] = $all_data[$v]['awards_link'];
+        //$awards_array[$awards_count]['awards_link'] = $all_data[$v]['awards_link'];
         
         $awards_array[$awards_count]['industry_title'] = $all_data[$v]['industry_title'];
         $awards_array[$awards_count]['state_short'] = $all_data[$v]['state_short'];
@@ -180,9 +186,9 @@ for($v=0;$v<=$all_data_count;$v++)
     elseif($all_data[$v]['type'] == 'publication')
     {
         $publication_array[$publication_count]['personal_id'] = $all_data[$v]['personal_id'];
-        $publication_array[$publication_count]['title'] = $all_data[$v]['title'];
-        $publication_array[$publication_count]['awards_link'] = $all_data[$v]['awards_link'];
-        $publication_array[$publication_count]['awards_title'] = $all_data[$v]['awards_title'];
+        $publication_array[$publication_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
+        $publication_array[$publication_count]['awards_link'] = str_replace("&","%26",$all_data[$v]['awards_link']);
+        $publication_array[$publication_count]['awards_title'] = remove_invalid_chars($all_data[$v]['awards_title']);
         $publication_array[$publication_count]['awards_date'] = $all_data[$v]['awards_date'];
         
         $comp_revenue = "";
@@ -193,22 +199,22 @@ for($v=0;$v<=$all_data_count;$v++)
         if($all_data[$v]['company_employee'] != '')
             $comp_emp_size = get_emp_size_value($all_data[$v]['company_employee']);
         
-        $publication_array[$publication_count]['company_name'] = $all_data[$v]['company_name'];
+        $publication_array[$publication_count]['company_name'] = remove_invalid_chars($all_data[$v]['company_name']);
         $publication_array[$publication_count]['company_website'] = $all_data[$v]['company_website'];
         $publication_array[$publication_count]['company_revenue'] = $comp_revenue;
         $publication_array[$publication_count]['company_employee'] = $comp_emp_size;
-        $publication_array[$publication_count]['address'] = $all_data[$v]['address'];
-        $publication_array[$publication_count]['address2'] = $all_data[$v]['address2'];
-        $publication_array[$publication_count]['city'] = $all_data[$v]['city'];
-        $publication_array[$publication_count]['zip_code'] = $all_data[$v]['zip_code'];
-        $publication_array[$publication_count]['email'] = $all_data[$v]['email'];
-        $publication_array[$publication_count]['phone'] = $all_data[$v]['phone'];
-        $publication_array[$publication_count]['first_name'] = $all_data[$v]['first_name'];
-        $publication_array[$publication_count]['last_name'] = $all_data[$v]['last_name'];
+        $publication_array[$publication_count]['address'] = remove_invalid_chars($all_data[$v]['address']);
+        $publication_array[$publication_count]['address2'] = remove_invalid_chars($all_data[$v]['address2']);
+        $publication_array[$publication_count]['city'] = remove_invalid_chars($all_data[$v]['city']);
+        $publication_array[$publication_count]['zip_code'] = remove_invalid_chars($all_data[$v]['zip_code']);
+        $publication_array[$publication_count]['email'] = remove_invalid_chars($all_data[$v]['email']);
+        $publication_array[$publication_count]['phone'] = remove_invalid_chars($all_data[$v]['phone']);
+        $publication_array[$publication_count]['first_name'] = remove_invalid_chars($all_data[$v]['first_name']);
+        $publication_array[$publication_count]['last_name'] = remove_invalid_chars($all_data[$v]['last_name']);
         
-        $publication_array[$publication_count]['title'] = $all_data[$v]['title'];
+        $publication_array[$publication_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
         $publication_array[$publication_count]['publication_date'] = $all_data[$v]['publication_date'];
-        $publication_array[$publication_count]['link'] = $all_data[$v]['link'];
+        $publication_array[$publication_count]['link'] = str_replace("&","%26",$all_data[$v]['link']);
         
         $publication_array[$publication_count]['industry_title'] = $all_data[$v]['industry_title'];
         $publication_array[$publication_count]['state_short'] = $all_data[$v]['state_short'];
@@ -219,7 +225,7 @@ for($v=0;$v<=$all_data_count;$v++)
     
     elseif($all_data[$v]['type'] == 'media_mention')
     {
-        $media_array[$media_count]['title'] = $all_data[$v]['title'];
+        $media_array[$media_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
         
         $comp_revenue = "";
         //echo "<br>company_employee id: ".$all_data[$v]['company_revenue'];
@@ -240,25 +246,25 @@ for($v=0;$v<=$all_data_count;$v++)
         
         
         $media_array[$media_count]['personal_id'] = $all_data[$v]['personal_id'];
-        $media_array[$media_count]['company_name'] = $all_data[$v]['company_name'];
+        $media_array[$media_count]['company_name'] = remove_invalid_chars($all_data[$v]['company_name']);
         $media_array[$media_count]['company_website'] = $all_data[$v]['company_website'];
         $media_array[$media_count]['company_revenue'] = $comp_revenue;
         $media_array[$media_count]['company_employee'] = $comp_emp_size;
-        $media_array[$media_count]['address'] = $all_data[$v]['address'];
-        $media_array[$media_count]['address2'] = $all_data[$v]['address2'];
-        $media_array[$media_count]['city'] = $all_data[$v]['city'];
-        $media_array[$media_count]['zip_code'] = $all_data[$v]['zip_code'];
-        $media_array[$media_count]['email'] = $all_data[$v]['email'];
-        $media_array[$media_count]['phone'] = $all_data[$v]['phone'];
-        $media_array[$media_count]['first_name'] = $all_data[$v]['first_name'];
-        $media_array[$media_count]['last_name'] = $all_data[$v]['last_name'];
+        $media_array[$media_count]['address'] = remove_invalid_chars($all_data[$v]['address']);
+        $media_array[$media_count]['address2'] = remove_invalid_chars($all_data[$v]['address2']);
+        $media_array[$media_count]['city'] = remove_invalid_chars($all_data[$v]['city']);
+        $media_array[$media_count]['zip_code'] = remove_invalid_chars($all_data[$v]['zip_code']);
+        $media_array[$media_count]['email'] = remove_invalid_chars($all_data[$v]['email']);
+        $media_array[$media_count]['phone'] = remove_invalid_chars($all_data[$v]['phone']);
+        $media_array[$media_count]['first_name'] = remove_invalid_chars($all_data[$v]['first_name']);
+        $media_array[$media_count]['last_name'] = remove_invalid_chars($all_data[$v]['last_name']);
         
         $media_array[$media_count]['pub_date'] = $all_data[$v]['pub_date'];
-        $media_array[$media_count]['quote'] = $all_data[$v]['quote'];
-        $media_array[$media_count]['publication'] = $all_data[$v]['publication'];
-        $media_array[$media_count]['media_link'] = $all_data[$v]['media_link'];
+        $media_array[$media_count]['quote'] = remove_invalid_chars($all_data[$v]['quote']);
+        $media_array[$media_count]['publication'] = remove_invalid_chars($all_data[$v]['publication']);
+        $media_array[$media_count]['media_link'] = str_replace("&","%26",$all_data[$v]['media_link']);
         
-        $media_array[$media_count]['industry_title'] = $all_data[$v]['industry_title'];
+        $media_array[$media_count]['industry_title'] = remove_invalid_chars($all_data[$v]['industry_title']);
         $media_array[$media_count]['state_short'] = $all_data[$v]['state_short'];
         
         
@@ -308,32 +314,41 @@ for($v=0;$v<=$all_data_count;$v++)
         //echo "<br>Movement_type: ".$movement_type;
         
         $movement_array[$movement_count]['personal_id'] = $all_data[$v]['personal_id'];
-        $movement_array[$movement_count]['title'] = $all_data[$v]['title'];
+        $movement_array[$movement_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
         
-        $movement_array[$movement_count]['company_name'] = $all_data[$v]['company_name'];
+        $movement_array[$movement_count]['company_name'] = remove_invalid_chars($all_data[$v]['company_name']);
         $movement_array[$movement_count]['company_website'] = $all_data[$v]['company_website'];
         $movement_array[$movement_count]['company_revenue'] = $comp_revenue;
         $movement_array[$movement_count]['company_employee'] = $comp_emp_size;
-        $movement_array[$movement_count]['address'] = $all_data[$v]['address'];
-        $movement_array[$movement_count]['address2'] = $all_data[$v]['address2'];
-        $movement_array[$movement_count]['city'] = $all_data[$v]['city'];
-        $movement_array[$movement_count]['zip_code'] = $all_data[$v]['zip_code'];
+        $movement_array[$movement_count]['address'] = remove_invalid_chars($all_data[$v]['address']);
+        $movement_array[$movement_count]['address2'] = remove_invalid_chars($all_data[$v]['address2']);
+        $movement_array[$movement_count]['city'] = remove_invalid_chars($all_data[$v]['city']);
+        $movement_array[$movement_count]['zip_code'] = remove_invalid_chars($all_data[$v]['zip_code']);
         $movement_array[$movement_count]['email'] = $all_data[$v]['email'];
-        $movement_array[$movement_count]['phone'] = $all_data[$v]['phone'];
-        $movement_array[$movement_count]['first_name'] = $all_data[$v]['first_name'];
-        $movement_array[$movement_count]['last_name'] = $all_data[$v]['last_name'];
+        $movement_array[$movement_count]['phone'] = remove_invalid_chars($all_data[$v]['phone']);
+        $movement_array[$movement_count]['first_name'] = remove_invalid_chars($all_data[$v]['first_name']);
+        $movement_array[$movement_count]['last_name'] = remove_invalid_chars($all_data[$v]['last_name']);
         
         $movement_array[$movement_count]['announce_date'] = $all_data[$v]['announce_date'];
         $movement_array[$movement_count]['effective_date'] = $all_data[$v]['effective_date'];
         $movement_array[$movement_count]['source'] = $m_source;
-        $movement_array[$movement_count]['headline'] = $all_data[$v]['headline'];
-        $movement_array[$movement_count]['full_body'] = $all_data[$v]['full_body'];
+        //$movement_array[$movement_count]['headline'] = remove_invalid_chars($all_data[$v]['headline']);
+        
+        
+        //$movement_array[$movement_count]['full_body'] = remove_invalid_chars($all_data[$v]['full_body']);
+        //$movement_array[$movement_count]['full_body'] = "";
+        
+        
         $movement_array[$movement_count]['short_url'] = $all_data[$v]['short_url'];
         $movement_array[$movement_count]['movement_type'] = $movement_type;
-        $movement_array[$movement_count]['what_happened'] = $all_data[$v]['what_happened'];
-        $movement_array[$movement_count]['about_person'] = $all_data[$v]['about_person'];
-        $movement_array[$movement_count]['about_company'] = $all_data[$v]['about_company'];
-        $movement_array[$movement_count]['more_link'] = $all_data[$v]['more_link'];
+        $movement_array[$movement_count]['what_happened'] = remove_invalid_chars($all_data[$v]['what_happened']);
+        //$movement_array[$movement_count]['what_happened'] = "";
+        $movement_array[$movement_count]['about_person'] = remove_invalid_chars($all_data[$v]['about_person']);
+        //$movement_array[$movement_count]['about_person'] = "";
+        //$movement_array[$movement_count]['about_company'] = remove_invalid_chars($all_data[$v]['about_company']);
+        //$movement_array[$movement_count]['about_company'] = "";
+        $movement_array[$movement_count]['more_link'] = str_replace("&","%26",$all_data[$v]['more_link']);
+        
         $movement_array[$movement_count]['previous_company'] = $previous_company;
         
         if($user_site == 'ciso')
@@ -379,20 +394,20 @@ for($v=0;$v<=$all_data_count;$v++)
             $comp_emp_size = $all_data[$v]['employee_size_name'];
         
         $funding_array[$funding_count]['personal_id'] = $all_data[$v]['personal_id'];
-        $funding_array[$funding_count]['company_name'] = $all_data[$v]['company_name'];
+        $funding_array[$funding_count]['company_name'] = remove_invalid_chars($all_data[$v]['company_name']);
         $funding_array[$funding_count]['company_website'] = $all_data[$v]['company_website'];
         $funding_array[$funding_count]['company_revenue'] = $comp_revenue;
         $funding_array[$funding_count]['company_employee'] = $comp_emp_size;
-        $funding_array[$funding_count]['address'] = $all_data[$v]['address'];
-        $funding_array[$funding_count]['address2'] = $all_data[$v]['address2'];
-        $funding_array[$funding_count]['city'] = $all_data[$v]['city'];
-        $funding_array[$funding_count]['zip_code'] = $all_data[$v]['zip_code'];
-        $funding_array[$funding_count]['email'] = $all_data[$v]['email'];
-        $funding_array[$funding_count]['phone'] = $all_data[$v]['phone'];
-        $funding_array[$funding_count]['first_name'] = $all_data[$v]['first_name'];
-        $funding_array[$funding_count]['last_name'] = $all_data[$v]['last_name'];
+        $funding_array[$funding_count]['address'] = remove_invalid_chars($all_data[$v]['address']);
+        $funding_array[$funding_count]['address2'] = remove_invalid_chars($all_data[$v]['address2']);
+        $funding_array[$funding_count]['city'] = remove_invalid_chars($all_data[$v]['city']);
+        $funding_array[$funding_count]['zip_code'] = remove_invalid_chars($all_data[$v]['zip_code']);
+        $funding_array[$funding_count]['email'] = remove_invalid_chars($all_data[$v]['email']);
+        $funding_array[$funding_count]['phone'] = remove_invalid_chars($all_data[$v]['phone']);
+        $funding_array[$funding_count]['first_name'] = remove_invalid_chars($all_data[$v]['first_name']);
+        $funding_array[$funding_count]['last_name'] = remove_invalid_chars($all_data[$v]['last_name']);
         
-        $funding_array[$funding_count]['title'] = $all_data[$v]['title'];
+        $funding_array[$funding_count]['title'] = remove_invalid_chars($all_data[$v]['title']);
         
         $funding_array[$funding_count]['funding_amount'] = $all_data[$v]['funding_amount'];
         $funding_array[$funding_count]['funding_date'] = $all_data[$v]['funding_date'];
@@ -472,6 +487,18 @@ for($v=0;$v<=$all_data_count;$v++)
         $jobs_count++;
     }
     
+    if($all_data[$v]['type'] == 'conferences')
+    {
+        $conferences_array[$conferences_count]['event_id'] = $all_data[$v]['event_id'];
+        $conferences_array[$conferences_count]['event_name'] = remove_invalid_chars($all_data[$v]['event_name']);
+        $conferences_array[$conferences_count]['event_location'] = remove_invalid_chars($all_data[$v]['event_location']);
+        $conferences_array[$conferences_count]['short_name'] = remove_invalid_chars($all_data[$v]['short_name']);
+        $conferences_array[$conferences_count]['add_date'] = remove_invalid_chars($all_data[$v]['add_date']);
+        $conferences_array[$conferences_count]['event_source'] = remove_invalid_chars($all_data[$v]['event_source']);
+        $conferences_array[$conferences_count]['event_name'] = remove_invalid_chars($all_data[$v]['event_name']);
+        $conferences_count++;
+    }    
+    
 }
 //die();
 //echo "<pre>awards_array: ";   print_r($awards_array);   echo "</pre>"; die();
@@ -482,6 +509,7 @@ $publication_count = count($publication_array);
 $media_count = count($media_array);
 $movement_count = count($movement_array);
 $jobs_count = count($jobs_array);
+$conferences_count = count($conferences_array);
 
 require('php_xls.php');
 $xls=new PHP_XLS();                  //create excel object
@@ -746,18 +774,18 @@ if($movement_count > 0)
     $xls->Text($xlsRow,18,"Announce Date");
     $xls->Text($xlsRow,19,"Effective Date");
     $xls->Text($xlsRow,20,"Source");
-    $xls->Text($xlsRow,21,"Headline");
-    $xls->Text($xlsRow,22,"Full Body");
-    $xls->Text($xlsRow,23,"Short Url");
-    $xls->Text($xlsRow,24,"Movement Type");
-    $xls->Text($xlsRow,25,"What Happened");
-    $xls->Text($xlsRow,26,"About Person");
-    $xls->Text($xlsRow,27,"About Company");
-    $xls->Text($xlsRow,28,"Source Link");
-    $xls->Text($xlsRow,29,"Previous Company");
+    //$xls->Text($xlsRow,21,"Headline");
+    //$xls->Text($xlsRow,22,"Full Body");
+    $xls->Text($xlsRow,21,"Short Url");
+    $xls->Text($xlsRow,22,"Movement Type");
+    $xls->Text($xlsRow,23,"What Happened");
+    $xls->Text($xlsRow,24,"About Person");
+    //$xls->Text($xlsRow,27,"About Company");
+    $xls->Text($xlsRow,25,"Source Link");
+    $xls->Text($xlsRow,26,"Previous Company");
     
     if($user_site == 'ciso')
-        $xls->Text($xlsRow,29,"Previous Email");
+        $xls->Text($xlsRow,27,"Previous Email");
     
     $xlsRow++;
     for($mo=0;$mo<$movement_count;$mo++)
@@ -782,18 +810,18 @@ if($movement_count > 0)
         $xls->Text($xlsRow,18,$movement_array[$mo]['announce_date']);
         $xls->Text($xlsRow,19,$movement_array[$mo]['effective_date']);
         $xls->Text($xlsRow,20,$movement_array[$mo]['source']);
-        $xls->Text($xlsRow,21,$movement_array[$mo]['headline']);
-        $xls->Text($xlsRow,22,$movement_array[$mo]['full_body']);
-        $xls->Text($xlsRow,23,$movement_array[$mo]['short_url']);
-        $xls->Text($xlsRow,24,$movement_array[$mo]['movement_type']);
-        $xls->Text($xlsRow,25,$movement_array[$mo]['what_happened']);
-        $xls->Text($xlsRow,26,$movement_array[$mo]['about_person']);
-        $xls->Text($xlsRow,27,$movement_array[$mo]['about_company']);
-        $xls->Text($xlsRow,28,$movement_array[$mo]['more_link']);
-        $xls->Text($xlsRow,29,$movement_array[$mo]['previous_company']);
+        //$xls->Text($xlsRow,21,$movement_array[$mo]['headline']);
+        //$xls->Text($xlsRow,22,$movement_array[$mo]['full_body']);
+        $xls->Text($xlsRow,21,$movement_array[$mo]['short_url']);
+        $xls->Text($xlsRow,22,$movement_array[$mo]['movement_type']);
+        $xls->Text($xlsRow,23,$movement_array[$mo]['what_happened']);
+        $xls->Text($xlsRow,24,$movement_array[$mo]['about_person']);
+        //$xls->Text($xlsRow,27,$movement_array[$mo]['about_company']);
+        $xls->Text($xlsRow,25,$movement_array[$mo]['more_link']);
+        $xls->Text($xlsRow,26,$movement_array[$mo]['previous_company']);
         
         if($user_site == 'ciso')
-            $xls->Text($xlsRow,29,$movement_array[$mo]['previous_email']);
+            $xls->Text($xlsRow,27,$movement_array[$mo]['previous_email']);
         
         $xlsRow++;
     }
@@ -920,6 +948,36 @@ if($jobs_count > 0)
         $xlsRow++;
     }
 }
+
+
+
+if($conferences_count > 0)
+{
+    
+    $xls->Text($xlsRow,1,"C O N F E R E N C E S");
+    $xlsRow=$xlsRow+2;
+    $xls->Text($xlsRow,1,"Event Unique ID");
+    $xls->Text($xlsRow,2,"Event Name");
+    $xls->Text($xlsRow,3,"Event Location");
+    $xls->Text($xlsRow,4,"State");
+    $xls->Text($xlsRow,5,"Event Date");
+    $xls->Text($xlsRow,6,"Event Source");
+    
+    $xlsRow++;
+    for($co=0;$co<$conferences_count;$co++)
+    {
+        $xls->Text($xlsRow,1,$conferences_array[$co]['event_id']);
+        $xls->Text($xlsRow,2,$conferences_array[$co]['event_name']);
+        $xls->Text($xlsRow,3,$conferences_array[$co]['event_location']);
+        $xls->Text($xlsRow,4,$conferences_array[$co]['short_name']);
+        $xls->Text($xlsRow,5,$conferences_array[$co]['add_date']);
+        $xls->Text($xlsRow,6,$conferences_array[$co]['event_source']);
+        $xlsRow++;
+    }
+}
+
+
+
 
 
 ob_end_clean();

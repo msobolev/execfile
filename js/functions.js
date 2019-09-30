@@ -67,7 +67,7 @@
                                 });
                                 
                                 
-                                
+                                var title_text = $('#title_text').val();
                                 
                                 var type = "all";
                                 if ($("#type").val() != '')
@@ -105,7 +105,7 @@
                                 //alert("SEARCH NOW: "+searchnow);
                                 //window.location.href = "http://stackoverflow.com";
                                 //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size;
-                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                 
 			}
 		});
@@ -134,7 +134,7 @@
                                     selected_title += this.value+",";
                                 });
 
-                                
+                                var title_text = $('#title_text').val();
                                 
                                 
                                 var type = "all";
@@ -175,7 +175,7 @@
                                 //alert("SEARCH NOW: "+searchnow);
                                 //window.location.href = "http://stackoverflow.com";
                                 //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+employee_size;
-                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                window.location.href = "http://www.execfile.com/home.php?searchnow="+searchnow+"&from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+employee_size+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                 
 			}
 		});
@@ -290,6 +290,8 @@
                                                 selected_title += this.value+",";
                                             });
                                             
+                                            var title_text = $('#title_text').val();
+                                            
                                             var from_date = $("#from").val();
                                             var to_date = $("#to").val();
                                             //var type = $("#type").val(); 
@@ -336,7 +338,7 @@
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -348,7 +350,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -445,7 +447,7 @@
                                                 //console.log(this.value);
                                                 selected_title += this.value+",";
                                             });
-
+                                            var title_text = $('#title_text').val();
     
                                             var from_date = $("#from").val();
                                             var to_date = $("#to").val();
@@ -500,7 +502,7 @@
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -511,7 +513,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&zip="+zip_val+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -604,6 +606,8 @@
                                                 selected_title += this.value+",";
                                             });
 
+                                            var title_text = $('#title_text').val();    
+
                                             var from_date = $("#from").val();
                                             var to_date = $("#to").val();
                                             //var type = $("#type").val(); 
@@ -645,7 +649,7 @@
                                                 var employee_size = $("#hidden_employee_size").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&employee_size="+employee_size+"&revenue="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -656,7 +660,7 @@
                                                 var revenue = $("#hidden_revenue").val();
                                                 setTimeout(function(){
                                                     //window.location.href = "http://45.55.139.16/ver2/home.php?from_date="+from_date+"&to_date="+to_date+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue;
-                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&mweb="+mweb;
+                                                    window.location.href = "http://www.execfile.com/home.php?from_date="+from_date+"&to_date="+to_date+"&city="+city_val+"&zip="+zip_val+"&industries="+industries+"&states="+hidden_states+"&type="+type+"&revenue="+revenue+"&employee_size="+lower_revenue+","+upper_revenue+"&companyval="+companyval+"&title_level="+selected_title+"&title_text="+title_text+"&mweb="+mweb;
                                                     //your code to be executed after 1 seconds
                                                 }, 3000); 
                                             }
@@ -922,6 +926,10 @@ function removing_tag(e)
         url.query.searchnow = '';
         url.query.companyval = '';
     }
+    if(e.indexOf("TITLE:") > -1)
+    {
+        url.query.title_text = '';
+    }
     
     var types_arr = ["movements","Speaking","Media Mentions","Publication","Industry Awards","Funding","Jobs"];
     if(types_arr.indexOf(e) > -1)
@@ -1016,4 +1024,10 @@ function getSalesForceLink(personal_id)
         window.location.href = result; //"http://stackoverflow.com";
         //alert("RES: "+result);
     }});
+}
+
+
+function showSpeakers(event_id)
+{
+    $("#speakers_"+event_id).toggle();
 }

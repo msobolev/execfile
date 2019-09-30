@@ -2,6 +2,14 @@
 //include("includes/include-top.php");
 $action = $_REQUEST['action'];
 $login_email = $_REQUEST['login_email'];
+
+
+$linkForward = "";
+if(isset($_GET['os']) && $_GET['os'] == 'stng')
+{
+    $linkForward = '&os=stng';
+}    
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
@@ -55,7 +63,7 @@ function ShowSignUpButton(){
 
 <div class="round-box-top"><img src="images/top-shadow.jpg" width="460" height="18"  alt="" title="" /></div>
 <div class="round-box">
-    <form name="frm_login" method="post" action="res-process.php?action=UserLogin">
+    <form name="frm_login" method="post" action="res-process.php?action=UserLogin<?=$linkForward?>">
         <div class="inner-field-box">
             <div class="text">
             <div id="email_message" style="display:<?PHP if($action=='LoginEmail' || $action=='LoginEmailPassword'){echo 'block;';}else{ echo 'none;';} ?>">The email is not recognized.&nbsp;<a href="index.php#joind_100s">New user?</a></div>Email
@@ -66,11 +74,30 @@ function ShowSignUpButton(){
             <input class="loginbox" name="login_email" id="login_email" type="text" value="<?=$login_email?>" onfocus="ClassChangeFocus('loginbox_email');"  onblur="ClassChangeBlur('loginbox_email');"/> <!-- onkeyup="ShowSignUpButton();" -->
             </div>
             </div> 
-		
+
+            
+            <?PHP
+            if(isset($_GET['loginattempts']) && $_GET['loginattempts'] != '' )
+            {    
+            ?>
+            <div class="text">
+                <div>Please contact customer support at misha@sobolev.com</div>		
+            </div>
+            <?PHP
+            }
+            else
+            {    
+            ?>
+            
+            
             <div class="text">
                 <div style="display:<?PHP if($action=='LoginPassword' || $action=='LoginEmailPassword' || $action=='concurrent'){echo 'block;';}else{ echo 'none;';} ?>">Incorrect password. Try again?</div>Password		
             </div>
-		
+            <?PHP
+            }
+            ?>
+            
+            
             <div class="field1">
                 <div id="loginbox_password" <?PHP if($action=='LoginPassword' || $action=='LoginEmailPassword' || $action=='concurrent'){echo 'class="loginboxdiv_error"';}else{ echo 'class="loginboxdiv"';} ?>>
                     <input class="loginbox" name="login_pass" id="login_pass" type="password" autocomplete="off" onfocus="ClassChangeFocus('loginbox_password');" onblur="ClassChangeBlur('loginbox_password');" /> <!--  onkeyup="ShowSignUpButton();" -->

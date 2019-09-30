@@ -1,6 +1,11 @@
 <?PHP
+
 session_start(); 
 ob_start();
+
+//ini_set('display_errors',1);
+//ini_set('display_startup_errors',1);
+//error_reporting(-1);
 //header('Location:https://www.execfile.com/execf/public/index.php/homepage');
 ?>
 <!DOCTYPE html>
@@ -167,11 +172,12 @@ ob_start();
                     alert("Fill all fields.");
                    
             }
-            
         </script>
-        
+        <!-- Start of Async Drift Code --> <script> "use strict"; !function() { var t = window.driftt = window.drift = window.driftt || []; if (!t.init) { if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice.")); t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], t.factory = function(e) { return function() { var n = Array.prototype.slice.call(arguments); return n.unshift(e), t.push(n), t; }; }, t.methods.forEach(function(e) { t[e] = t.factory(e); }), t.load = function(t) { var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script"); o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js"; var i = document.getElementsByTagName("script")[0]; i.parentNode.insertBefore(o, i); }; } }(); drift.SNIPPET_VERSION = '0.3.1'; drift.load('v64366pg229d'); </script> <!-- End of Async Drift Code -->
 </head>
 <body>
+<script type="text/javascript"> (function(a,l,b,c,r,s){ _nQc=c,r=a.createElement(l),s=a.getElementsByTagName(l)[0]; r.async=1; r.src=l.src=("https:"==a.location.protocol?"https://":"http://")+b; s.parentNode.insertBefore(r,s);}) (document,"script","serve.albacross.com/track.js","89266462"); </script>
+
 <?PHP
 
 /*
@@ -185,11 +191,43 @@ else
  */
 //ini_set('display_errors',1);
 //ini_set('display_startup_errors',1);
-//error_reporting(-1);
+error_reporting(-1);
 
 include("config.php");
+
 include("functions.php");
+//die("3");
+//$userIp = getRealIpAddr();
+
 com_db_connect_hre2() or die('Unable to connect to database server!');
+
+
+$checkIp = "select * from exec_banned_ips where banned_ip = '".$userIp."'";
+$checkIpRes = com_db_query($checkIp);
+$checkIpCount = com_db_num_rows($checkIpRes);
+//echo "<br>check_user_rows: ".$check_user_rows;
+//die();
+if($checkIpCount > 0)
+{
+    $url = "https://www.cisosonthemove.com/pricing.html";
+    com_redirect($url);    
+}
+
+
+//$userIp == '110.93.205.130' || 
+/*
+if($userIp == '109.70.100.18' || $userIp == '109.70.100.19' || $userIp == '129.204.112.220' || $userIp == '185.104.120.3' || $userIp == '185.184.157.94' || $userIp == '185.220.101.21' || $userIp == '185.220.101.22' || $userIp == '89.234.157.254')
+{    
+    $url = "https://www.cisosonthemove.com/pricing.html";
+    com_redirect($url);
+}
+*/
+
+
+
+recordTraffic('homepage');
+
+
 if(isset($_GET['action']) && $_GET['action'] == 'logout')
 {
     $logout_id = com_db_GetValue("select login_id from " . TABLE_LOGIN_HISTORY. " where user_id='".$_SESSION['sess_user_id']."' and add_date ='".date('Y-m-d')."' order by login_id desc");
@@ -228,30 +266,75 @@ while($log_history_row = com_db_fetch_array($log_history_result))
 //mysql_select_db("exec",$this_site) or die ("ERROR: Database not found ");
 
 //com_db_connect() or die('Unable to connect to database server!');
-
+/*
+function nameValidation($name)
+{
+    if($name == '')
+    {
+        return 1;
+    }    
+    else
+    {
+        //echo "<br>In else";
+        $name = trim($name);
+        $spacePos = strpos($name,' ');
+        //echo "<br>SpacePos:".$spacePos;
+        if($spacePos > -1) // Name contains space
+        {
+            //echo "<br>In else if";
+            return 0;
+        }   
+        else
+        {
+            //echo "<br>In else else";
+            $upperCount = preg_match_all("/[A-Z]/", $name);
+            //echo "<br>UpperCount:".$upperCount;
+            if($upperCount > 1)
+            {
+                //echo "<br>In else else if";
+                return 1;
+            }    
+        }    
+    }    
+}
+*/
 
 if((isset($_POST['field-name']) && $_POST['field-name'] != '') && (isset($_POST['field-email']) && $_POST['field-email'] != ''))
 {
-    $name = $_POST['field-name'];
-    $email = $_POST['field-email'];
+    $name = secure_input($_POST['field-name']);
+    $email = secure_input($_POST['field-email']);
+    //echo "<br>Email before mysql real:".$email;
+    //$email = $link,$email);
+    //echo "<br>Email after mysql real:".$email;
     
+    //echo "<pre>_POST";   print_r($_POST);  echo "</pre>";
     
-    $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
-    //echo "<br>check_user: ".$check_user;
-    $check_user_rs = com_db_query($check_user);
-    $check_user_rows = com_db_num_rows($check_user_rs);
-    //echo "<br>check_user_rows: ".$check_user_rows;
-    //die();
-    if($check_user_rows > 0)
-    {
-        header("Location: request_demo.php?sf=2");
-    }    
-    else
+    if($email != '')
     {    
-        add_user($name,$email);
-        header("Location: request_demo.php?sf=1");
+        $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
+        //echo "<br>check_user: ".$check_user;
+        //die();
+        $check_user_rs = com_db_query($check_user);
+        $check_user_rows = com_db_num_rows($check_user_rs);
+        //echo "<br>check_user_rows: ".$check_user_rows;
+        //die();
+        if($check_user_rows > 0)
+        {
+            header("Location: request_demo.php?sf=2");
+        }    
+        else
+        {   
+            
+            $nameValidation = nameValidation($name);
+            //echo "<br>nameValidation:".$nameValidation; 
+            //die();
+            if($nameValidation == 0)
+            {    
+                add_user($name,$email,'',0);
+                header("Location: request_demo.php?sf=1");
+            }    
+        }
     }
-    
     
 
 }   
@@ -262,7 +345,10 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
     $first_name = $_POST['first_name_rq'];
     $last_name = $_POST['last_name_rq'];
     $email = $_POST['email_rq'];
-    add_user($first_name,$email,1,$last_name,'Request a demo');
+    if($email != '')
+    {
+        add_user($first_name,$email,1,$last_name,'Request a demo');
+    }    
 }
 ?>
    
@@ -399,10 +485,11 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 				
 				<div class="section-body">
 					<ul class="list-logos">
+                                            <!--
 						<li>
 							<img src="css/home_images/temp/logo-garther1.png" alt="">
 						</li>
-						
+					    -->	
 						<li>
 							<img src="css/home_images/temp/logo-grovo.png" alt="">
 						</li>
@@ -796,7 +883,7 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 
                             <ul class="list-links">
                                 <li>
-                                    <a href="#">Connect on LinkedIn</a>
+                                    <a href="https://www.linkedin.com/company/execfile/">Connect on LinkedIn</a>
                                 </li>
 
                                 <li>
@@ -822,6 +909,8 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
             </div><!-- /.shell -->
 	</footer><!-- /.footer -->
     </div><!-- /.wrapper -->
+    <iframe src="www.linkedin.com/in/mishasobolev" height="1" width="1" frameBorder="0"></iframe>
+<!-- <a href="https://seal.beyondsecurity.com/vulnerability-scanner-verification/www.execfile.com"><img src="https://seal.beyondsecurity.com/verification-images/www.execfile.com/vulnerability-scanner-2.gif" alt="Website Security Test" border="0"></a> -->
 </body>
 </html>
 <?PHP

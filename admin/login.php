@@ -40,13 +40,15 @@ com_db_connect_hre2() or die('Unable to connect to database server!');
 		}	
 	}
 	
-	if(isset($_POST['email_address']) && isset($_POST['password'])) 
+	//if(isset($_POST['email_address']) && isset($_POST['password'])) 
+        if($_POST['email_address'] != '' && $_POST['password'] != '') 
         {
             $email_address = com_db_input($_POST['email_address']);
             $password = com_db_input($_POST['password']);
             // Check if email exists
             //$loginQuery = "select admin_id as login_id, admin_groups_id as login_groups_id,access_type, admin_firstname as login_firstname, admin_email_address as login_email_address, admin_password as login_password, admin_modified as login_modified, admin_logdate as login_logdate, admin_lognum as login_lognum from " . TABLE_ADMIN . " where admin_email_address = '" . com_db_input($email_address) . "'";
-            $loginQuery = "select * from " . TABLE_USER . " where email = '" . com_db_input($_POST['email_address']) . "' and password = '".$_POST['password']."' and level = 'admin'";
+            //$loginQuery = "select * from " . TABLE_USER . " where email = '" . com_db_input($_POST['email_address']) . "' and password = '".$_POST['password']."' and level = 'admin'";
+            $loginQuery = "select * from exec_admin where login_user = '" . com_db_input($_POST['email_address']) . "' and password = '".$_POST['password']."'";
             $check_admin_query = com_db_query($loginQuery);
             $check_admin = com_db_fetch_array($check_admin_query);
            // echo "<pre>check_admin_query: ";   print_r($check_admin);    echo "</pre>";    

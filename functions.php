@@ -67,7 +67,7 @@ function type_sort($a,$b)
 }
 
 
-function update_user_counts($unread_movements_count,$unread_speaking_count,$unread_media_count,$unread_award_count,$unread_publication_count,$unread_funding_count,$unread_job_count)
+function update_user_counts($unread_movements_count,$unread_speaking_count,$unread_media_count,$unread_award_count,$unread_publication_count,$unread_funding_count,$unread_job_count,$unread_conferences_count)
 {
     if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
     {    
@@ -104,6 +104,9 @@ function update_user_counts($unread_movements_count,$unread_speaking_count,$unre
         com_db_query("DELETE FROM ".TABLE_SESSION_COUNT." where record_type='jobs' and user_id = ".$this_user);	
         com_db_query("INSERT INTO ".TABLE_SESSION_COUNT."(session_counts,record_type,user_id) values(".$unread_job_count.",'jobs',".$this_user.")");	
         
+        com_db_query("DELETE FROM ".TABLE_SESSION_COUNT." where record_type='conferences' and user_id = ".$this_user);	
+        com_db_query("INSERT INTO ".TABLE_SESSION_COUNT."(session_counts,record_type,user_id) values(".$unread_conferences_count.",'conferences',".$this_user.")");	
+        
         
         /*
         com_db_query("DELETE FROM ".TABLE_COUNT." where record_type='speaking' and user_id = ".$this_user);	
@@ -137,14 +140,16 @@ function update_user_counts($unread_movements_count,$unread_speaking_count,$unre
 
 
 
-function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zip='',$searchnow = '',$city = '',$company = '',$industries_ids = '',$state_ids ='',$revenue = '',$employee_size = '',$title_level = '',$display_type = '')
+function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zip='',$searchnow = '',$city = '',$company = '',$industries_ids = '',$state_ids ='',$revenue = '',$employee_size = '',$title_level = '',$title_text = '',$display_type = '')
 {
     //echo "<br>FAR title_level: ".$title_level;
+    //echo "<br>FAR title_text: ".$title_text;
     //echo "<br>Type: ".$type;
     //echo "<br>func: ".$func;
     
     //echo "<br>LAST PAGE: ".$_SERVER['HTTP_REFERER'];
     //$show_time = 1;
+    $show_time = 0; // Turn this to 1 to see time
     global $total_count_without_where;
     global $movement_count;
     //global $appointment_count;
@@ -154,6 +159,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     global $award_count;
     global $funding_count;
     global $job_count;
+    global $conferences_count;
     global $login_page_flow;
     global $filtered_count;
     
@@ -175,7 +181,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $count_date_range = "";
         
         $sort_by_add_dates = 1;
-        
+        //$type = 'movements';
     }        
     
     $count_lower_limit = subDate('90');
@@ -183,7 +189,6 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     //die();
     //echo "<br>from_date: ".$from_date;
     //echo "<br>to_date: ".$to_date;
-    
     
     //com_db_connect() or die('Unable to connect to database server!');
     com_db_connect_hre2() or die('Unable to connect to database server!');
@@ -203,12 +208,15 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     $funding_last_id_db = com_db_GetValue("select record_id from ".TABLE_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'funding'");
     
     $jobs_last_id_db = com_db_GetValue("select record_id from ".TABLE_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'jobs'");
+    
+    //echo "<br>select record_id from ".TABLE_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'conferences'";
+    $conferences_last_id_db = com_db_GetValue("select record_id from ".TABLE_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'conferences'");
     //echo "<br>Funding Q: select record_id from ".TABLE_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'funding'";
     //echo "<br>Funding_last_id_db: ".$funding_last_id_db;
     
     //$func = 'cmo';
-    
-    //echo "<br>FUNC: ".$func;
+    $event_site_clause = "";
+    //echo "<br>FAR FUNC: ".$func;
     if($func == '' || $func == 'hr')
     {
         //echo "<br>In HR";
@@ -240,6 +248,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $table_search_data_awards            = "hre_search_data_awards";
         $table_search_data_media            = "hre_search_data_media";
         $table_search_data_fundings            = "hre_search_data_fundings";
+        $table_conferences = "hre_events";
+        $table_organizers = "hre_organizers";
+        
         
     }
     elseif($func == 'cto' || $func == 'ciso')
@@ -268,6 +279,19 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $table_search_data_awards            = "cto_search_data_awards";
         $table_search_data_media            = "cto_search_data_media";
         $table_search_data_fundings            = "cto_search_data_fundings";
+        
+        $table_conferences = "cto_events";
+        $table_organizers = "cto_organizers";
+        
+        if($func == 'cto')
+        {
+            $event_site_clause = " and site = 'cto'";
+        }
+        elseif($func == 'ciso')
+        {
+            $event_site_clause = " and site = 'ciso'";
+        }
+        
     }
     elseif($func == 'cfo')
     {
@@ -296,6 +320,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $table_search_data_awards            = "cfo_search_data_awards";
         $table_search_data_media            = "cfo_search_data_media";
         $table_search_data_fundings            = "cfo_search_data_fundings";
+        
+        $table_conferences = "cfo_events";
+        $table_organizers = "cfo_organizers";
     }
     elseif($func == 'cmo'  || $func == 'cso')
     {
@@ -325,6 +352,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $table_search_data_awards            = "cmo_search_data_awards";
         $table_search_data_media            = "cmo_search_data_media";
         $table_search_data_fundings            = "cmo_search_data_fundings";
+        
+        $table_conferences = "cmo_events";
+        $table_organizers = "cmo_organizers";
     }
     elseif($func == 'clo')
     {
@@ -352,6 +382,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         $table_search_data_awards            = "clo_search_data_awards";
         $table_search_data_media            = "clo_search_data_media";
         $table_search_data_fundings            = "clo_search_data_fundings";
+        
+        $table_conferences = "clo_events";
+        $table_organizers = "clo_organizers";
     }
     
     
@@ -366,6 +399,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     $industries_clause = "";
     
     $title_clause = "";
+    
+    $zip_clause = "";
+    $company_personal_clause = "";
     
     if($title_level != '')
     {
@@ -391,9 +427,16 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         elseif($director_pos > -1)
             $title_clause .= " and title like '%director%'";
         
-    }    
-    //echo "<br>FAR title_clause:".$title_clause;
+    }   
     
+    $title_text_clause = "";
+    if($title_text != '')
+    {
+        $title_text_clause = " and title like  '%".$title_text."%'";
+    }
+    
+    //echo "<br>FAR title_text_clause:".$title_text_clause;
+    //die();
     if($revenue != '')        
     {
         if(strpos($revenue,",") > -1)
@@ -430,7 +473,6 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $revenue_clause .= " and company_revenue in (".$revenue_ids.")";
         }    
     } 
-
     
     if($zip != '')
     {
@@ -446,7 +488,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     {
         //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
         //$company_personal_clause = " and cm.company_name = '".$searchnow."'";
-        $searchnow = trim($searchnow);
+        $searchnow = mysql_real_escape_string(trim($searchnow));
         $personal_name_arr = explode(" ",$searchnow);
         //echo "<br>Size personal_name_arr:".sizeof($personal_name_arr);
         $searched_first_name = trim($personal_name_arr[0]);
@@ -555,23 +597,33 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
       //  if($type == '')
       //      $type = 'all';
     }
-    //echo "<br>FA company : ".$company;
+    //echo "<br>FA company : ".$company; 
     if($company != '')
     {    
         //echo "<br>If one";
         
         $web_arr = array();
         $web_arr = explode("<br />",$company);
+        
+        // Updated on 22 May 2019
+        if(strpos($company,",") > -1)
+        {
+            $web_arr = explode(",",$company);
+        }        
+        
+        
         //echo "<pre>web_arr:";   print_r($web_arr);   echo "</pre>";
         //echo "<br>count webarr:".count($web_arr);
         if(count($web_arr) > 0)
         {
+            //echo "<br>FAR in if";
             //echo "<br>If two";
             $company_personal_clause = " and (company_website in (";
             foreach($web_arr as $ind => $web_value)
             {
-                
-                
+                //echo "<br>web_value be4:".$web_value;
+                $web_value = mysql_real_escape_string($web_value);
+                //echo "<br>web_value aftr:".$web_value;
                 // Updated to handle secondary urls
                 $getting_primary_url = "select cm.company_website as secondary_url from ".$table_company_master." as cm,cto_company_websites as cw where cm.company_id = cw.company_id and cw.company_website = '".$web_value."'";
                 //echo "<br>getting_primary_url:".$getting_primary_url;
@@ -606,7 +658,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             foreach($web_arr as $ind => $web_value)
             {
                 //$array = preg_split('/\s*\R\s*/m', trim($web_value), NULL, PREG_SPLIT_NO_EMPTY);
-
+                $web_value = mysql_real_escape_string($web_value);
                 $web_value = nl2br($web_value);
                 //echo "<br>web_value: ".$web_value;
                 $web_value = trim($web_value);
@@ -618,8 +670,25 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             
             
             
+            //$company = mysql_real_escape_string($company);
+            $company = com_db_input($company);
             
-            $company_personal_clause .= " or company_name like ('%$company%')";
+            // Updated on 23 May 2019 to accomodate multiple company names
+            // commented below - below handles single company name
+            //$company_personal_clause .= " or company_name like ('%$company%')";
+            
+            // Below added on 23 may 2019
+            $company_personal_clause .= " or company_name in (";
+            foreach($web_arr as $ind => $web_value)
+            {
+                $web_value = mysql_real_escape_string($web_value);
+                $web_value = nl2br($web_value);
+                $web_value = trim($web_value);
+                $company_personal_clause .= "'".$web_value."',"; 
+            }
+            $company_personal_clause .= ")";
+            // Above added on 23 may 2019
+            
             
             
             
@@ -645,7 +714,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }    
         elseif($company != '')
         {
-            
+            //echo "<br>FAR in elseif";
             $getting_primary_url = "select cm.company_website as secondary_url from ".$table_company_master." as cm,cto_company_websites as cw where cm.company_id = cw.company_id and cw.company_website = '".$company."'";
             //echo "<br>getting_primary_url:".$getting_primary_url;
             $secondary_url_rs = mysql_query($getting_primary_url);
@@ -659,11 +728,12 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
                 $company = $sec_url_row['secondary_url'];
             }    
             //echo "<br>company AFTER:".$company;
-            
+            $company = com_db_input($company);
             //$company_personal_clause = " and cm.company_name = '".$searchnow."' || pm.first_name = '".$searchnow."' ||  pm.last_name = '".$searchnow."'";
             $company_personal_clause = " and (company_name LIKE '%".$company."%' || company_website = '".$company."' || company_urls = '".$company."')";
         }
     }    
+    //echo "<br>company_personal_clause:".$company_personal_clause;
     //echo "<br>industries_ids FIRST: ".$industries_ids;
     
     if($industries_ids != '')
@@ -809,7 +879,8 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //if($revenue_clause == '' && $zip_clause == '')
         
         //echo "<br>move_last_id_db: ".$move_last_id_db;
-        
+        //echo "<br>FAR move_last_id_db:".$move_last_id_db;
+        //echo "<br>FAR count_lower_limit:".$count_lower_limit;
         if($move_last_id_db == '')
         {
             if($count_lower_limit != '')
@@ -835,7 +906,10 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
                 ");
             */
             //echo "<br><br>movement count: SELECT count(*) as total_move_count FROM ".$table_search_data." where movement_type in (1,2) $ciso_clause $cso_clause $move_count_date_clause";
-            $indMoveCountResult = mysql_query("SELECT count(*) as total_move_count FROM ".$table_search_data." where movement_type in (1,2) $ciso_clause $cso_clause $move_count_date_clause",$site);
+            
+            
+            //echo "<br>FAR SELECT count(*) as total_move_count FROM ".$table_search_data." where movement_type in (1,2) $ciso_clause $cso_clause $move_count_date_clause";
+            $indMoveCountResult = mysql_query("SELECT count(*) as total_move_count FROM ".$table_search_data." where movement_type in (1,2) $ciso_clause $cso_clause ",$site);
 
             /*
             if(!$indMoveCountResult)
@@ -852,6 +926,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $indMoveCountRow = mysql_fetch_array($indMoveCountResult);
             //echo "<pre>indMoveCountRow: ";   print_r($indMoveCountRow);   echo "</pre>";
             $movement_count = $indMoveCountRow['total_move_count'];
+            //echo "<br>FAR movement_count:".$movement_count;
         }
         //echo "<br>Count Query: SELECT count(*) as total_move_count FROM hre_search_data where movement_type in (1,2) $move_count_date_clause";
         //echo "<br>movement_count: ".$movement_count;
@@ -933,15 +1008,32 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
          $indResult = mysql_query("SELECT SQL_CALC_FOUND_ROWS personal_id,move_id,first_name, last_name,
             personal_image,email,phone".$company_fields.",title,movement_type,
             more_link,announce_date as announce_date,effective_date as add_date,effective_date,source_id,headline,
-            '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,
+            '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,linkedin_link,twitter_link,
             company_name,company_logo $previous_email_clause
             FROM $table_search_data
             WHERE 
-            movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
+            movement_type in (1,2) and move_status = 0  $where_personal_clause $from_date_clause $to_date_clause 
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
             $revenue_clause $employee_size_clause $ciso_clause $cso_clause   $title_clause 
-            $invalid_title
+            $invalid_title $title_text_clause
             $order_by $limit_clause");       
+         
+        /* 
+        echo "<br>SELECT SQL_CALC_FOUND_ROWS personal_id,move_id,first_name, last_name,
+            personal_image,email,phone".$company_fields.",title,movement_type,
+            more_link,announce_date as announce_date,effective_date as add_date,effective_date,source_id,headline,
+            '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,linkedin_link,twitter_link,
+            company_name,company_logo $previous_email_clause
+            FROM $table_search_data
+            WHERE 
+            movement_type in (1,2) and move_status = 0  $where_personal_clause $from_date_clause $to_date_clause 
+            $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
+            $revenue_clause $employee_size_clause $ciso_clause $cso_clause   $title_clause 
+            $invalid_title $title_text_clause
+            $order_by $limit_clause"; 
+         die();
+        */ 
+         
            
         $msc = microtime(true)-$msc; 
         if($show_time == 1)
@@ -958,14 +1050,14 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
          echo "<br>Movement Query:SELECT SQL_CALC_FOUND_ROWS personal_id,move_id,first_name, last_name,
             personal_image,email,phone".$company_fields.",title,movement_type,
             more_link,announce_date as announce_date,effective_date as add_date,effective_date,source_id,headline,
-            '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,
+            '' as full_body,'' as short_url,what_happened,about_person,full_body,'' as short_url,linkedin_link,twitter_link,
             company_name,company_logo $previous_email_clause
             FROM $table_search_data
             WHERE 
-            movement_type in (1,2) $where_personal_clause $from_date_clause $to_date_clause 
+            movement_type in (1,2) and move_status = 0  $where_personal_clause $from_date_clause $to_date_clause 
             $zip_clause $company_personal_clause $city_clause $industries_clause $state_clause
             $revenue_clause $employee_size_clause $ciso_clause $cso_clause   $title_clause 
-            $invalid_title
+            $invalid_title $title_text_clause
             $order_by $limit_clause";
         */ 
          
@@ -976,6 +1068,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         while($indRow = mysql_fetch_array($indResult))
         {
+            //echo "<pre>indRow: ";   print_r($indRow); echo "</pre>";
+            
+            
             //echo "<br>Within";
             //echo "<br>Move id: ".$indRow['move_id'];   
             $data_arr[$data]['id'] = $indRow['move_id'];
@@ -1016,6 +1111,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['industry_title'] = $indRow['industry_title'];
             $data_arr[$data]['state_short'] = $indRow['state_short'];
             
+            $data_arr[$data]['linkedin_link'] = $indRow['linkedin_link'];
+            $data_arr[$data]['twitter_link'] = $indRow[33]; //$indRow['twitter_link'];
+            
             if($func == 'ciso')
             {
                 $data_arr[$data]['previous_email'] = $indRow['previous_email'];
@@ -1054,7 +1152,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     //echo "<br>filtered_count a: ".$filtered_count;
     // SPEAKING
     //echo "<br>Before speaking";
-    if($type == 'speaking' || ($type == 'all' && $_GET['p'] > 1) || ($display_type == 'file' && (strpos($type,"speaking") > -1) || $type == 'all'))
+    if($type == 'speaking' || ($type == 'all' && $_GET['p'] > 1) || ($display_type == 'file' && (strpos($type,"speaking") > -1) || ($type == 'all' && $_GET['p'] > 1)))
     {    
         //echo "<br>Within speaking";
         $default_speaking_limit = ' limit 30';
@@ -1245,14 +1343,14 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         //echo "<br>zip_clause: ".$zip_clause;
         $indResult = mysql_query("select SQL_CALC_FOUND_ROWS personal_id,speaking_link,first_name,last_name,
             personal_image,email,phone,speaking_id,event,event_date,company_name,company_website,address,address2,city,zip_code,
-            sd.add_date,role,revenue_name,employee_size_name,state_name,industry_name,source_name,mgt_change_name,title,
+            sd.add_date,role,revenue_name,employee_size_name,state_name,industry_name,source_name,mgt_change_name,title,linkedin_link,twitter_link,
             topic $company_related_fields $file_select_vals
             from $table_search_data as sd  
             $file_joins
              where record_type = 'speaking'
             $where_personal_clause $file_where $from_date_clause $to_date_clause $zip_clause
             $revenue_clause $city_clause $company_personal_clause
-            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause $title_clause    
+            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause $title_clause $title_text_clause    
             group by speaking_id order by event_date desc  $default_speaking_limit");
         
         $msc = microtime(true)-$msc; 
@@ -1263,14 +1361,14 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         /*
         echo "<br>Speaking Query: select SQL_CALC_FOUND_ROWS personal_id,speaking_link,first_name,last_name,
             personal_image,email,phone,speaking_id,event,event_date,company_name,company_website,address,address2,city,zip_code,
-            sd.add_date,role,revenue_name,employee_size_name,state_name,industry_name,source_name,mgt_change_name,title,
+            sd.add_date,role,revenue_name,employee_size_name,state_name,industry_name,source_name,mgt_change_name,title,linkedin_link,twitter_link,
             topic $company_related_fields $file_select_vals
             from $table_search_data as sd  
             $file_joins
              where record_type = 'speaking'
             $where_personal_clause $file_where $from_date_clause $to_date_clause $zip_clause
             $revenue_clause $city_clause $company_personal_clause
-            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause $title_clause    
+            $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause $title_clause $title_text_clause    
             group by speaking_id order by event_date desc  $default_speaking_limit";
         */
         
@@ -1338,6 +1436,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         while($indRow = mysql_fetch_array($indResult))
         {
+            //echo "<pre>indRow: ";   print_r($indRow); echo "</pre>";
+            
+            
             $data_arr[$data]['move_id'] = $indRow['move_id'];
             $data_arr[$data]['id'] = $indRow['speaking_id'];
             $data_arr[$data]['personal_id'] = $indRow['personal_id'];
@@ -1375,6 +1476,10 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['industry_name'] = $indRow['industry_name'];
             $data_arr[$data]['source_name'] = $indRow['source_name'];
             $data_arr[$data]['mgt_change_name'] = $indRow['mgt_change_name'];
+            
+            $data_arr[$data]['linkedin_link'] = $indRow['linkedin_link'];
+            $data_arr[$data]['twitter_link'] = $indRow['twitter_link']; //$indRow['twitter_link'];
+            
             
             $last_speaking_id = "";
             //echo "<br>speaking_last_id_db: ".$speaking_last_id_db;
@@ -1418,7 +1523,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     //die();
     //echo "<br>filtered_count b: ".$filtered_count;
     // AWARDS
-    if($type == 'awards' || $type == 'all' || strpos($type,"awards") > -1)
+    if($type == 'awards' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"awards") > -1)
     { 
         $default_awards_limit = ' limit 30';
         
@@ -1522,11 +1627,11 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         
         $indResult = mysql_query("select SQL_CALC_FOUND_ROWS personal_id,awards_link,first_name,last_name,
-            personal_image,email as email,awards_id,awards_title,awards_given_by,
+            personal_image,email as email,awards_id,awards_title,awards_given_by,linkedin_link,twitter_link,
             awards_date,add_date as add_date,phone $company_related_fields
             from $table_search_data_awards
             where (record_type = 'awards')
-            $where_personal_clause $from_date_clause $to_date_clause $zip_clause $title_clause
+            $where_personal_clause $from_date_clause $to_date_clause $zip_clause $title_clause $title_text_clause
             $revenue_clause $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause
             group by awards_id $default_awards_limit order by awards_date desc");
         
@@ -1539,11 +1644,11 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         /*
         echo "<br>AWARD QUERY: select SQL_CALC_FOUND_ROWS personal_id,awards_link,first_name,last_name,
-            personal_image,email as email,awards_id,awards_title,awards_given_by,
+            personal_image,email as email,awards_id,awards_title,awards_given_by,pm.linkedin_link,pm.twitter_link,
             awards_date,add_date as add_date,phone $company_related_fields
             from $table_search_data_awards
             where (record_type = 'awards')
-            $where_personal_clause $from_date_clause $to_date_clause $zip_clause
+            $where_personal_clause $from_date_clause $to_date_clause $zip_clause $title_clause $title_text_clause
             $revenue_clause $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause
             group by awards_id $default_awards_limit order by awards_date desc";
         */
@@ -1592,6 +1697,10 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['revenue_name'] = $indRow['revenue_name'];
             $data_arr[$data]['employee_size_name'] = $indRow['employee_size_name'];
             
+            $data_arr[$data]['linkedin_link'] = $indRow['linkedin_link'];
+            $data_arr[$data]['twitter_link'] = $indRow['twitter_link'];
+            
+            
             if($awards_last_id_db == '')
             {
                 $data_arr[$data]['show_state'] = 'unread';
@@ -1613,7 +1722,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
     //echo "<br>filtered_count c: ".$filtered_count;
     // MEDIA MENTIONS
-    if($type == 'media' || $type == 'media_mention' || $type == 'all' || strpos($type,"media_mention") > -1)
+    if($type == 'media' || $type == 'media_mention' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"media_mention") > -1)
     {
         $default_media_limit = ' limit 30';
         if($display_type = 'file')
@@ -1730,11 +1839,11 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
         
         $indResult = mysql_query("select SQL_CALC_FOUND_ROWS personal_id,phone,media_link,first_name,last_name,
-            personal_image,email as email,quote,publication,pub_date,mm_id,
+            personal_image,email as email,quote,publication,pub_date,mm_id,linkedin_link,twitter_link,
             add_date as add_date $company_related_fields
             from $table_search_data_media
             where record_type = 'media' $from_date_clause $to_date_clause
-            $revenue_clause $zip_clause $city_clause $company_personal_clause $industries_clause $title_clause
+            $revenue_clause $zip_clause $city_clause $company_personal_clause $industries_clause $title_clause $title_text_clause
             $state_clause $employee_size_clause $where_personal_clause $ciso_clause $cso_clause
             GROUP BY mm_id order by pub_date desc $default_media_limit");
         
@@ -1797,6 +1906,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['revenue_name'] = $indRow['revenue_name'];
             $data_arr[$data]['employee_size_name'] = $indRow['employee_size_name'];
             
+            $data_arr[$data]['linkedin_link'] = $indRow['linkedin_link'];
+            $data_arr[$data]['twitter_link'] = $indRow['twitter_link'];
+            
             if($media_last_id_db == '')
             {
                 $data_arr[$data]['show_state'] = 'unread';
@@ -1819,7 +1931,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
 
     //echo "<br>filtered_count d: ".$filtered_count;
     // PUBLICATION
-    if($type == 'publication' || $type == 'all' || strpos($type,"publication") > -1)
+    if($type == 'publication' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"publication") > -1)
     {
         $default_pub_limit = ' limit 30';
         if($display_type = 'file')
@@ -2013,7 +2125,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         
     //echo "<br>filtered_count e: ".$filtered_count;
     // funding
-    if($type == 'funding' || $type == 'all' || strpos($type,"funding") > -1)
+    if($type == 'funding' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"funding") > -1)
     {
         $default_speaking_limit = ' limit 30';
         if($display_type = 'file')
@@ -2165,17 +2277,17 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             first_name, last_name,
             personal_image,company_logo,
             email as email,phone,company_name, title,movement_type,funding_id,funding_amount,
-            funding_source,funding_add_date as add_date,funding_date as funding_date,
+            funding_source,funding_add_date as add_date,funding_date as funding_date,linkedin_link,twitter_link,
             company_id $company_related_fields,
             company_revenue,company_employee,industry_id as industry_id,company_website,address,address2,
             city,state as state_id,zip_code,revenue_name,employee_size_name
             FROM 
             $table_search_data_fundings
             WHERE ( record_type = 'fundings'
-            $from_date_clause $to_date_clause $zip_clause $where_personal_clause $title_clause
+            $from_date_clause $to_date_clause $zip_clause $where_personal_clause $title_clause $title_text_clause
             $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
-            $revenue_clause) group by funding_id order by funding_add_date desc $default_speaking_limit");
-        
+            $revenue_clause)  order by funding_date desc $default_speaking_limit");
+        // group by funding_id // this clause remove for urgent fix , 2nd Mar 2019
         
         
         
@@ -2189,16 +2301,16 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             first_name, last_name,
             personal_image,company_logo,
             email as email,phone,company_name, title,movement_type,funding_id,funding_amount,
-            funding_source,funding_add_date as add_date,funding_date as funding_date,
+            funding_source,funding_add_date as add_date,funding_date as funding_date,linkedin_link,twitter_link,
             company_id $company_related_fields,
             company_revenue,company_employee,industry_id as industry_id,company_website,address,address2,
             city,state as state_id,zip_code,revenue_name,employee_size_name
             FROM 
             $table_search_data_fundings
             WHERE ( record_type = 'fundings'
-            $from_date_clause $to_date_clause $zip_clause $where_personal_clause
+            $from_date_clause $to_date_clause $zip_clause $where_personal_clause $title_clause $title_text_clause
             $city_clause $company_personal_clause $industries_clause $state_clause $employee_size_clause $ciso_clause $cso_clause    
-            $revenue_clause) group by funding_id order by funding_add_date desc $default_speaking_limit";
+            $revenue_clause)  order by funding_add_date desc $default_speaking_limit";
         */ 
         //die();
         
@@ -2247,6 +2359,9 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
             $data_arr[$data]['revenue_name'] = $indRow['revenue_name'];
             $data_arr[$data]['employee_size_name'] = $indRow['employee_size_name'];
             
+            $data_arr[$data]['linkedin_link'] = $indRow['linkedin_link'];
+            $data_arr[$data]['twitter_link'] = $indRow['twitter_link'];
+            
             
             if($funding_last_id_db == '')
             {
@@ -2269,7 +2384,7 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
     
     //echo "<br>filtered_count f: ".$filtered_count;
     // Jobs
-    if($type == 'jobs' || $type == 'all' || strpos($type,"jobs") > -1)
+    if($type == 'jobs' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"jobs") > -1)
     {
         $default_speaking_limit = ' limit 30';
         if($display_type = 'file')
@@ -2449,6 +2564,225 @@ function get_all_data($id='',$type='',$func = '',$from_date = '',$to_date='',$zi
         }
     }
    
+    
+    //echo "<br>type:".$type;
+    if($type == 'conferences' || ($type == 'all' && $_GET['p'] > 1) || strpos($type,"conferences") > -1 && 1 == 2)
+    { 
+        //echo "<br>within";
+        $default_conferences_limit = ' limit 30';
+        
+        if($display_type = 'file')
+            $default_conferences_limit = '';
+        
+        $where_personal_clause = "";
+        if($id != '')
+            $where_personal_clause = " and event_id = ".$id;
+        
+        $from_date_clause = "";
+        $to_date_clause = "";
+        
+        
+        if($sort_by_add_dates == 1)
+        {
+            $to_date_clause = " and event_start_date <= '".$to_date."'";
+        }
+        else
+        {  
+        
+            if($from_date != '')
+            {
+                $from_date_clause = " and event_start_date >= '".$from_date."'";
+            }        
+            if($to_date != '')
+            {
+                $to_date_clause = " and event_start_date <= '".$to_date."'";
+            }
+        }    
+
+        if($conferences_last_id_db == '')
+        {
+            if($count_lower_limit != '')
+            {    
+                //$awards_count_date_clause = "  and pa.awards_date >= '".$count_lower_limit."' and pa.awards_date <= '".$to_date."'";
+            }
+        }
+        
+        $msc = microtime(true); 
+      
+        $event_state_clause = "";
+        if($state_ids != '')
+        {
+            
+            $event_state_clause = " and event_state in (".$state_ids.")";
+        }
+        
+        if($city != '')
+        {
+            $city_event_clause = " and event_location = '".$city."'";
+        }
+        
+        $where_cluase = " (1 = 1) ";
+
+        //$default_conferences_limit = " limit 0,10";
+        
+        $indResult = mysql_query("select SQL_CALC_FOUND_ROWS event_id,event_name,event_start_date as add_date,event_location,event_location,event_logo,event_source,status,s.short_name as short_name,organizer
+        from $table_conferences as c,hre_state as s
+        where c.event_state = s.state_id and $where_cluase $event_state_clause
+        $from_date_clause $to_date_clause $event_site_clause $city_event_clause
+        $default_conferences_limit order by event_start_date desc");
+        
+        $msc = microtime(true)-$msc; 
+        if($show_time == 1)
+            echo "<br><br>".$msc . ' s CONFERENCES'; // in seconds
+        
+        //echo "<br>";
+        /*
+        $num_conferences_result = mysql_query("SELECT FOUND_ROWS() as total_conferences_rows");
+        $num_conferences_row = mysql_fetch_array($num_conferences_result);
+        $filtered_count = $num_conferences_row['total_conferences_rows']+$filtered_count;
+        $conferences_count = $num_conferences_row['total_conferences_rows'];
+        */
+        
+        
+        //echo "<br>num_awards_row: ".$num_awards_row['total_speaking_rows'];
+        //echo "<br>filtered_count c: ".$filtered_count;
+            
+        //echo "<br>conferences_last_id_db:".$conferences_last_id_db;
+        //echo "<br>conferences_count:".$conferences_count;
+        while($indRow = mysql_fetch_array($indResult))
+        {
+            $this_event_id = $indRow['event_id'];
+            
+            /*
+            $getSpeakers = "SELECT pm.personal_id,pm.first_name,pm.last_name,pm.personal_image,pm.email,mm.title,cm.company_name from 
+            $table_personal_master as pm,
+            $table_personal_speaking as ps,
+            $table_movement_master as mm,
+            $table_company_master as cm
+            where pm.personal_id = ps.personal_id and 
+            cm.company_id = mm.company_id and
+            mm.personal_id = pm.personal_id and
+            ps.event_id = ".$this_event_id;
+            */
+            
+            /*
+            $getSpeakers = "SELECT pm.personal_id,pm.first_name,pm.last_name,pm.personal_image,pm.email from 
+            $table_personal_master as pm,
+            $table_personal_speaking as ps
+            where pm.personal_id = ps.personal_id and 
+            ps.event_id = ".$this_event_id;
+            */
+            
+            $getSpeakers = "SELECT personal_id,first_name,last_name,personal_image,email,company_name,title from 
+            $table_search_data
+            where record_type = 'speaking' and 
+            event_id = ".$this_event_id;
+            
+            
+            
+            
+            //echo "<br>getSpeakers:".$getSpeakers;
+            $speakersResult = mysql_query($getSpeakers);
+            $speakersCount = mysql_num_rows($speakersResult);
+            
+            //echo "<br>speakersCount:".$speakersCount;
+            
+            if($speakersCount > 0)
+            {
+                $data_arr[$data]['speakersCount'] = $speakersCount;
+                $data_arr[$data]['event_id'] = $indRow['event_id'];
+                $data_arr[$data]['event_name'] = $indRow['event_name'];
+                $data_arr[$data]['event_location'] = $indRow['event_location'];
+                $data_arr[$data]['add_date'] = $indRow['add_date'];
+                $data_arr[$data]['event_logo'] = $indRow['event_logo'];
+                $data_arr[$data]['event_source'] = $indRow['event_source'];
+                $data_arr[$data]['type'] = 'conferences';
+                $data_arr[$data]['short_name'] = $indRow['short_name'];
+
+                $organizer = $indRow['organizer'];
+
+                $organizer_logo = "";
+                //echo "<br>organizer:".$organizer;
+                if($organizer != '')
+                {
+                    $getOrganizer = "SELECT organizer_logo from $table_organizers where o_id = ".$organizer;
+                    //echo "<br>getOrganizer:".$getOrganizer;
+                    $organizerResult = mysql_query($getOrganizer);
+                    $organizerCount = mysql_num_rows($organizerResult);
+                    if($organizerCount > 0)
+                    {
+                        $organizerRow = mysql_fetch_array($organizerResult);
+                        $organizer_logo = $organizerRow['organizer_logo'];
+                        //echo "<br>organizer_logo:".$organizer_logo;
+
+                        $data_arr[$data]['event_logo'] = $organizer_logo;
+
+                    }    
+                }    
+                //$data_arr[$data]['organizer_logo'] = $organizer_logo;
+                //$getSpeakers = "SELECT pm.first_name,pm.last_name,pm.personal_image,pm.email from $table_personal_master as pm,$table_personal_speaking as ps where pm.personal_id = ps.personal_id and ps.event_id = ".$data_arr[$data]['event_id'];
+
+
+                $speakerCounter = 0;
+                while($speakerRow = mysql_fetch_array($speakersResult))
+                {
+                    $thisPersonalId = $speakerRow['personal_id'];
+                    
+                    $data_arr[$data]['speaker'][$speakerCounter]['first_name'] = $speakerRow['first_name'];
+                    $data_arr[$data]['speaker'][$speakerCounter]['last_name'] = $speakerRow['last_name'];
+                    $data_arr[$data]['speaker'][$speakerCounter]['personal_image'] = $speakerRow['personal_image'];
+                    $data_arr[$data]['speaker'][$speakerCounter]['email'] = $speakerRow['email'];
+
+
+                    /*
+                    $getMovement = "SELECT cm.company_name,mm.title from 
+                    $table_personal_master as pm,
+                    $table_movement_master as mm,
+                    $table_company_master as cm
+                    where pm.personal_id = mm.personal_id and cm.company_id = mm.company_id    
+                    and mm.personal_id = $thisPersonalId
+                    order by mm.effective_date desc limit 0,1";
+                    */
+                    
+
+                    /*
+                    $getMovement = "SELECT company_name,title from $table_search_data where personal_id = $thisPersonalId order by effective_date desc limit 0,1";
+                    $moveResult = mysql_query($getMovement);
+                    $moveCount = mysql_num_rows($moveResult);
+                    $moveRow = mysql_fetch_array($moveResult);
+                    */
+                    
+                    $data_arr[$data]['speaker'][$speakerCounter]['company_name'] = $speakerRow['company_name'];
+                    $data_arr[$data]['speaker'][$speakerCounter]['title'] = $speakerRow['title'];
+
+
+                    $speakerCounter++;
+                }
+
+                if($conferences_last_id_db == '')
+                {
+                    $data_arr[$data]['show_state'] = 'unread';
+                    //$award_count++;
+                    $conferences_count++;
+                }    
+                else
+                {    
+                    if($indRow['event_id'] <= $conferences_last_id_db)
+                        $data_arr[$data]['show_state'] = 'read';
+                    else
+                    {    
+                        $data_arr[$data]['show_state'] = 'unread';
+                        $conferences_count++;
+                    }    
+                }
+                $data++;
+            }    
+            
+        } // end of while loop
+    }    
+    //echo "<br>conferences_count:".$conferences_count;
+    //echo "<br>Data:".$data;
+    
     //echo "<br>filtered_count g: ".$filtered_count;
     $total_count_without_where = $total_speaking_count+$total_award_count+$total_media_count+$total_publication_count+$total_move_count+$total_funding_count+$total_job_count;
     //echo "<br>filtered_count fun bt: ".$filtered_count;
@@ -2942,10 +3276,10 @@ function create_job_url($title = '',$company_name = '',$movement_id = '',$record
 
 
 
-function show_movements($first_name,$last_name,$movement_id,$personal_id,$company_name,$title,$email,$phone,$movement_type,$more_link,$personal_image,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
+function show_movements($first_name,$last_name,$movement_id,$personal_id,$company_name,$title,$email,$phone,$movement_type,$more_link,$personal_image,$personal_pic_root,$add_date = '',$show_state='',$linkedin_link='',$twitter_link='',$ind=0)
 {
     global $exec_demo;
-    //echo "<br>Personal_image: ".$personal_image;
+    //echo "<br>ONE Personal_image: ".$personal_image;
     $sf = "";
     $personalURL = "";
     //$converted_date = date("M d, Y", strtotime($all_data[$i]['awards_date']));
@@ -2954,9 +3288,9 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
 
     $movement_text = "";
     if($movement_type == 1)
-        $movement_text = " Appointed ";
+        $movement_text = " Appointed as ";
     elseif($movement_type == 2)
-        $movement_text = " Promoted";
+        $movement_text = " Promoted to ";
 
     $share_text = "";
     $share_text = "Congrats ".$first_name." ". $last_name." on ".$movement_type." as ".$title." at ".$company_name;  //$all_data[$i]['company_name']
@@ -2990,14 +3324,22 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         <div class="article-image">
         <?PHP
         //echo "<br>exec_demo var: ".$exec_demo;
-        //echo "<br>personal_image: ".$personal_image;
+         //echo "<pre>";
+        //echo "<br>http referer: ".$_SERVER['HTTP_REFERER'];
         $personal_image_ed = $personal_image; 
-        if($_SERVER['HTTP_REFERER'] != '' && strpos($_SERVER['HTTP_REFERER'],"execfile.com") > -1)
+        
+        //echo "<br>HTTP_REFERER:".strpos($_SERVER['HTTP_REFERER'],"execfile.com");
+        //echo "<br>HTTPS_REFERER:".strpos($_SERVER['HTTPS_REFERER'],"execfile.com");
+        
+        if($_SERVER['HTTP_REFERER'] != '' && strpos($_SERVER['HTTP_REFERER'],"execfile.com") > -1 || 1 == 1)
         {
-
+           // echo "<br>Within if";
         }   
         else
+        {
+            //echo "<br>Within else";
             $personal_image = '';
+        }    
         
         //echo "<br>personal_pic_root: ".$personal_pic_root;
         //echo "<br>personal_image: ".$personal_image;
@@ -3051,16 +3393,22 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
         
         ?>
         <div class="article-content" style="<?=$width?>">
-            <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was <?=$movement_text?> as <?=$mod_t?> at <?=$company_name?>
+            <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was <?=$movement_text?> <?=$mod_t?> at <?=$company_name?>
             <?PHP
             if($add_date != '')
                 echo "- ".date("m.d.Y",strtotime($add_date)).".";
+            
+            $iconMargins = '';
+            if($ind == 1)
+                $iconMargins = 'style=margin-right:25px;';
+            
+            
             ?>
             
             </p>
             <div class="socials">
                 <ul>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$personal_pic_root.$personalURL?>" class="note">
                             <i class="ico-note"></i>
                         </a>
@@ -3071,7 +3419,7 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
                     {    
                     ?>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$more_link?>" class="upload">
                             <i class="ico-upload"></i>
                         </a>
@@ -3080,32 +3428,48 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
                     }
                     ?>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$sf?>" class="salesforce">
                             <i class="ico-salesforce"></i>
                         </a>
                     </li>
 
-                    <li>
-                        <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>&url=<?=$more_link?>" class="twitter">
+                    <?PHP
+                    //echo "<br>twitter_link($first_name $last_name):".$twitter_link;
+                    if($twitter_link != '')
+                    { 
+                        
+                        $http_pos_tw = strpos($twitter_link,"http");
+                        if($http_pos_tw > -1)
+                        {}    
+                        else
+                            $twitter_link = "http://".$twitter_link;
+                        
+                        
+                    ?>
+                    
+                    <li <?=$iconMargins?>>
+                        <!-- <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>&url=<?=$more_link?>" class="twitter"> -->
+                        <a target="_blank" href="<?=$twitter_link?>" class="twitter">
                             <i class="ico-twitter"></i>
                         </a>
-
-                        <!--
-                         <a href="https://twitter.com/intent/tweet" class="twitter-share-button twitter">
-                            <i class="ico-twitter"></i>
-                        </a>   
-                        -->    
-
                     </li>
 
                     <?PHP
-                    if($more_link != '')
-                    {    
+                    }
+                    if($linkedin_link != '')
+                    { 
+                        //echo "<br>linkedin_link:".$linkedin_link;
+                        $http_pos = strpos($linkedin_link,"http");
+                        if($http_pos > -1)
+                        {}    
+                        else
+                            $linkedin_link = "http://".$linkedin_link;
                     ?>
                     
-                    <li>
-                        <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$more_link?>&title=<?=$share_text?>" class="linkedin">
+                    <li <?=$iconMargins?>>
+                        <!-- <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$more_link?>&title=<?=$share_text?>" class="linkedin"> -->
+                        <a target="_blank" href="<?=$linkedin_link?>" class="linkedin">
                             <i class="ico-linkedin"></i>
                         </a>
                     </li>
@@ -3179,7 +3543,7 @@ function show_movements($first_name,$last_name,$movement_id,$personal_id,$compan
 }
 
 
-function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_name,$title,$email,$phone,$personal_image,$awards_title,$awards_given_by,$awards_date,$awards_link,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
+function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_name,$title,$email,$phone,$personal_image,$awards_title,$awards_given_by,$awards_date,$awards_link,$personal_pic_root,$add_date = '',$show_state='',$linkedin_link='',$twitter_link='',$ind=0)
 {
     $profile_root_link = "https://www.hrexecsonthemove.com/";
     
@@ -3280,6 +3644,11 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
             }    
         }    
         
+        $iconMargins = '';
+        if($ind == 1)
+            $iconMargins = 'style=margin-right:25px;'; 
+        
+        
         //echo "<br>strpos: ".strpos($awards_title,"award");
         //echo "<br>awards_title BE4:".$awards_title."::";
         //if(strpos($awards_title,"award") < 0 || strpos($awards_title,"award") == '')
@@ -3301,7 +3670,7 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
 
             <div class="socials">
                 <ul>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$personal_pic_root.$personalURL?>" class="note">
                             <i class="ico-note"></i>
                         </a>
@@ -3310,7 +3679,7 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
                     if($awards_link != '')
                     {    
                     ?>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$awards_link?>" class="upload">
                             <i class="ico-upload"></i>
                         </a>
@@ -3320,23 +3689,49 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
                     ?>
                     
                     
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$sf?>" class="salesforce">
                             <i class="ico-salesforce"></i>
                         </a>
                     </li>
-
-                    <li>
-                        <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>&original_referer=&nbsp;" class="twitter">
+                    <?PHP
+                    //echo "<br>twitter_link:".$twitter_link;
+                    if($twitter_link != '')
+                    { 
+                        
+                        $http_pos_tw = strpos($twitter_link,"http");
+                        if($http_pos_tw > -1)
+                        {}    
+                        else
+                            $twitter_link = "http://".$twitter_link;
+                    ?>
+                    <li <?=$iconMargins?>>
+                        <!-- <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>&original_referer=&nbsp;" class="twitter"> -->
+                        <a target="_blank" href="<?=$twitter_link?>" class="twitter">
                             <i class="ico-twitter"></i>
                         </a>
                     </li>
+                    <?PHP
+                    }
+                    if($linkedin_link != '')
+                    { 
+                        
+                        $http_pos = strpos($linkedin_link,"http");
+                        if($http_pos > -1)
+                        {}    
+                        else
+                            $linkedin_link = "http://".$linkedin_link;
 
-                    <li>
-                        <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$awards_link?>" class="linkedin">
+                    ?>
+                    <li <?=$iconMargins?>>
+                        <!-- <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$awards_link?>" class="linkedin"> -->
+                        <a target="_blank" href="<?=$linkedin_link?>" class="linkedin">
                             <i class="ico-linkedin"></i>
                         </a>
                     </li>
+                    <?PHP
+                    }
+                    ?>
                 </ul>
             </div><!-- /.socials -->
         </div><!-- /.article-content -->
@@ -3366,14 +3761,14 @@ function show_awards($first_name,$last_name,$awards_id,$personal_id,$company_nam
 
 
 
-function show_speaking($first_name,$last_name,$speaking_id,$personal_id,$company_name,$title,$email,$phone,$personal_image,$event,$speaking_link,$event_date,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
+function show_speaking($first_name,$last_name,$speaking_id,$personal_id,$company_name,$title,$email,$phone,$personal_image,$event,$speaking_link,$event_date,$personal_pic_root,$add_date = '',$show_state='',$linkedin_link='',$twitter_link='',$ind=0)
 {
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
         //echo "<br>Site: ".$_SESSION['site'];
         $base_site = $_SESSION['site'];
         if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
-            $profile_root_link = "https://www.ctosonthemove.com/";
+            $profile_root_link = "https://ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
@@ -3465,6 +3860,13 @@ function show_speaking($first_name,$last_name,$speaking_id,$personal_id,$company
         //if($ind == 1)
         if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
             $width = 'width:63%;';
+        
+        
+        $iconMargins = '';
+        if($ind == 1)
+            $iconMargins = 'style=margin-right:25px;';
+        
+        
         ?>
         <div class="article-content" style="<?=$width?>">
             <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> scheduled to speak at <?=$event?> on <?=$converted_date?>
@@ -3474,36 +3876,67 @@ function show_speaking($first_name,$last_name,$speaking_id,$personal_id,$company
             ?></p>
             <div class="socials">
                 <ul>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$profile_root_link.$personalURL?>" class="note">
                             <i class="ico-note"></i>
                         </a>
                     </li>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$speaking_link?>" class="upload">
                             <i class="ico-upload"></i>
                         </a>
                     </li>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <!-- <a href="<?=$sf?>" class="salesforce"> -->
                         <a  onclick="getSalesForceLink('<?=$personal_id?>')" href="javascript:void(0)" class="salesforce"> 
                             <i class="ico-salesforce"></i>
                         </a>
                     </li>
 
-                    <li>
-                        <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>" class="twitter">
+                    <?PHP
+                    if($twitter_link != '')
+                    { 
+                        
+                        $http_pos_tw = strpos($twitter_link,"http");
+                        if($http_pos_tw > -1)
+                        {}    
+                        else
+                            $twitter_link = "http://".$twitter_link;
+                        
+                        
+                    ?>
+                    
+                    <li <?=$iconMargins?>>
+                        <!-- <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>" class="twitter"> -->
+                        <a target="_blank" href="<?=$twitter_link?>" class="twitter">
                             <i class="ico-twitter"></i>
                         </a>
                     </li>
+                    <?PHP
+                    }
+                    if($linkedin_link != '')
+                    {
+                        
+                        $http_pos = strpos($linkedin_link,"http");
+                        if($http_pos > -1)
+                        {}    
+                        else
+                            $linkedin_link = "http://".$linkedin_link;
+                        
+                        
+                    ?>
 
-                    <li>
-                        <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$speaking_link?>" class="linkedin">
+                    <li <?=$iconMargins?>>
+                        <!-- <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$speaking_link?>" class="linkedin"> -->
+                        <a target="_blank" href="<?=$linkedin_link?>" class="linkedin">
                             <i class="ico-linkedin"></i>
                         </a>
                     </li>
+                    <?PHP
+                    }
+                    ?>
                 </ul>
             </div><!-- /.socials -->
         </div><!-- /.article-content -->
@@ -3529,13 +3962,13 @@ function show_speaking($first_name,$last_name,$speaking_id,$personal_id,$company
 }
 
 
-function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_name,$title,$email,$phone,$personal_image,$publication,$more_link,$media_link,$pub_date,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
+function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_name,$title,$email,$phone,$personal_image,$publication,$more_link,$media_link,$pub_date,$personal_pic_root,$add_date = '',$show_state='',$linkedin_link,$twitter_link,$ind=0)
 {
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
         $base_site = $_SESSION['site'];
         if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
-            $profile_root_link = "https://www.ctosonthemove.com/";
+            $profile_root_link = "https://ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
@@ -3633,6 +4066,12 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
         //if($ind == 1)
     if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
         $width = 'width:63%;';
+    
+    
+    $iconMargins = '';
+    if($ind == 1)
+        $iconMargins = 'style=margin-right:25px;';
+    
     ?>
     <div class="article-content" style="<?=$width?>">
         <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> was quoted by <?=$publication?> on <?=trim($pub_date)?><?PHP
@@ -3642,7 +4081,7 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
         </p>    
         <div class="socials">
             <ul>
-                <li>
+                <li <?=$iconMargins?>>
                     <a target="_blank" href="<?=$profile_root_link.$personalURL?>" class="note">
                         <i class="ico-note"></i>
                     </a>
@@ -3653,7 +4092,7 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
                 if($more_link != '')
                 {    
                 ?>
-                <li>
+                <li <?=$iconMargins?>>
                     <a target="_blank" href="<?=$more_link?>" class="upload">
                         <i class="ico-upload"></i>
                     </a>
@@ -3663,24 +4102,49 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
                 ?>
 
 
-                <li>
+                <li <?=$iconMargins?>>
                     <!-- <a target="_blank" href="<?=$sf?>" class="salesforce"> -->
                     <a  onclick="getSalesForceLink('<?=$personal_id?>')" href="javascript:void(0)" class="salesforce"> 
                         <i class="ico-salesforce"></i>
                     </a>
                 </li>
 
-                <li>
-                    <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>&text=<?=$share_text?>" class="twitter">
+                <?PHP
+                
+                if($twitter_link != '')
+                {
+                    $http_pos_tw = strpos($twitter_link,"http");
+                    if($http_pos_tw > -1)
+                        {}    
+                    else
+                        $twitter_link = "http://".$twitter_link;
+                ?>
+                <li <?=$iconMargins?>>
+                    <!-- <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>&text=<?=$share_text?>" class="twitter"> -->
+                    <a target="_blank" href="<?=$twitter_link?>" class="twitter">
                         <i class="ico-twitter"></i>
                     </a>
                 </li>
+                <?PHP
+                }
+                if($linkedin_link != '')
+                {
+                    $http_pos = strpos($linkedin_link,"http");
+                    if($http_pos > -1)
+                    {}    
+                    else
+                        $linkedin_link = "http://".$linkedin_link;
+                ?>
 
-                <li>
-                    <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$media_link?>" class="linkedin">
+                <li <?=$iconMargins?>>
+                    <!-- <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$media_link?>" class="linkedin"> -->
+                    <a target="_blank" href="<?=$linkedin_link?>" class="linkedin">
                         <i class="ico-linkedin"></i>
                     </a>
                 </li>
+                <?PHP
+                }
+                ?>
             </ul>
         </div><!-- /.socials -->
     </div><!-- /.article-content -->
@@ -3710,16 +4174,16 @@ function show_media($first_name,$last_name,$speaking_id,$personal_id,$company_na
 
 
 
-function show_funding($first_name,$last_name,$funding_id,$personal_id,$company_id,$company_logo,$company_name,$title,$email,$phone,$personal_image,$funding_source,$funding_amount,$funding_date,$personal_pic_root,$add_date = '',$show_state='',$ind=0)
+function show_funding($first_name,$last_name,$funding_id,$personal_id,$company_id,$company_logo,$company_name,$title,$email,$phone,$personal_image,$funding_source,$funding_amount,$funding_date,$personal_pic_root,$add_date = '',$show_state='',$linkedin_link,$twitter_link,$ind=0)
 {
-    //echo "<br>SITE: ".$_SESSION['site'];
+    //echo "<br>twitter_link ZERO:".$twitter_link;
     if(isset($_SESSION['site']) && $_SESSION['site'] != '')
     {    
         $base_site = $_SESSION['site'];
         if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
-            $profile_root_link = "https://www.ctosonthemove.com/";
+            $profile_root_link = "https://ctosonthemove.com/";
         elseif($base_site == 'cto')
-            $profile_root_link = "https://www.ctosonthemove.com/";
+            $profile_root_link = "https://ctosonthemove.com/";
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
 
@@ -3774,22 +4238,27 @@ function show_funding($first_name,$last_name,$funding_id,$personal_id,$company_i
 
         <?PHP
         $funding_date = date("m.d.Y", strtotime($funding_date));
+        
+        
+        $iconMargins = '';
+        if($ind == 1)
+            $iconMargins = 'style=margin-right:25px;'; 
         //echo "<pre>all_data: ";   print_r($all_data);   echo "</pre>";
         ?>
         <div class="article-content-secondary">
             <!-- <a href="#" class="logo-cashstar">Cashstar</a> -->
-            <a href="#" class="logo-cashstar"><img src="https://www.ctosonthemove.com/company_logo/thumb/<?=$company_logo?>"></a>
+            <a href="#" class="logo-cashstar"><img src="https://ctosonthemove.com/company_logo/thumb/<?=$company_logo?>"></a>
             <div class="article-inner-secondary">
                 <p><?=$company_name?> raised <?=$funding_amount?> on <?=$funding_date?></p>
                 <div class="socials">
                     <ul>
-                        <li>
+                        <li <?=$iconMargins?>>
                             <a target="_blank" href="<?=$profile_root_link.$dim_url?>" class="note">
                                 <i class="ico-note"></i>
                             </a>
                         </li>
 
-                        <li>
+                        <li <?=$iconMargins?>>
                             <a target="_blank" href="<?=$funding_source?>" class="upload"><i class="ico-upload"></i></a>
                         </li>
                     </ul>
@@ -3844,25 +4313,54 @@ function show_funding($first_name,$last_name,$funding_id,$personal_id,$company_i
 
                 <div class="socials">
                     <ul>
-                        <li>
+                        <li <?=$iconMargins?>>
                             <a href="<?=$sf?>" class="salesforce">
                                 <i class="ico-salesforce"></i>
                             </a>
                         </li>
 
-                        <li>
+                        <?PHP
+                        //echo "<br>twitter_link ONE:".$twitter_link;
+                        if($twitter_link != '')
+                        { 
+                        
+                            $http_pos_tw = strpos($twitter_link,"http");
+                            if($http_pos_tw > -1)
+                            {}    
+                            else
+                                $twitter_link = "http://".$twitter_link;
+                            
+                        //echo "<br>twitter_link TWO:".$twitter_link;    
+                        ?>
+                        
+                        
+                        <li <?=$iconMargins?>>
                             <!-- <a href="<?=$twitter_share_link?>text=<?=$share_text?>&url=<?=$funding_source?>" class="twitter"> -->
-                            <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>text=<?=$share_text?>" class="twitter">
+                            <a target="_blank" href="<?=$twitter_link?>" class="twitter">
                                 <i class="ico-twitter"></i>
                             </a>
                         </li>
+                        <?PHP
+                        }
+                        if($linkedin_link != '')
+                        { 
 
-                        <li>
+                            $http_pos = strpos($linkedin_link,"http");
+                            if($http_pos > -1)
+                            {}    
+                            else
+                                $linkedin_link = "http://".$linkedin_link;
+
+                        ?>
+                        <li <?=$iconMargins?>>
                             <!-- <a href="<?=$linkedin_share_link?>summary=fddffs&url=<?=$all_data[$i]['funding_source']?>" class="linkedin"> -->
-                            <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$funding_source?>" class="linkedin">
+                            <a target="_blank" href="<?=$linkedin_link?>" class="linkedin">
                                 <i class="ico-linkedin"></i>
                             </a>
                         </li>
+                        <?PHP
+                        }
+                        ?>
                     </ul>
                 </div><!-- /.socials -->
             </div><!-- /.article-content -->
@@ -3900,7 +4398,7 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
     {    
         $base_site = $_SESSION['site'];
         if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
-            $profile_root_link = "https://www.ctosonthemove.com/";
+            $profile_root_link = "https://ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
@@ -3991,6 +4489,12 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
             //if($ind == 1)
             if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
                 $width = 'width:63%;';
+            
+            
+            
+        $iconMargins = '';
+        if($ind == 1)
+            $iconMargins = 'style=margin-right:25px;'; 
         ?>
         <div class="article-content" style="<?=$width?>">
             <p><?=$company_name?> looking to hire <?=$job_title?> in <?=$location?>– published on <?=$post_date?><?PHP
@@ -4000,7 +4504,7 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
 
             <div class="socials">
                 <ul>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a href="<?=$profile_root_link.$dim_url?>" class="note">
                             <i class="ico-note"></i>
                         </a>
@@ -4009,7 +4513,7 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
                     if($source != '')
                     {    
                     ?>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$source?>" class="upload">
                             <i class="ico-upload"></i>
                         </a>
@@ -4019,7 +4523,7 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
                     ?>
 
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>&text=<?=$share_text?>" class="twitter">
                             <i class="ico-twitter"></i>
                         </a>
@@ -4030,7 +4534,7 @@ function show_job($first_name,$last_name,$job_id,$personal_id,$company_id,$compa
                     if($source != '')
                     {    
                     ?>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$source?>" class="linkedin">
                             <i class="ico-linkedin"></i>
                         </a>
@@ -4074,7 +4578,7 @@ function show_publication($first_name,$last_name,$publication_id,$personal_id,$c
     {    
         $base_site = $_SESSION['site'];
         if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
-            $profile_root_link = "https://www.ctosonthemove.com/";
+            $profile_root_link = "https://ctosonthemove.com/";
 
         elseif($base_site == 'cfo')
             $profile_root_link = "https://www.cfosonthemove.com/";
@@ -4166,9 +4670,15 @@ function show_publication($first_name,$last_name,$publication_id,$personal_id,$c
         <?PHP
         $publication_date = date("m-d-Y", strtotime($publication_date));
         $width = 'width:85%;';
-            //if($ind == 1)
-            if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
-                $width = 'width:63%;';
+        //if($ind == 1)
+        if(isset($_SESSION['sess_user_id']) && $_SESSION['sess_user_id'] != '')
+            $width = 'width:63%;';
+            
+            
+        $iconMargins = '';
+        if($ind == 1)
+            $iconMargins = 'style=margin-right:25px;';    
+            
         ?>
         <div class="article-content" style="<?=$width?>">
             <p><a href="<?=$personal_pic_root.$personalURL?>"><?=$first_name?> <?=$last_name?></a> published "<?=$title?>" on <?=$publication_date?><?PHP
@@ -4178,31 +4688,31 @@ function show_publication($first_name,$last_name,$publication_id,$personal_id,$c
 
             <div class="socials">
                 <ul>
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$profile_root_link.$personalURL?>" class="note">
                             <i class="ico-note"></i>
                         </a>
                     </li>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$link?>" class="upload">
                             <i class="ico-upload"></i>
                         </a>
                     </li>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=$sf?>" class="salesforce">
                             <i class="ico-salesforce"></i>
                         </a>
                     </li>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=TWITTER_SHARE_ROOT?>&text=<?=$share_text?>" class="twitter">
                             <i class="ico-twitter"></i>
                         </a>
                     </li>
 
-                    <li>
+                    <li <?=$iconMargins?>>
                         <a target="_blank" href="<?=LINKEDIN_SHARE_ROOT?>url=<?=$link?>" class="linkedin">
                             <i class="ico-linkedin"></i>
                         </a>
@@ -4232,6 +4742,185 @@ function show_publication($first_name,$last_name,$publication_id,$personal_id,$c
     </li><!-- /.article -->    
 <?PHP    
 }
+
+
+
+
+function show_conferences($event_name,$event_start_date,$event_id,$event_location,$event_state,$event_logo,$event_source,$speakersCount,$speakersData,$ind=0)
+{
+    //echo "<br>Speakers Count:".$speakersCount;
+    //echo "<pre>peakersData: ";   print_r($speakersData);   echo "</pre>"; 
+    if(isset($_SESSION['site']) && $_SESSION['site'] != '')
+    {    
+        $base_site = $_SESSION['site'];
+        if($base_site == 'it' || $base_site == 'ciso' || $base_site == 'cto')
+            $profile_root_link = "https://ctosonthemove.com/";
+
+        elseif($base_site == 'cfo')
+            $profile_root_link = "https://www.cfosonthemove.com/";
+
+        elseif($base_site == 'cmo' || $base_site == 'cso')
+            $profile_root_link = "https://www.cmosonthemove.com/";
+
+        elseif($base_site == 'clo')
+            $profile_root_link = "https://www.closonthemove.com/";
+        //if($base_site == 'hr')
+        //    $profile_root_link = "https://www.hrexecsonthemove.com/";
+        else
+            $profile_root_link = "https://www.hrexecsonthemove.com/";
+    }
+    
+    //$profile_root_link = "https://www.hrexecsonthemove.com/";
+    
+    $converted_date = date("M d, Y", strtotime($event_start_date));
+
+    $personalURL = "";
+    $personalURL = trim($first_name).'_'.trim($last_name).'_Exec_'.$personal_id;
+
+    $sf = "";
+    $sf = EXECFILE_ROOT."/salesforce/oauth.php?fname=".urlencode($first_name)."&lname=".urlencode($last_name)."&company_name=".urlencode($company_name)."&title=".urlencode($title)."&email=".urlencode($email)."&phone=".urlencode($phone); 
+
+    $share_text = "";
+    $share_text = "Congrats ".$first_name." ". $last_name." on ".$awards_title." ".$awards_link;  //$all_data[$i]['company_name']
+?>
+
+    <li class="article">
+        <ul class="list-checkboxes">
+            <li>
+                <div class="checkbox">
+                    <input type="checkbox" name="field-8#" id="field-8#">
+
+                    <!-- <label class="form-label" for="field-8#">1#</label> -->
+                </div>
+            </li>
+        </ul>
+
+        <span class="ico-article ico-article-secondary">
+                <i class="ico-desk"></i>
+        </span>
+
+        <div style="cursor:pointer;" onclick="showSpeakers('<?=$event_id?>')" class="article-image">
+            <!-- <img src="<?=$profile_root_link?>event_logo/thumb/https://ctosonthemove.com/company_logo/thumb/Pro-1502371028.png" height="80" width="80" alt="" class="article-avatar"> -->
+            <img src="<?=$profile_root_link?>event_photo/thumb/<?=$event_logo?>" height="80" width="80" alt="" class="article-avatar">
+        </div>
+
+        <div class="article-content">
+            <!-- <p><? //=$event_name?> taking place in <? //=$event_location?> on <? //=$event_start_date?>, convening CHROs in North America</p> -->
+            
+            <p><?=$event_name?> on <?=$event_start_date?> at <?=$event_location?>
+            <?PHP
+            if($event_state != '')
+            {    
+            ?>
+            , <?=$event_state?>     
+            <?PHP
+            }
+            ?>
+            </p>
+            <div class="socials">
+                <ul>
+                    <li>
+                        <a href="#" class="note">
+                            <i class="ico-note"></i>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a target="_blank" href="<?=$event_source?>" class="upload">
+                            <i class="ico-upload"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="article-actions">
+            
+            <?PHP
+            //$event_start_date;
+            $todays_date = date('Y-m-d');
+            //echo "<br>Todays date:".$todays_date;
+            
+            if($event_start_date >= $todays_date) // Future case
+            {    
+                //echo "   Future";
+            ?>
+                <a target="_blank" href="<?=$event_source?>" class="btn btn-primary ">
+                    <span>Register now</span>
+
+                    <i class="ico-arrow-right"></i>
+                </a>
+            <?PHP
+            }
+            else // Past case
+            {    
+            ?>
+                <a  href="javascript:void(0)" disabled class="btn btn-primary btn-secondary">
+                    <span>Register now</span>
+
+                    <i class="ico-arrow-right"></i>
+                </a>
+            <?PHP
+            }
+            ?>
+        </div>
+        
+        <div style="display:none;" id="speakers_<?=$event_id?>">
+            
+            <?PHP
+            if($speakersCount > 0)
+            {
+                foreach($speakersData as $index=>$speaker)
+                {    
+                    // Todo - get speaker emails
+                    $email = $speaker['email'];
+            ?>
+            
+                <div style="float:left;width:73%;margin-left:40px;padding-top:17px;" class="article-inner">
+                    <div class="article-image">
+                        <a href="#">
+                        <?PHP
+                        if($speaker['personal_image'] != '')
+                        {    
+                        ?>
+                        
+                            <a href=""><img src="<?=$profile_root_link?>/personal_photo/small/<?=$speaker['personal_image']?>" height="80" width="80" alt="" class="article-avatar"></a>
+                        
+                        <?PHP
+                        }
+                        else
+                        {    
+                        ?>
+                            <a href=""><img src="no-personal-image.png" height="80" width="80" alt="" class="article-avatar"></a>
+                        <?PHP
+                        }
+                        ?>
+                        </a>
+                    </div>
+                    <div class="article-content" style="width:80%;float:left;">
+                        <!-- <p> <?=$speaker['first_name']?> <?=$speaker['last_name']?> scheduled to speak at <?=$event_name?> on <?=$event_start_date?></p> -->
+                        <p> <?=$speaker['first_name']?> <?=$speaker['last_name']?> - <?=$speaker['title']?> - <?=$speaker['company_name']?></p>
+                    </div>    
+                </div>
+            
+            
+                <div style="width:15%;margin-top:10px;" class="article-actions">
+                    <a href="mailto:<?=$email?>?subject=Congrats&amp;body=Congrats on your speaking" target="_blank" class="btn btn-primary">
+                    <!-- <a href="#" class="btn btn-primary"> -->
+                        <span>Email now</span>
+                        <i class="ico-arrow-right"></i>
+                    </a>
+                </div><!-- /.article-actions -->
+            
+            <?PHP
+                }
+            }
+            ?>
+        </div>
+    </li> 
+<?PHP    
+}
+
 
 
 
@@ -4341,9 +5030,10 @@ function get_companies_with_url()
 }
 
 
-function get_all_registered_users()
+function get_all_registered_users($status_clause = '')
 {
-    $indResult = com_db_query("select * FROM ".TABLE_USER." where level != 'admin'"); 
+    //echo "<br>User Q:select * FROM ".TABLE_USER." where level != 'admin' $status_clause";
+    $indResult = com_db_query("select * FROM ".TABLE_USER." where level != 'admin' $status_clause"); 
     $data_arr = array();    
     //while($indRow = mysql_fetch_array($indResult))
     while($indRow = com_db_fetch_array($indResult))
@@ -4431,14 +5121,17 @@ function get_cities()
 function add_user($name,$email,$password,$status,$last_name = '',$form_type = '',$text_only = '',$site = '')
 {
     //com_db_query("INSERT into ".TABLE_USER."(first_name,email,status,add_date) values('".$name."','".$email."','".$status."','".date("Y-m-d:H:i:s")."')");	
-    
+    //echo "<br>Here";
     if (preg_match('~[0-9]+~', $name)) 
     {
+        //echo "In if";
     }
     else
     {    
+        //echo "In else 1";
         if($name != '')
         {
+            //echo "In if 2";
             /*
             if($email != '')
             {
@@ -4481,7 +5174,72 @@ function add_user($name,$email,$password,$status,$last_name = '',$form_type = ''
             */
             
             //if($banned == 0)
-            com_db_query("INSERT into ".TABLE_USER."(first_name,email,password,status,last_name,form_type,add_date,text_only,site) values('".$name."','".$email."','".$password."','".$status."','".$last_name."','".$form_type."','".date("Y-m-d:H:i:s")."','".$text_only."','".$site."')");	    
+           // echo "<br>INSERT into ".TABLE_USER."(first_name,email,password,status,last_name,form_type,add_date,text_only,site) values('".$name."','".$email."',md5('$password'),'".$status."','".$last_name."','".$form_type."','".date("Y-m-d:H:i:s")."','".$text_only."','".$site."')";
+            
+            $addUserQuery = "INSERT into ".TABLE_USER."(first_name,email,password,status,last_name,form_type,add_date,text_only,site) values('".$name."','".$email."',md5('$password'),'".$status."','".$last_name."','".$form_type."','".date("Y-m-d:H:i:s")."','".$text_only."','".$site."')";
+            com_db_query($addUserQuery);	    
+            
+            $admin_email = com_db_GetValue("select admin_email from exec_admin");
+            $msg = "Thank you! One of our representatives will be in touch with you shortly.";
+
+            $email_message = "Below are details of request a demo user:";
+            $email_message .= "<br>Name: ".$name; 
+            $email_message .= "<br>Email: ".$email; 
+
+            /*
+            $headers = 'From: info@execfile.com' . "\r\n" .
+            'Reply-To: info@execfile.com' . "\r\n" ;
+            */
+            // Send
+            //$admin_email = 'faraz.aia@nxvt.com';
+            //mail($admin_email, 'Request A Demo User', $email_message,$headers);
+            
+            
+            require_once('PHPMailer/class.phpmailer.php');
+            $mail                = new PHPMailer();
+            $mail->IsSMTP(); // telling the class to use SMTP
+            $mail->SMTPAuth      = true;                  // enable SMTP authentication
+            $mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
+            $mail->Host          = "smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
+            $mail->Port          = 25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
+            //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
+            $mail->Username      = "msobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
+            $mail->Password      = "borabora2190"; //"rts0214";        // SMTP account password
+            //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
+            $mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
+            //$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');
+            $mail->AddReplyTo("msobolev@execfile.com", 'Execfile.com');
+            $mail->Subject       = "Request A Demo User";
+
+
+
+        $mail->MsgHTML($email_message);
+
+        $to_admin = "faraz.aia@nxvt.com";
+        $mail->AddAddress($admin_email, $full_name);
+        $mail->Send();
+            
+            
+            
+            
+            
+            
+            
+            //mail('faraz.aia@nxvt.com', 'Request A Demo User', $email_message,$headers);
+
+            $todays = date('Y-m-d');
+            $add_query = "INSERT into exec_forms(form_data,form_date,form_type) values('".$email_message."','".$todays."','request_demo')";
+            //echo "query:".$query;
+            com_db_query($add_query);
+            
+            // Adding user to next Execfile
+            $new_exec = mysqli_connect("10.132.233.66","cfo2","cV!kJ201Ze","hre2") or die("Database 3 ERROR ");
+            mysqli_query($new_exec,$addUserQuery);
+            mysqli_close($new_exec);
+            
+
+            return $msg;
+            //die();
         }
     }    
 } 
@@ -4489,7 +5247,7 @@ function add_user($name,$email,$password,$status,$last_name = '',$form_type = ''
 
 function update_user($name,$email,$password,$status,$user_id,$user_site,$text_only)
 {
-    com_db_query("UPDATE ".TABLE_USER." set first_name='".$name."',email='".$email."',status='".$status."',password='".$password."',site='".$user_site."',text_only='".$text_only."' where user_id=".$user_id);	
+    com_db_query("UPDATE ".TABLE_USER." set first_name='".$name."',email='".$email."',status='".$status."',password=md5('".$password."'),site='".$user_site."',text_only='".$text_only."' where user_id=".$user_id);	
 } 
 
 // Redirect to another page or site
@@ -4516,7 +5274,7 @@ function com_db_connect($server = EXEC_SERVER_IP, $username = EXEC_DB_USER_NAME,
         
         $message = "Execfile Website is Down";
         // Send
-        mail('faraz_aleem@hotmail.com', 'Execfile Website Down', $message);
+        mail('faraz.aia@nxvt.com', 'Execfile Website Down', $message);
         
         
         echo "Error: Unable to connect to MySQL." . PHP_EOL;
@@ -4548,28 +5306,28 @@ function com_db_connect_hre2($server = EXEC_SERVER_IP, $username = EXEC_DB_USER_
         // Send
         
         require_once('PHPMailer/class.phpmailer.php');
-$mail                = new PHPMailer();
-$mail->IsSMTP(); // telling the class to use SMTP
-$mail->SMTPAuth      = true;                  // enable SMTP authentication
-$mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
-$mail->Host          = "smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
-$mail->Port          = 25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
-//$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
-$mail->Username      = "misha.sobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
-$mail->Password      = "ryazan"; //"rts0214";        // SMTP account password
-//$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
-$mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
-//$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');
-$mail->AddReplyTo("msobolev@execfile.com", 'Execfile.com');
-$mail->Subject       = "Execfile Website Down";
+        $mail                = new PHPMailer();
+        $mail->IsSMTP(); // telling the class to use SMTP
+        $mail->SMTPAuth      = true;                  // enable SMTP authentication
+        $mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
+        $mail->Host          = "smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
+        $mail->Port          = 25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
+        //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
+        $mail->Username      = "msobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
+        $mail->Password      = "borabora2190"; //"rts0214";        // SMTP account password
+        //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
+        $mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
+        //$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');
+        $mail->AddReplyTo("msobolev@execfile.com", 'Execfile.com');
+        $mail->Subject       = "URGENT! Execfile Website Down";
 
 
 
-$mail->MsgHTML("Execfile Website is Down");
+        $mail->MsgHTML("Execfile Website is Down");
 
-$to_admin = "faraz.aia@nxvt.com";
-$mail->AddAddress($to_admin, $full_name);
-$mail->Send();
+        $to_admin = "faraz.aia@nxvt.com";
+        $mail->AddAddress($to_admin, $full_name);
+        $mail->Send();
         
         //mail('faraz.aia@nxvt.com', 'Execfile Website Down', $message);
         //die("HERE");
@@ -5215,6 +5973,169 @@ function get_db_reveunue_against_raw($revenue)
         return  $revenue_ids;
     }
 }
+
+
+function remove_invalid_chars($text)
+{
+    $find[] = 'â€œ'; // left side double smart quote
+    $find[] = 'â€'; // right side double smart quote
+    $find[] = 'â€˜'; // left side single smart quote
+    $find[] = 'â€™'; // right side single smart quote
+    $find[] = 'â€¦'; // elipsis
+    $find[] = 'â€”'; // em dash
+    $find[] = 'â€“'; // en dash
+
+    $replace[] = '"';
+    $replace[] = '"';
+    $replace[] = "'";
+    $replace[] = "'";
+    $replace[] = "...";
+    $replace[] = "-";
+    $replace[] = "-";
+
+    $text = str_replace($find, $replace, $text);
+    
+    $text = strip_tags($text);
+    
+    //$text = str_replace("&"," and ",$text);
+    $text = str_replace("&","&#38;",$text);
+    
+    $text = str_replace("&nbsp;"," ",$text);
+    
+    $text = str_replace("’","'",$text);
+    
+    //$text = str_replace("â€”","",$text);
+    //$text = str_replace("`","'",$text);
+    
+    
+    return $text;
+    
+}
+
+
+function secure_input($text)
+{
+    global $link;
+    //echo "<br>Text1:".$text;
+    $text = htmlspecialchars($text);
+    //echo "<br>Text2:".$text;
+    $text = mysqli_real_escape_string($link,$text);
+    //echo "Text3:".$text;
+    return $text;
+}
+
+
+function getRealIpAddr()
+{
+    if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+    {
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+    {
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
+
+function get_login_report($status_clause = '')
+{
+    
+    $indResult = com_db_query("select * FROM exec_login_log order by l_id desc;"); 
+    $data_arr = array();    
+    while($indRow = com_db_fetch_array($indResult))
+    {
+        //if(strpos($indRow['user_email'],'@') > -1)
+        //{
+        
+        $data_arr[$indRow['l_id']]['user_email'] = $indRow['user_email'];
+        $data_arr[$indRow['l_id']]['user_ip'] = $indRow['user_ip'];
+        $data_arr[$indRow['l_id']]['add_date'] = $indRow['add_date'];
+        $data_arr[$indRow['l_id']]['status'] = $indRow['status'];
+        //}
+
+    }
+    //echo "<pre>data arr: ";   print_r($data_arr);   echo "</pre>";
+    return $data_arr;
+}
+
+function recordTraffic($pageName)
+{
+    $userIp = getRealIpAddr();
+    $currentDate = date('Y-m-d');
+    $addTraffic = "INSERT into exec_general_traffic(user_ip,visited_date,visited_page) values('$userIp','$currentDate','$pageName')";
+    $addTrafficRs = com_db_query($addTraffic);
+}
+
+function get_general_report($period = '')
+{
+    $where_clase = "";
+    
+    if($period == 'weekly')
+    {
+        $before_date = subDate('7');
+        $where_clase = " where visited_date >= '".$before_date."'";
+    }  
+    elseif($period == 'monthly')
+    {
+        $before_date = subDate('30');
+        $where_clase = " where visited_date >= '".$before_date."'";
+    }  
+    elseif($period == 'day')
+    {
+        $before_date = subDate('1');
+        $where_clase = " where visited_date >= '".$before_date."'";
+    }  
+    //echo "<br>select * FROM exec_general_traffic $where_clase order by t_id desc;";
+    
+    $indResult = com_db_query("select * FROM exec_general_traffic $where_clase order by t_id desc;"); 
+    $data_arr = array();    
+    while($indRow = com_db_fetch_array($indResult))
+    {
+        $data_arr[$indRow['t_id']]['user_ip'] = $indRow['user_ip'];
+        $data_arr[$indRow['t_id']]['visited_date'] = $indRow['visited_date'];
+        $data_arr[$indRow['t_id']]['visited_page'] = $indRow['visited_page'];
+    }
+    //echo "<pre>data arr: ";   print_r($data_arr);   echo "</pre>";
+    return $data_arr;
+}
+
+function nameValidation($name)
+{
+    if($name == '')
+    {
+        return 1;
+    }    
+    else
+    {
+        //echo "<br>In else";
+        $name = trim($name);
+        $spacePos = strpos($name,' ');
+        //echo "<br>SpacePos:".$spacePos;
+        if($spacePos > -1) // Name contains space
+        {
+            //echo "<br>In else if";
+            return 0;
+        }   
+        else
+        {
+            //echo "<br>In else else";
+            $upperCount = preg_match_all("/[A-Z]/", $name);
+            //echo "<br>UpperCount:".$upperCount;
+            if($upperCount > 1)
+            {
+                //echo "<br>In else else if";
+                return 1;
+            }    
+        }    
+    }    
+}
+
 
 ?>
 

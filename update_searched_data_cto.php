@@ -1,7 +1,7 @@
 <?php
-//ini_set('display_errors',1);
-//ini_set('display_startup_errors',1);
-//error_reporting(-1);
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 include("config.php");
 
 $site = mysql_connect(EXEC_SERVER_IP,EXEC_DB_USER_NAME,EXEC_DB_PASSWORD,TRUE) or die("Database ERROR ".mysql_error());
@@ -12,8 +12,8 @@ mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
 //$del_sp_q = "DELETE from hre_search_data where record_type LIKE 'speaking'";
 //$del_sp_res = mysql_query($del_sp_q);  
 //echo "<br>HERE";
-//if(1 == 1)
-//{
+if(1 == 1)
+{
     $del_q = "DELETE from cto_search_data";
     $del_res = mysql_query($del_q);  
     
@@ -24,34 +24,13 @@ mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
     $del_q = "DELETE from cto_search_data_awards";
     $del_res = mysql_query($del_q);  
     
-    $del_q = "DELETE from cto_search_data_fundings";
-    $del_res = mysql_query($del_q);  
-    
-    /*
-    $main_query = "select cm.company_logo,cm.company_id as company_id, cm.company_name as company_name,cm.company_website as company_website,pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.personal_image as personal_image,mm.move_id as move_id,mm.title as title,
-    pm.level as level, pm.level_order as level_order,pm.email,pm.phone,pm.about_person,cm.about_company,
-    mm.headline,mm.source_id,mm.movement_type,mm.add_date,mm.announce_date,mm.more_link,mm.effective_date,mm.full_body,mm.what_happened,
-    cm.company_revenue,cm.company_employee,cm.company_industry,cm.ind_group_id,cm.industry_id,cm.city,cm.state,cm.country,cm.zip_code,cm.address,cm.address2
-    hre_company_master as cm,
-    hre_movement_master as mm,
-    hre_management_change as m,
-    hre_source as so,
-    hre_state as s,
-    hre_countries as ct,
-    hre_industry as i,
-    revenue_size as r,
-    hre_employee_size as e
-    where cm.company_id = mm.company_id and pm.personal_id = mm.personal_id 
-    and mm.movement_type=m.id and mm.source_id=so.id
-     cm.state=s.state_id and cm.country=ct.countries_id and cm.industry_id=i.industry_id and cm.company_revenue=r.id and cm.company_employee=e.id
-    group by personal_id";
-    */
+     
     
 
     $main_query = "select cm.company_logo,cm.company_id as company_id, cm.company_name as company_name,cm.company_website as company_website,pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.personal_image as personal_image,mm.move_id as move_id,mm.title as title,
     pm.level as level, pm.level_order as level_order,pm.email,pm.phone,pm.about_person,pm.ciso_user,cm.about_company,
     mm.headline,mm.source_id,mm.movement_type,mm.add_date,mm.announce_date,mm.more_link,mm.effective_date,mm.full_body,mm.what_happened,
-    cm.company_revenue,cm.company_employee,cm.company_industry,cm.ind_group_id,cm.industry_id,cm.city,cm.state,cm.country,cm.zip_code,cm.address,cm.address2,cm.company_urls,pm.previous_email
+    cm.company_revenue,cm.company_employee,cm.company_industry,cm.ind_group_id,cm.industry_id,cm.city,cm.state,cm.country,cm.zip_code,cm.address,cm.address2,cm.company_urls,pm.previous_email,pm.linkedin_link,pm.twitter_link,mm.status as move_status
     from cto_personal_master as pm,
     hre_company_master as cm,
     cto_movement_master as mm
@@ -116,8 +95,13 @@ mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
         $previous_email = $indRow['previous_email'];
         
         
+        $linkedin_link = $indRow['linkedin_link'];
+        $twitter_link = $indRow['twitter_link'];
+        
+        $move_status = $indRow['move_status'];
+        
         $insert_q = "";
-        $insert_q = "INSERT into cto_search_data(company_id,company_name,company_website,company_logo,personal_id,first_name,middle_name,last_name,email,phone,personal_image,move_id,title,level,level_order,source_id,movement_type,add_date,announce_date,more_link,company_revenue,company_employee,company_industry,ind_group_id,industry_id,city,state,country,zip_code,address,address2,about_person,about_company,effective_date,headline,full_body,what_happened,company_urls,ciso_user,previous_email) values('$company_id','$company_name','$company_website','$company_logo','$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$move_id','$title','$level','$level_order','$source_id','$movement_type','$add_date','$announce_date','$more_link','$company_revenue','$company_employee','$company_industry','$ind_group_id','$industry_id','$city','$state','$country','$zip_code','$address','$address2','$about_person','$about_company','$effective_date','$headline','$full_body','$what_happened','$company_urls','$ciso_user','$previous_email')";
+        $insert_q = "INSERT into cto_search_data(company_id,company_name,company_website,company_logo,personal_id,first_name,middle_name,last_name,email,phone,personal_image,move_id,title,level,level_order,source_id,movement_type,add_date,announce_date,more_link,company_revenue,company_employee,company_industry,ind_group_id,industry_id,city,state,country,zip_code,address,address2,about_person,about_company,effective_date,headline,full_body,what_happened,company_urls,ciso_user,previous_email,linkedin_link,twitter_link,move_status) values('$company_id','$company_name','$company_website','$company_logo','$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$move_id','$title','$level','$level_order','$source_id','$movement_type','$add_date','$announce_date','$more_link','$company_revenue','$company_employee','$company_industry','$ind_group_id','$industry_id','$city','$state','$country','$zip_code','$address','$address2','$about_person','$about_company','$effective_date','$headline','$full_body','$what_happened','$company_urls','$ciso_user','$previous_email','$linkedin_link','$twitter_link','$move_status')";
 
         //if($personal_id == '68661')
         //    echo "<br><br>Ins Q: ".$insert_q;
@@ -129,11 +113,11 @@ mysql_select_db(HR_DATABASE,$site) or die ("ERROR: Database not found ");
 
 
 
-$speaking_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,ps.speaking_id,ps.speaking_link,ps.event,ps.event_date,ps.topic,ps.add_date,ps.role as role,pm.ciso_user
+$speaking_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,ps.speaking_id,ps.speaking_link,ps.event,ps.event_date,ps.topic,ps.add_date,ps.role as role,pm.ciso_user,pm.linkedin_link,pm.twitter_link,ps.event_id
         from cto_personal_master as pm,
         cto_personal_speaking as ps 
         where pm.personal_id = ps.personal_id";
-
+//echo "<br>speaking_query: ".$speaking_query;
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
 //echo "<br>speaking_query: ".$speaking_query;
 
@@ -212,12 +196,16 @@ while($speakingRow = mysql_fetch_array($speaking_res))
     $role = $speakingRow['role'];
     $topic = $speakingRow['topic'];
 
+    $linkedin_link = $speakingRow['linkedin_link'];
+    $twitter_link = $speakingRow['twitter_link'];
+    $event_id = $speakingRow['event_id'];
+    
     $ciso_user = $speakingRow['ciso_user'];
     
     $insert_speaking_q = "";
-    $insert_speaking_q = "INSERT into cto_search_data(personal_id,first_name,middle_name,last_name,email,phone,personal_image,speaking_id,speaking_link,event,event_date,topic,add_date,record_type,company_id,company_name,company_website,role,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$speaking_id','$speaking_link','$event','$event_date','$topic','$add_date','speaking','$this_company_id','$this_company_name','$this_company_website','$role','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user')";
+    $insert_speaking_q = "INSERT into cto_search_data(personal_id,first_name,middle_name,last_name,email,phone,personal_image,speaking_id,speaking_link,event,event_date,topic,add_date,record_type,company_id,company_name,company_website,role,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user,linkedin_link,twitter_link,event_id) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$speaking_id','$speaking_link','$event','$event_date','$topic','$add_date','speaking','$this_company_id','$this_company_name','$this_company_website','$role','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user','$linkedin_link','$twitter_link','$event_id')";
     
-    //echo "<br><br>insert_q: ".$insert_speaking_q;
+    //echo "<br><br>insert_speaking_q: ".$insert_speaking_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
     $main_speaking = mysql_query($insert_speaking_q);
 }
@@ -225,7 +213,7 @@ while($speakingRow = mysql_fetch_array($speaking_res))
 
 
 
-$media_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.mm_id,pa.media_link,pa.quote,pa.pub_date,pa.publication,pa.add_date,pm.ciso_user
+$media_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.mm_id,pa.media_link,pa.quote,pa.pub_date,pa.publication,pa.add_date,pm.ciso_user,pm.linkedin_link,pm.twitter_link
         from cto_personal_master as pm,
         cto_personal_media_mention as pa 
         where pm.personal_id = pa.personal_id";
@@ -312,9 +300,12 @@ while($mediaRow = mysql_fetch_array($media_res))
     if($mediaRow['ciso_user'] == 1)
         $ciso_user = 1;
     
+    $linkedin_link = $mediaRow['linkedin_link'];
+    $twitter_link = $mediaRow['twitter_link'];
+    
     
     $insert_media_q = "";
-    $insert_media_q = "INSERT into cto_search_data_media(personal_id,first_name,middle_name,last_name,email,phone,personal_image,mm_id,media_link,publication,pub_date,quote,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$mm_id','$media_link','$publication','$pub_date','$quote','$add_date','media','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user')";
+    $insert_media_q = "INSERT into cto_search_data_media(personal_id,first_name,middle_name,last_name,email,phone,personal_image,mm_id,media_link,publication,pub_date,quote,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user,linkedin_link,twitter_link) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$mm_id','$media_link','$publication','$pub_date','$quote','$add_date','media','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user','$linkedin_link','$twitter_link')";
     
     //echo "<br><br>insert_q: ".$insert_media_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
@@ -323,13 +314,13 @@ while($mediaRow = mysql_fetch_array($media_res))
 
 
 
-$awards_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.awards_id,pa.awards_link,pa.awards_title,pa.awards_date,pa.awards_given_by,pa.add_date,pm.ciso_user
+$awards_query = "SELECT pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,pm.email,pm.phone,pm.personal_image as personal_image,pa.awards_id,pa.awards_link,pa.awards_title,pa.awards_date,pa.awards_given_by,pa.add_date,pm.ciso_user,pm.linkedin_link,pm.twitter_link
         from cto_personal_master as pm,
         cto_personal_awards as pa 
         where pm.personal_id = pa.personal_id";
 
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
-echo "<br>awards_query: ".$awards_query;
+//echo "<br>awards_query: ".$awards_query;
 
 $awards_res = mysql_query($awards_query);        
 $awards_rows = mysql_num_rows($awards_res);
@@ -407,28 +398,36 @@ while($awardsRow = mysql_fetch_array($awards_res))
     //$role = $mediaRow['role'];
     //$topic = $mediaRow['topic'];
     
+    $linkedin_link = $awardsRow['linkedin_link'];
+    $twitter_link = $awardsRow['twitter_link'];
+    
     $ciso_user = 0;
     if($awardsRow['ciso_user'] == 1)
         $ciso_user = 1;
     
     $insert_awards_q = "";
-    $insert_awards_q = "INSERT into cto_search_data_awards(personal_id,first_name,middle_name,last_name,email,phone,personal_image,awards_id,awards_link,awards_title,awards_date,awards_given_by,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$awards_id','$awards_link','$awards_title','$awards_date','$awards_given_by','$add_date','awards','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user')";
+    $insert_awards_q = "INSERT into cto_search_data_awards(personal_id,first_name,middle_name,last_name,email,phone,personal_image,awards_id,awards_link,awards_title,awards_date,awards_given_by,add_date,record_type,company_id,company_name,company_website,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user,linkedin_link,twitter_link) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$awards_id','$awards_link','$awards_title','$awards_date','$awards_given_by','$add_date','awards','$this_company_id','$this_company_name','$this_company_website','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user','$linkedin_link','$twitter_link')";
     
     //echo "<br><br>insert_q: ".$insert_media_q;
     //echo "<br>insert_speaking_q: ".$insert_speaking_q;
     $main_awards = mysql_query($insert_awards_q);
 }
 
+}
+
+
+$del_q = "DELETE from cto_search_data_fundings";
+    $del_res = mysql_query($del_q); 
 
 $funding_query = "SELECT cm.company_id,cm.company_logo,pm.personal_id as personal_id, pm.first_name, pm.middle_name,pm.last_name,
     pm.email,pm.phone,pm.personal_image as personal_image,cf.funding_id,cf.funding_source,
-    cf.funding_amount,cf.funding_date,cf.funding_add_date,mm.title,pm.ciso_user
+    cf.funding_amount,cf.funding_date,cf.funding_add_date,mm.title,pm.ciso_user,pm.linkedin_link,pm.twitter_link
         from cto_personal_master as pm,
         cto_movement_master as mm,
         hre_company_master as cm,
         cto_company_funding as cf
         where mm.personal_id = pm.personal_id and cm.company_id = mm.company_id
-        and cm.company_id = cf.company_id and pm.add_to_funding = 1";
+        and cm.company_id = cf.company_id and pm.add_to_funding = 1 group by cf.funding_id";
 
 // beoing company =  and pm.personal_id in (199, 23992, 58373, 58781, 59336, 23992, 60215, 68097, 68098)
 //echo "<br>funding_query: ".$funding_query;
@@ -480,7 +479,7 @@ while($fundingsRow = mysql_fetch_array($fundings_res))
     hre_employee_size as e
     where cm.state=s.state_id and cm.country=ct.countries_id and cm.industry_id=i.industry_id and 
     cm.company_revenue=r.id and cm.company_employee=e.id
-    and cm.company_id = $company_id";
+    and cm.company_id = $company_id  limit 0,1";
     
     //echo "<br><br><br><br>getting_company_query: ".$getting_company_query;
     $comp_res = mysql_query($getting_company_query);        
@@ -499,51 +498,60 @@ while($fundingsRow = mysql_fetch_array($fundings_res))
         $this_company_city = $this_company_row['city'];
         $this_company_zip_code = $this_company_row['zip_code'];
         
-        $mgt_change_name = $this_company_row['mgt_change_name'];
+        $mgt_change_name = ''; //$this_company_row['mgt_change_name'];
         $source_name = $this_company_row['source_name'];
         $state_name = $this_company_row['state_name'];
         $industry_name = $this_company_row['industry_name'];
         $revenue_name = $this_company_row['revenue_name'];
         $employee_size_name = $this_company_row['employee_size_name'];
         
-        $title = $this_company_row['title'];
+        $title = '';//$this_company_row['title'];
         $industry_id = $this_company_row['industry_id'];
         
         $state = $this_company_row['state'];
+        
+        
+        $personal_id = $fundingsRow['personal_id'];
+        $first_name = $fundingsRow['first_name'];
+        $middle_name = $fundingsRow['middle_name'];
+        $last_name = $fundingsRow['last_name'];
+        $personal_image = $fundingsRow['personal_image'];
+        $personal_email = $fundingsRow['email'];
+        $personal_phone = $fundingsRow['phone'];
+
+        $title = $fundingsRow['title'];
+
+        $add_date = ''; //$fundingsRow['add_date'];
+        $funding_id = $fundingsRow['funding_id'];
+        $funding_source = $fundingsRow['funding_source'];
+        $funding_amount = $fundingsRow['funding_amount'];
+        $funding_date = $fundingsRow['funding_date'];
+        $funding_add_date = $fundingsRow['funding_add_date'];
+
+        $linkedin_link = $fundingsRow['linkedin_link'];
+        $twitter_link = $fundingsRow['twitter_link'];
+
+        //$role = $mediaRow['role'];
+        //$topic = $mediaRow['topic'];
+
+        $ciso_user = 0;
+        if($fundingsRow['ciso_user'] == 1)
+            $ciso_user = 1;
+
+
+
+        $insert_fundings_q = "";
+        $insert_fundings_q = "INSERT into cto_search_data_fundings(personal_id,first_name,middle_name,last_name,email,phone,personal_image,funding_id,funding_source,funding_amount,funding_date,funding_add_date,record_type,company_id,company_name,company_website,company_logo,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user,linkedin_link,twitter_link) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$funding_id','$funding_source','$funding_amount','$funding_date','$funding_add_date','fundings','$this_company_id','$this_company_name','$this_company_website','$this_company_logo','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user','$linkedin_link','$twitter_link')";
+
+        //echo "<br><br>insert_q: ".$insert_fundings_q;
+        //echo "<br>insert_speaking_q: ".$insert_speaking_q;
+        $main_fundings = mysql_query($insert_fundings_q);
+        
+        
     }    
     
     
-    $personal_id = $fundingsRow['personal_id'];
-    $first_name = $fundingsRow['first_name'];
-    $middle_name = $fundingsRow['middle_name'];
-    $last_name = $fundingsRow['last_name'];
-    $personal_image = $fundingsRow['personal_image'];
-    $personal_email = $fundingsRow['email'];
-    $personal_phone = $fundingsRow['phone'];
     
-    $title = $fundingsRow['title'];
-    
-    $add_date = $fundingsRow['add_date'];
-    $funding_id = $fundingsRow['funding_id'];
-    $funding_source = $fundingsRow['funding_source'];
-    $funding_amount = $fundingsRow['funding_amount'];
-    $funding_date = $fundingsRow['funding_date'];
-    $funding_add_date = $fundingsRow['funding_add_date'];
-    //$role = $mediaRow['role'];
-    //$topic = $mediaRow['topic'];
-    
-    $ciso_user = 0;
-    if($fundingsRow['ciso_user'] == 1)
-        $ciso_user = 1;
-    
-    
-    
-    $insert_fundings_q = "";
-    $insert_fundings_q = "INSERT into cto_search_data_fundings(personal_id,first_name,middle_name,last_name,email,phone,personal_image,funding_id,funding_source,funding_amount,funding_date,funding_add_date,record_type,company_id,company_name,company_website,company_logo,mgt_change_name,source_name,state_name,industry_name,revenue_name,employee_size_name,address,address2,city,zip_code,title,state,industry_id,ciso_user) values('$personal_id','$first_name','$middle_name','$last_name','$personal_email','$personal_phone','$personal_image','$funding_id','$funding_source','$funding_amount','$funding_date','$funding_add_date','fundings','$this_company_id','$this_company_name','$this_company_website','$this_company_logo','$mgt_change_name','$source_name','$state_name','$industry_name','$revenue_name','$employee_size_name','$this_company_address','$this_company_address2','$this_company_city','$this_company_zip_code','$title','$state','$industry_id','$ciso_user')";
-    
-    //echo "<br><br>insert_q: ".$insert_fundings_q;
-    //echo "<br>insert_speaking_q: ".$insert_speaking_q;
-    $main_fundings = mysql_query($insert_fundings_q);
 }
 
 //echo "<br>HERE 3";

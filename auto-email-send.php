@@ -3,25 +3,13 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1);
 
-//define("TABLE_USER","exec_user");
-//define("TABLE_ALERT_SEND_INFO","hre_personal_awards");
-
-//define("TABLE_COMPANY_MASTER","hre_company_master");
-//define("TABLE_MANAGEMENT_CHANGE","hre_management_change");
-
 define("TABLE_SOURCE","hre_source");
 
-//define("TABLE_STATE","hre_state");
-//define("TABLE_COUNTRIES","hre_countries");
-//define("TABLE_INDUSTRY","hre_industry");
-//define("TABLE_REVENUE_SIZE","hre_revenue_size");
-
-//define("TABLE_EMPLOYEE_SIZE","hre_employee_size");
 define("TABLE_PERSONAL_FILTER_ONOFF","hre_personal_filter_onoff");
 define("TABLE_ALERT_SEND","hre_alert_send");
-//define("TABLE_ALERT","exec_alert");
 
-//define("TABLE_ALERT_SEND_INFO","hre_alert_send_info");
+
+
 define("TABLE_MAILER_ERROR","hre_mailer_error");
 
 
@@ -29,7 +17,7 @@ define("DIR_WS_HTTP_FOLDER","");
 
 define("HTTP_SERVER_EXEC","http://www.execfile.com/");
 
-define("HTTP_CTO_URL","http://www.ctosonthemove.com/");
+define("HTTP_CTO_URL","http://ctosonthemove.com/");
 
 $site_company_address = '40 West 38th street, 5th Floor';
 $site_company_state = 'New York';
@@ -86,7 +74,9 @@ function modify_url($comp_url)
         $comp_url = 'www.'.$comp_url;
         //echo "<br>appending www ".$comp_url;
     }
+    
     return $comp_url;
+    //return "'".$comp_url."'";
 }
 
 
@@ -98,29 +88,11 @@ function sortBySubkey(&$array, $subkey, $sortType = SORT_DESC)
     array_multisort($keys, $sortType, $array);
 }
 
-/*
-function addDate($days){
-$date = date('Y-m-j');
-$duration=$days.' day';
-$newdate = strtotime ( $duration , strtotime ( $date ) ) ;
-$newdate = date ( 'Y-m-j' , $newdate );
-return $newdate;
-}
- 
- */
 
 function getImageXY( $image, $imgDimsMax=140) 
 {
     $top = 0;
     $left = 0;
-
-    // COPIED
-    /*
-    $org_image = HTTPS_SITE_URL.'company_logo/org/'.$image;
-    $image = HTTPS_SITE_URL.'company_logo/demoemail/'.$image;
-    //copy('foo/test.php', 'bar/test.php');
-    copy($org_image, $image);
-    */
 
 
     $aspectRatio= 1;    // deafult aspect ratio...keep the image as is.
@@ -153,10 +125,6 @@ function getImageXY( $image, $imgDimsMax=140)
             }
     }
 
-    //return '<img src="' . $image . '" width="' . $imgWidth . '" height="' . $imgHeight . '" style="position:relative;display:inline;top:'.$top.'px;left:'.$left.'px;" />';
-    //return '<img src="' . $image . '" width="' . $imgWidth . '" height="' . $imgHeight . '"  />';
-    //return '<img src=' . $image . ' width=80 height=' . $imgHeight . ' style="margin:auto;top:0px;right:0px;bottom:0px;left:0px;position:absolute !important;"  />';
-
     return $image.":HEIGHT:".$imgHeight;
 }
 
@@ -165,7 +133,7 @@ function getImageXY( $image, $imgDimsMax=140)
 $_GET['show_sf'] = 1;
 
 $debug = $_GET['debug'];
-
+$exec_clause = "&ex=1";
 
 //period between 30 days ago and 30 days in the future. doc 2014-06-18 cto
 $future_date=addDate('30');
@@ -173,9 +141,9 @@ $before_date=subDate('30');
 $speaker_future_date = addDate('90');
 
 $speaker_before_date = date('Y-m-j');
+
+$future_7_date = addDate('7');
 //========================================================================
-
-
 
 $exp_date = date('Y-m-d');
 
@@ -185,25 +153,43 @@ $mail                = new PHPMailer();
 $mail->IsSMTP(); // telling the class to use SMTP
 $mail->SMTPAuth      = true;                  // enable SMTP authentication
 $mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
-$mail->Host          = "smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
-$mail->Port          = 25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
+
+
+$mail->Host          = "smtpout.secureserver.net";
+$mail->Port          = 25; 
+$mail->Username      = "msobolev@execfile.com";//"misha.sobolev@execfile.com";
+$mail->Password      = "borabora2190";//"ryazan";
+
+// Working
+/*
+$mail->Host          = "smtp.gmail.com"; //"smtpout.secureserver.net"; //"smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
+$mail->Port          = "587";//25;//80;    // 25 465               // 26 set the SMTP port for the GMAIL server
 //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
-$mail->Username      = "msobolev@execfile.com"; //misha.sobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
-$mail->Password      = "ryazan"; //"rts0214";        // SMTP account password
+$mail->Username      = "ms@hrexecsonthemove.com"; //"msobolev@execfile.com"; //misha.sobolev@execfile.com"; //rts_email_sent@hrexecsonthemove.com"; // SMTP account username
+$mail->Password      = "borabora2190";   // "ryazan"; //"rts0214";        // SMTP account password
+$mail->SMTPSecure = 'tls'; 
+*/
+
 //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
-$mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
+
+
 //$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');
 $mail->AddReplyTo("msobolev@execfile.com", 'Execfile.com');
 $mail->Subject       = "are these your potential clients?";
-com_db_connect_hre2() or die('Unable to connect to database server!');
 
+//$mail->SMTPDebug      = 2;
+//$mail->SMTPSecure = 'tls'; 
+
+com_db_connect_hre2() or die('Unable to connect to database server!');
 
 //if ($link) mysql_select_db("exec");
 //com_db_connect() or die('Unable to connect to database server!');
-//$alert_query = "select a.* from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=0 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."'   and a.status=0 and a.delivery_schedule <>'No Updates' and a.user_id = 422";//limit 0,20
+
+//$alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates';";  
+// Query updated so that same alert can be send in one day multiple times
 $alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates';";  
 
-//$alert_query = "select a.*,u.site,u.text_only from " . TABLE_ALERT . " as a, ".TABLE_USER." as u where a.user_id=u.user_id and u.status=1 and a.exp_date >'".date('Y-m-d'). "' and alert_date <= '".date('Y-m-d')."' and a.status=0 and a.delivery_schedule <>'No Updates' and a.user_id = 1963;";  
+
 if($debug == 1)
     echo "<br><br>===================================<br><br>alert_query: ".$alert_query ;
 
@@ -214,27 +200,30 @@ $alert_result = com_db_query($alert_query);
 $addLeadText = "Add&nbsp;as&nbsp;a&nbsp;Lead&#013;(Only&nbsp;for&nbsp;Ent&nbsp;license)";
 
 while($alert_row = com_db_fetch_array($alert_result)){
-
+//echo "<br>Within ifff"; die();
     if($debug == 1)
     {    
         echo "<br><br>=================================<br>=================================<br>NEXT ALERT RUN";
         echo "<br>alert_id: ".$alert_row['alert_id'];
     }    
     
+	echo "<br>User Site:".$alert_row['site'];
+	//die();
+	
+    if($alert_row['alert_site'] != '')
+            $alert_row['site'] = $alert_row['alert_site'];
+        
+        
+    $hide_submit_button = 0;    
+    if($alert_row['hide_submit_button'] == 1)
+        $hide_submit_button == 1;
+    
+    //$hide_submit_button = 1;
+    
+    
     if($alert_row['site'] == 'cmo'  || $alert_row['site'] == 'cso')
     {
-        /*
-        define("TABLE_PERSONAL_AWARDS","cmo_personal_awards");
-        define("TABLE_PERSONAL_BOARD","cmo_personal_board");
-        define("TABLE_PERSONAL_MEDIA_MENTION","cmo_personal_media_mention");
-        define("TABLE_PERSONAL_PUBLICATION","cmo_personal_publication");
-        define("TABLE_PERSONAL_SPEAKING","cmo_personal_speaking");
-        define("TABLE_COMPANY_JOB_INFO","cmo_company_job_info");
-        define("TABLE_COMPANY_FUNDING","cmo_company_funding");
-        define("TABLE_MOVEMENT_MASTER","cmo_movement_master");
-        define("TABLE_PERSONAL_MASTER","cmo_personal_master");
-        define("HTTP_SERVER","https://www.cmosonthemove.com/");
-         */
+        
         $TABLE_COMPANY_MASTER = "hre_company_master";
         $TABLE_PERSONAL_AWARDS = "cmo_personal_awards";
         $TABLE_PERSONAL_BOARD = "cmo_personal_board";
@@ -247,8 +236,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
         $TABLE_PERSONAL_MASTER = "cmo_personal_master";
         $HTTP_SERVER = "https://www.cmosonthemove.com/";
         
+        //$mail->SetFrom('ms@closonthemove.com', 'Execfile.com');
+        $mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
+        
     }
-    elseif($alert_row['site'] == 'cto' || $alert_row['site'] == 'ciso')
+    elseif($alert_row['site'] == 'cto' || $alert_row['site'] == 'ciso'  || $alert_row['site'] == 'cto/ciso')
     {
         $TABLE_COMPANY_MASTER = "hre_company_master";
         $TABLE_PERSONAL_AWARDS = "cto_personal_awards";
@@ -260,7 +252,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
         $TABLE_COMPANY_FUNDING = "cto_company_funding";
         $TABLE_MOVEMENT_MASTER = "cto_movement_master";
         $TABLE_PERSONAL_MASTER = "cto_personal_master";
-        $HTTP_SERVER = "https://www.ctosonthemove.com/";
+        $HTTP_SERVER = "https://ctosonthemove.com/";
+        
+        //$mail->SetFrom('ms@cisosonthemove.com', 'Execfile.com'); //ms@cisosonthemove.com
+        $mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
+        
     }
     elseif($alert_row['site'] == 'cfo')
     {
@@ -289,21 +285,13 @@ while($alert_row = com_db_fetch_array($alert_result)){
         $TABLE_MOVEMENT_MASTER = "clo_movement_master";
         $TABLE_PERSONAL_MASTER = "clo_personal_master";
         $HTTP_SERVER = "https://www.closonthemove.com/";
+        
+        //$mail->SetFrom('ms@closonthemove.com', 'Execfile.com'); 
+        $mail->SetFrom('msobolev@execfile.com', 'Execfile.com'); 
     }
     else
     {
-        /*
-        define("TABLE_PERSONAL_AWARDS","hre_personal_awards");
-        define("TABLE_PERSONAL_BOARD","hre_personal_board");
-        define("TABLE_PERSONAL_MEDIA_MENTION","hre_personal_media_mention");
-        define("TABLE_PERSONAL_PUBLICATION","hre_personal_publication");
-        define("TABLE_PERSONAL_SPEAKING","hre_personal_speaking");
-        define("TABLE_COMPANY_JOB_INFO","hre_company_job_info");
-        define("TABLE_COMPANY_FUNDING","hre_company_funding");
-        define("TABLE_MOVEMENT_MASTER","hre_movement_master");
-        define("TABLE_PERSONAL_MASTER","hre_personal_master");
-        define("HTTP_SERVER","https://www.hrexecsonthemove.com/");
-         */
+        
         
         $TABLE_COMPANY_MASTER = "hre_company_master";
         $TABLE_PERSONAL_AWARDS = "hre_personal_awards";
@@ -318,9 +306,14 @@ while($alert_row = com_db_fetch_array($alert_result)){
         $HTTP_SERVER = "https://www.hrexecsonthemove.com/";
         
         
+        //$mail->SetFrom('ms@hrexecsonthemove.com', 'Execfile.com');
+        $mail->SetFrom('msobolev@execfile.com', 'Execfile.com');
+        
+        
     }    
     echo "<br>Http SERVER: ".$HTTP_SERVER;
     echo "<br>TABLE MOVEMENT MASTER: ".$TABLE_MOVEMENT_MASTER;
+	//die();
     $message ='';
     $message_info = '';
     $alert_metch_str='';
@@ -429,8 +422,8 @@ while($alert_row = com_db_fetch_array($alert_result)){
     {
         $webArr = explode("<br />",$alert_row['company_website']);
         $webStr='';
-        $comp_url_limit = 200;
-        if(sizeof($webArr) > 200)
+        $comp_url_limit = 5500;
+        if(sizeof($webArr) > 5500)
             $loop_limit = $comp_url_limit;
         else
             $loop_limit = sizeof($webArr);
@@ -443,21 +436,33 @@ while($alert_row = com_db_fetch_array($alert_result)){
             {        
                 $webArr[$wb] = modify_url($webArr[$wb]);
             }
-            echo "<br>After url modification: ".$webArr[$wb];
+            //echo "<br>After url modification: ".$webArr[$wb];
             
             if($webStr =='')
             {
-                $webStr = " (cm.company_website like '%".$webArr[$wb]."' OR cm.company_urls like '".$webArr[$wb]."') ";
+                //$webStr = " (cm.company_website like '%".$webArr[$wb]."' OR cm.company_urls like '".$webArr[$wb]."') ";
+                //echo "<br>In if:".$webArr[$wb];
+                $webArr[$wb] = str_replace(",","' OR '",$webArr[$wb]);
+                
+                // Updated on 7th Dec to accomodate 5000 company urls
+                $webStr = " (cm.company_website like '".$webArr[$wb]."' ";
+                
             }
             else
             {
-                $webStr .= " or (cm.company_website like '%".$webArr[$wb]."' OR cm.company_urls like '".$webArr[$wb]."') ";
+                //echo "<br>In else".$webArr[$wb];
+                //$webStr .= " or (cm.company_website like '%".$webArr[$wb]."' OR cm.company_urls like '".$webArr[$wb]."') ";
+                // Updated on 7th Dec to accomodate 5000 company urls
+                $webStr .= " or '".$webArr[$wb]."' ";
             }
 
         }
 
         if($webStr !='')
         {
+            $webStr .= ")";
+            
+            
             $company_website_str =  " (".$webStr.") ";
         } 
     }
@@ -627,7 +632,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
     
     // Calculating number of records of each type
     $no_triggers = 0;
-    $def_mgt_num = 4;
+    
+    // Updated on 23rd April 2019
+    //$def_mgt_num = 4;
+    
+    $def_mgt_num = 32;
     $def_speaking_num = 2;
     // $db_speaking_num means number of speaking records in DB
     
@@ -727,6 +736,29 @@ while($alert_row = com_db_fetch_array($alert_result)){
         $cso_clause = " and cmo_user = 1";
     } 
     
+    
+    
+    
+    $title_clause = "";
+        
+    if($alert_row['chief_level'] == '1' && $alert_row['vp_level'] == '1' && $alert_row['director_level'] == '1')
+        $title_clause .= " and (mm.title like '%chief%' OR mm.title like '%vp%' OR mm.title like '%vice president%' OR mm.title like '%director%')";
+    elseif($alert_row['chief_level'] == '1' && $alert_row['vp_level'] == '1')
+        $title_clause .= " and (mm.title like '%chief%' OR mm.title like '%vp%' OR mm.title like '%vice president%')";
+    elseif($alert_row['chief_level'] == '1' && $alert_row['director_level'] == '1')
+        $title_clause .= " and (mm.title like '%chief%' OR mm.title like '%director%')";
+    elseif($alert_row['vp_level'] == '1' && $alert_row['director_level'] == '1')
+        $title_clause .= " and (mm.title like '%vp%' OR mm.title like '%vice president%' OR mm.title like '%director%')";
+    elseif($alert_row['chief_level'] == '1')
+        $title_clause .= " and mm.title like '%chief%'";
+    elseif($alert_row['vp_level'] == '1')
+        $title_clause .= " and (mm.title like '%vp%' OR mm.title like '%vice president%')";
+    elseif($alert_row['director_level'] == '1')
+        $title_clause .= " and mm.title like '%director%'";
+        
+        
+    
+
     echo "<br>alert row mgt change: ".$alert_row['mgt_change'];
     echo "<br>records_in_email: ".$records_in_email;   
     echo "<br>no_triggers: ".$no_triggers;   
@@ -752,7 +784,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
         where ps.personal_id = pm.personal_id and pm.personal_id = mm.personal_id and mm.company_id = cm.company_id 
-        and ps.personal_id>0 and event_date >'". $speaker_before_date ."' and event_date <'". $speaker_future_date ."' and ps.status=0 $ciso_clause $cso_clause";
+        and ps.personal_id>0 and event_date >'". $speaker_before_date ."' and event_date <'". $speaker_future_date ."' and ps.status=0 $ciso_clause $cso_clause $title_clause";
         
         if($alert_metch_str != '')
             $speakingQuery .= " and ".$alert_metch_str;
@@ -762,7 +794,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
         //$order_by = " order by cm.company_employee desc";
         //$order_by = " order by ps.add_date desc";
-        $order_by = " order by priority asc";
+        
+        //$order_by = " order by priority asc";
+        $order_by = " order by alert_priority asc,effective_date desc";
         $speakingQuery .= $order_by; 
         
         if($def_trigger_num != '')
@@ -812,7 +846,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         .$TABLE_COMPANY_MASTER. " as cm,"
         .$TABLE_PERSONAL_MASTER. " as pm,"
         .$TABLE_MOVEMENT_MASTER. " as mm 
-        where cf.company_id = cm.company_id and pm.personal_id = mm.personal_id and cm.company_id = mm.company_id and pm.add_to_funding =1 and cf.funding_date>'".$before_date."' and cf.funding_date<'".$future_date."' $ciso_clause $cso_clause";
+        where cf.company_id = cm.company_id and pm.personal_id = mm.personal_id and cm.company_id = mm.company_id and pm.add_to_funding =1 and cf.funding_date>'".$before_date."' and cf.funding_date<'".$future_date."' $ciso_clause $cso_clause $title_clause";
         
         
         
@@ -824,7 +858,8 @@ while($alert_row = com_db_fetch_array($alert_result)){
         
         //$order_by = " order by cm.company_employee desc";
         //$order_by = " order by cf.funding_date desc";
-        $order_by = " order by priority asc";
+        //$order_by = " order by priority asc";
+        $order_by = " order by alert_priority asc";
         $fundingsQuery .= $order_by; 
         
         
@@ -896,7 +931,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
         where pm.personal_id = pa.personal_id and pm.personal_id = mm.personal_id and mm.company_id = cm.company_id
-        and pa.personal_id>0 and pa.awards_date>'".$before_date."' and pa.awards_date<'".$future_date."' and pa.status=0 $ciso_clause $cso_clause";
+        and pa.personal_id>0 and pa.awards_date>'".$before_date."' and pa.awards_date<'".$future_date."' and pa.status=0 $ciso_clause $cso_clause $title_clause";
         
         if($alert_metch_str != '')
             $awardsQuery .= " and ".$alert_metch_str;
@@ -907,7 +942,8 @@ while($alert_row = com_db_fetch_array($alert_result)){
         
         //$order_by = " order by cm.company_employee desc";
         //$order_by = " order by pa.awards_date desc";
-        $order_by = " order by priority asc";
+        //$order_by = " order by priority asc";
+        $order_by = " order by alert_priority asc";
         $awardsQuery .= $order_by; 
         
         if($def_trigger_num != '')
@@ -962,7 +998,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
         where pm.personal_id = pmm.personal_id and pm.personal_id = mm.personal_id and mm.company_id = cm.company_id
-        and pm.personal_id>0 and pmm.pub_date>'".$before_date."' and  pmm.pub_date<'".$future_date."' and pmm.status=0 $ciso_clause $cso_clause";
+        and pm.personal_id>0 and pmm.pub_date>'".$before_date."' and  pmm.pub_date<'".$future_date."' and pmm.status=0 $ciso_clause $cso_clause $title_clause";
         
         if($alert_metch_str != '')
             $mediaQuery .= " and ".$alert_metch_str;
@@ -972,7 +1008,8 @@ while($alert_row = com_db_fetch_array($alert_result)){
         
         //$order_by = " order by cm.company_employee desc";
         //$order_by = " order by pmm.pub_date desc";
-        $order_by = " order by priority asc";
+        //$order_by = " order by priority asc";
+        $order_by = " order by alert_priority asc";
         $mediaQuery .= $order_by; 
         
         if($def_trigger_num != '')
@@ -1028,7 +1065,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         .$TABLE_COMPANY_MASTER." as cm,"
         .$TABLE_MOVEMENT_MASTER." as mm
         where pm.personal_id = pb.personal_id and pm.personal_id = mm.personal_id and mm.company_id = cm.company_id 
-        and pb.personal_id>0 and pb.board_date>'".$before_date."' and pb.board_date<'".$future_date."'  and pb.status=0 $ciso_clause $cso_clause";
+        and pb.personal_id>0 and pb.board_date>'".$before_date."' and pb.board_date<'".$future_date."'  and pb.status=0 $ciso_clause $cso_clause $title_clause";
 
         if($alert_metch_str != '')
             $boardQuery .= " and ".$alert_metch_str;
@@ -1039,7 +1076,8 @@ while($alert_row = com_db_fetch_array($alert_result)){
         
         //$order_by = " order by cm.company_employee desc";
         //$order_by = " order by pb.board_date desc";
-        $order_by = " order by priority asc";
+        //$order_by = " order by priority asc";
+        $order_by = " order by alert_priority asc";
         
         $boardQuery .= $order_by; 
         
@@ -1129,7 +1167,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
             }    
         }
     }
-    echo "<pre>person_info: ";   print_r($person_info);   echo "</pre>";
+    //echo "<pre>person_info: ";   print_r($person_info);   echo "</pre>";
 
     
     //FAR UNCOMMENT For jobs and fundings
@@ -1248,11 +1286,23 @@ while($alert_row = com_db_fetch_array($alert_result)){
         
         //Triggers 5 end
         if($alert_row['add_date'] == date("Y-m-d")){
+            echo "<br>in add date if";
             $movement_add_date = " mm.add_date <'".date("Y-m-d")."'";
         }
+        else{
+            echo "<br>in add date else";
+           $movement_add_date = " mm.add_date >='".$alert_row['previous_date']."' and mm.add_date < '".date("Y-m-d")."'";
+    }
         
-        $effective_date_within_60day = date("Y-m-d",mktime(0,0,0,date("m"),(date("d")-60),date("Y"))); 
+    
+    $movement_add_date = "";
+    
+        $effective_date_within_60day = date("Y-m-d",mktime(0,0,0,date("m"),(date("d")-30),date("Y"))); 
 
+        
+        
+        /*
+        // Without add date check
         $email_query1 = "select mm.move_id,mm.personal_id,mm.title,mm.movement_type,mm.announce_date,mm.what_happened,mm.movement_url,mm.effective_date,mm.announce_date,mm.headline,mm.full_body,mm.short_url,mm.more_link,
             pm.first_name,pm.middle_name,pm.last_name,pm.personal_image,pm.email,pm.phone,pm.about_person,cm.company_name,
             cm.company_website,cm.address,cm.address2,cm.city,cm.zip_code,cm.phone as cphone,
@@ -1274,8 +1324,34 @@ while($alert_row = com_db_fetch_array($alert_result)){
             where (mm.company_id=cm.company_id and mm.personal_id=pm.personal_id and mm.status ='0' and mm.movement_url <>'' and mm.movement_type=m.id and mm.source_id=so.id and effective_date > '".$effective_date_within_60day."') 
             and (cm.state=s.state_id and cm.country=ct.countries_id and cm.industry_id=i.industry_id and cm.company_revenue=r.id and cm.company_employee=e.id)";				
 
+        */    
 
+        // With add date check
+        $email_query1 = "select mm.move_id,mm.personal_id,mm.title,mm.movement_type,mm.announce_date,mm.what_happened,mm.movement_url,mm.effective_date,mm.announce_date,mm.headline,mm.full_body,mm.short_url,mm.more_link,
+            pm.first_name,pm.middle_name,pm.last_name,pm.personal_image,pm.email,pm.phone,pm.about_person,cm.company_name,
+            cm.company_website,cm.address,cm.address2,cm.city,cm.zip_code,cm.phone as cphone,
+            cm.fax,cm.about_company,m.name as movement_name,so.source as source,
+            s.short_name as state,ct.countries_name as country,i.title as company_industry,
+            r.name as company_revenue,e.name as company_employee,cm.company_logo,'' as job_id,'' as funding_id,cm.company_id,1 as res_type,
+            if(pm.personal_image!= '' and pm.email_verified = 'Yes',1,2) as priority 
+            from " 
+            .$TABLE_MOVEMENT_MASTER. " as mm, "
+            .$TABLE_PERSONAL_MASTER. " as pm, "
+            .$TABLE_COMPANY_MASTER. " as cm, " 
+            .TABLE_MANAGEMENT_CHANGE." as m, "
+            .TABLE_SOURCE." as so, "
+            .TABLE_STATE." as s, "
+            .TABLE_COUNTRIES." as ct, "
+            .TABLE_INDUSTRY." as i, "
+            .TABLE_REVENUE_SIZE." as r, "
+            .TABLE_EMPLOYEE_SIZE." as e    
+            where (mm.company_id=cm.company_id and mm.personal_id=pm.personal_id and mm.status ='0' and mm.movement_url <>'' and mm.movement_type=m.id and mm.source_id=so.id and effective_date > '".$effective_date_within_60day."'  ".$movement_add_date.") 
+            and (cm.state=s.state_id and cm.country=ct.countries_id and cm.industry_id=i.industry_id and cm.company_revenue=r.id and cm.company_employee=e.id)";				
 
+        
+        
+        
+        
         $email_query2 = "select mm.move_id,mm.personal_id,mm.title,mm.movement_type,mm.announce_date,mm.what_happened,mm.movement_url,mm.effective_date,mm.announce_date,mm.headline,mm.full_body,mm.short_url,mm.more_link,
             pm.first_name,pm.middle_name,pm.last_name,pm.personal_image,pm.email,pm.phone,pm.about_person,cm.company_name,
             cm.company_website,cm.address,cm.address2,cm.city,cm.zip_code,cm.phone as cphone,
@@ -1303,6 +1379,14 @@ while($alert_row = com_db_fetch_array($alert_result)){
             $limit_by_clause = " limit 0,$def_mgt_num";   
         else
             $limit_by_clause = " limit 0,8";   
+        
+        
+        // Updating for weekly alerts, so that all results of week should be added in weekly alert
+        
+        if($alert_row['delivery_schedule']== 'Weekly')
+            $limit_by_clause = " limit 0,50";
+        
+        
                       //Personal Photo and email checking on/off
         $pfQuery = "select * from ".TABLE_PERSONAL_FILTER_ONOFF." where filter_onoff='ON'";
         $pfResult = com_db_query($pfQuery);
@@ -1337,16 +1421,17 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
 
         //echo "<br>only_triggers: ".$only_triggers;
-        $future_effective_date_check = " and mm.effective_date <= '".$speaker_before_date."'";
+        //$future_effective_date_check = " and mm.effective_date <= '".$speaker_before_date."'";
+        $future_effective_date_check = " and mm.effective_date <= '".$future_7_date."'";
       
         if($alert_metch_str =='')
         {
-            $email_query = $email_query1." $ciso_clause $cso_clause $future_effective_date_check" ;
+            $email_query = $email_query1." $ciso_clause $cso_clause $future_effective_date_check $title_clause" ;
         }
         //elseif($alert_metch_str !='' && $triggers=='')
         elseif($alert_metch_str !='')
         {
-            $email_query = $email_query1." and ".$alert_metch_str." $ciso_clause $cso_clause $future_effective_date_check" ;
+            $email_query = $email_query1." and ".$alert_metch_str." $ciso_clause $cso_clause $future_effective_date_check $title_clause" ;
 
         }
        
@@ -1354,6 +1439,8 @@ while($alert_row = com_db_fetch_array($alert_result)){
         // Added By FA to stop bulk movement uploads going in alerts email
         $email_query .= ' and source_bulk_upload != 1 '; 
         $email_query .= ' and mm.movement_type in (1,2,6,7) ';
+        
+        $email_query .= ' and mm.status = 0 ';
                    
         // FAR UNDO MUST
         //$sent_contact_id = '';
@@ -1378,7 +1465,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
             echo "<br><br>sent_contact_id TWO: ".$sent_contact_id;
 
         //$order_by_clause = " order by move_id desc";
-        $order_by_clause = " order by priority asc";
+        
+        // Updated cuz it was causing some error - 27th Feb 2019
+        $order_by_clause = " order by alert_priority asc";
         //$order_by_clause = " order by cm.company_employee desc";
 		  
 		  
@@ -1388,7 +1477,15 @@ while($alert_row = com_db_fetch_array($alert_result)){
         if($debug == 1)
             echo '<br><br>FAR UNDO : '.$email_query .'<br>';
         
+        
         $email_result = com_db_query($email_query);
+        
+        /*
+        $num_movement_result = mysql_query("SELECT FOUND_ROWS() as total_movement_rows");
+        $num_movement_row = mysql_fetch_array($num_movement_result);
+        $total_movement_count = $num_movement_row['total_movement_rows']; 
+        */
+        
         if($email_result)
         {
             $numRows = com_db_num_rows($email_result);
@@ -1396,7 +1493,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
         
         
     }  
-    //echo '<br><br>FAR UNDO : '.$email_query .'<br>'; 
+    echo '<br><br>FAR UNDO : '.$email_query .'<br>'; 
     //die();
     
     
@@ -1449,7 +1546,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                     <td align="center">
                         <table width="650" border="0" cellspacing="0" cellpadding="0" class="w320">
                             <tr>
-                                <td class="img" style="font-size:0pt; line-height:0pt; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'index.php" target="_blank"><img src="http://execfile.com/css/images/new-logo.png" width="336" height="61" alt="" border="0" /></a></td>
+                                <td class="img" style="font-size:0pt; line-height:0pt; text-align:left"><a href="https://www.execfile.com/index.php" target="_blank"><img src="http://execfile.com/css/images/new-logo.png" width="336" height="61" alt="" border="0" /></a></td>
                             </tr>
                         </table>
                     </td>
@@ -1523,8 +1620,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                             echo "<br>email_row effective_date: ".$email_row['effective_date'];
 					}
 					
+                                        echo "<br>Beofe effictive date check";
                                         if($email_row['effective_date'] > $effective_date_within_60day)
                                         {
+                                            echo "<br>within effictive date check";
                                             if($debug == 1)
 						echo "<br>Within if effective date wala";
 
@@ -1568,6 +1667,14 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                         else
                                         {
                                           $personal_image_path = $HTTP_SERVER.DIR_WS_HTTP_FOLDER.'personal_photo/small/no_image_information.png';
+                                        }
+                                        
+                                        
+                                        
+                                        if($debug == 1)
+                                        {
+                                            echo "<br>CNT:".$cnt;
+                                            echo "<br>delivery_schedule:".$alert_row['delivery_schedule'];
                                         }
 
                                         
@@ -1623,7 +1730,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                             <td align="left">
                                                                                 <table border="0" cellspacing="0" cellpadding="0">
                                                                                     <tr>
-                                                                                        <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                        <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                                                                         <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                                                                         <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                                                                         <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"></td>
@@ -1634,8 +1741,12 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                </td>
-                                                                <td align="right" width="170" class="btn-container">
+                                                                </td>';
+                                                
+                                                
+                                                                if($hide_submit_button == 0)
+                                                                {    
+                                                                $messageSrt .='<td align="right" width="170" class="btn-container">
                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
                                                                         <tr>
                                                                             <td>
@@ -1650,16 +1761,20 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                </td>
-                                                            </tr>
+                                                                </td>';
+                                                                }
+                                                            $messageSrt .='</tr>
                                                         </table>
                                                     </td>
                                                 </tr>
                                             </table>
                                             <div style="font-size:0pt; line-height:0pt; height:1px; background:#d8d8d8; "><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="1" style="height:1px" alt="" /></div>';
                                             //if($cnt<=5){
-                                                if($cnt<=15)
+                                                // Undo
+                                                if($cnt<=15 || $alert_row['delivery_schedule']== 'Weekly')
+                                                //if($cnt<=55)
                                                 {
+                                                    
                                                     $messageEmailStr .='<table width="100%" border="0" cellspacing="0" cellpadding="20">
                                                         <tr>
                                                             <td>
@@ -1674,7 +1789,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     <td align="left">
                                                                                         <table border="0" cellspacing="0" cellpadding="0">
                                                                                             <tr>
-                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                                                                                 <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                                                                                 <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"></td>
@@ -1685,8 +1800,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-                                                                        </td>
-                                                                        <td align="right" width="170" class="btn-container">
+                                                                        </td>';
+                                                                        if($hide_submit_button == 0)
+                                                                        {    
+                                                                        $messageEmailStr .='<td align="right" width="170" class="btn-container">
                                                                             <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
                                                                                 <tr>
                                                                                     <td>
@@ -1701,8 +1818,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-                                                                        </td>
-                                                                    </tr>
+                                                                        </td>';
+                                                                        }
+                                                                    $messageEmailStr .='</tr>
                                                                 </table>
                                                             </td>
                                                         </tr>
@@ -1744,7 +1862,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     <td align="left">
                                                                                         <table border="0" cellspacing="0" cellpadding="0">
                                                                                             <tr>
-                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                                                                                 <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                                                                                 <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$email_row['more_link'].'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Source</span></a></td>
@@ -1755,8 +1873,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-                                                                        </td>
-                                                                        <td align="right" width="170" class="btn-container">
+                                                                        </td>';
+                                                
+                                                                        if($hide_submit_button == 0)
+                                                                        {    
+                                                                        $messageSrt .='<td align="right" width="170" class="btn-container">
                                                                             <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
                                                                                 <tr>
                                                                                     <td>
@@ -1771,8 +1892,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-                                                                        </td>
-                                                                    </tr>
+                                                                        </td>';
+                                                                        }
+                                                                    $messageSrt .='</tr>
                                                                 </table>
                                                             </td>
                                                         </tr>
@@ -1781,8 +1903,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                     <div style="font-size:0pt; line-height:0pt; height:1px; background:#d8d8d8; "><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="1" style="height:1px" alt="" /></div>';
 
                                                     //if($cnt<=5){
-                                                    if($cnt<=15)
-                                                    {
+                                                    //if(($cnt>8 && $cnt<=15) || ($alert_row['delivery_schedule']== 'Weekly'))
+                                                    if($cnt<=5){
+                                                    
                                                         // FA NEED TO ADD SALESFORCE BUTTON HERE
                                                         $messageEmailStr .='<table width="100%" border="0" cellspacing="0" cellpadding="20">
                                                         <tr>
@@ -1798,7 +1921,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                         <td align="left">
                                                                                             <table border="0" cellspacing="0" cellpadding="0">
                                                                                                 <tr>
-                                                                                                    <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                    <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                                                                                     <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                                                                                     <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                                                                                     <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$email_row['more_link'].'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Source</span></a></td>
@@ -1809,9 +1932,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                         </td>
                                                                                     </tr>
                                                                                 </table>
-                                                                            </td>
-
-                                                                            <td align="right" width="170" class="btn-container">
+                                                                            </td>';
+                                                                            if($hide_submit_button == 0)
+                                                                            {    
+                                                                            $messageEmailStr .='<td align="right" width="170" class="btn-container">
                                                                                 <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
                                                                                     <tr>
                                                                                         <td>
@@ -1826,13 +1950,75 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                                     </td>
                                                                                 </tr>
                                                                             </table>
-                                                                        </td>
-                                                                    </tr>
+                                                                        </td>';
+                                                                            }    
+                                                                    $messageEmailStr .='</tr>
                                                                 </table>
                                                             </td>
                                                         </tr>
                                                     </table>
                                                     <div style="font-size:0pt; line-height:0pt; height:1px; background:#d8d8d8; "><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="1" style="height:1px" alt="" /></div>';
+                                                
+                                                    }
+                                                    if(1 == 2 && (($cnt>8 && $cnt<=15) || ($alert_row['delivery_schedule']== 'Weekly')))
+                                                    {    
+                                                        // New variable added to show more then 15 records in alert email
+                                                        // upated on 4th Feb 2019
+                                                        $messageSrt .='<table width="100%" border="1" cellspacing="0" cellpadding="20">
+                                                        <tr>
+                                                            <td>
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="img-holder" style="font-size:0pt; line-height:0pt; text-align:left" valign="top" width="105"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank"><img src="'.$personal_image_path.'" alt="" border="0" width="81" height="81" /></a></td>
+                                                                        <td class="text" style="color:#000000; font-family:Arial; font-size:15px; line-height:20px; text-align:left">
+                                                                            '.$heading.'
+                                                                            <div style="font-size:0pt; line-height:0pt; height:10px"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="10" style="height:10px" alt="" /></div>
+                                                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td align="left">
+                                                                                        <table border="0" cellspacing="0" cellpadding="0">
+                                                                                            <tr>
+                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
+                                                                                                <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
+                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$email_row['more_link'].'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Source</span></a></td>
+                                                                                                <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
+                                                                                                '.$sf.'    
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>';
+                                                        
+                                                                        if($hide_submit_button == 0)
+                                                                        {    
+                                                                        $messageSrt .='<td align="right" width="170" class="btn-container">
+                                                                            <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#fcb20e">
+                                                                                            <tr>
+                                                                                                <td class="img" style="font-size:0pt; line-height:0pt; text-align:left" width="1"><div class="hide-for-mobile"><div style="font-size:0pt; line-height:0pt; height:47px"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="47" style="height:47px" alt="" /></div></div>
+                                                                                                <div style="font-size:0pt; line-height:0pt;" class="mobile-br-30"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="0" alt="" /></div>
+                                                                                                 </td>
+                                                                                                <td class="btn" style="color:#ffffff; font-family:Arial; font-size:16px; line-height:20px; text-align:center" width="125"><a href="mailto:'.$email_row['email'].'?subject=Congrats&amp;body=Congrats on your appointment" target="_blank" class="link2" style="color:#ffffff; text-decoration:none"><span class="link2" style="color:#ffffff; text-decoration:none">Email Now &rsaquo;</span></a></td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>';
+                                                                        }
+                                                                    $messageSrt .='</tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <div style="font-size:0pt; line-height:0pt; height:1px; background:#d8d8d8; "><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/empty.gif" width="1" height="1" style="height:1px" alt="" /></div>';
+
+                                                        
                                                 }
                                             }
                                             $cnt++;
@@ -1921,17 +2107,13 @@ while($alert_row = com_db_fetch_array($alert_result)){
 				
                                     }
                                 echo "<br>within if 2141";
-                                
-				
 				
                                 // Sorting header array so that person comes first
                                 sortBySubkey($person_info, 'type');
                                 //echo "<pre>person_info AFter sort :";	print_r($person_info);	echo "</pre>";
                                 
-                                
                                 // UNDO 
                                 //$person_info = array_reverse($person_info);
-                                
                                 
 				//$person_info = array_reverse($person_info);
 				$totPerson = sizeof($person_info);
@@ -2051,8 +2233,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
 				$table4 .= '</tr></table>';
 				
-
-				if($totPerson<=8)
+                                // Undo
+				if($totPerson<=8 || $alert_row['delivery_schedule']== 'Weekly' || $numRows > 8)
+                                //if($totPerson<=55)
                                 {
 
                                     $perImgName = '<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -2107,19 +2290,6 @@ while($alert_row = com_db_fetch_array($alert_result)){
 				if($messageSrt!='')
                                 {
                                     echo "<br>In if line 2042";
-                                    //if($alert_row['text_only'] == '1')
-                                    //{
-                                        /*
-                                        echo "<br>In if line 2045";
-                                        $person_image_name = '';
-                                        $message .= $person_image_name;
-                                        $messageEmail .= $messageEmailStr;
-                                        $txtmessageEmail = $messageEmailStr;
-                                         
-                                         */
-                                    //}
-                                    //else
-                                    //{    
                                     
                                         $message .= $person_image_name.'<div class="img" style="font-size:0pt; line-height:0pt; text-align:left"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/box_top.jpg" alt="" border="0" width="660" height="5" /></div></div>
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="w320">
@@ -2212,31 +2382,15 @@ while($alert_row = com_db_fetch_array($alert_result)){
                             }
                             else
                             {
-                                /*
-                                echo "<br>In else line 2144";
-                                if($alert_row['text_only'] == '1')
-                                {
-                                    echo "<br>In else line 2146";
-                                    //echo 
-                                    $person_image_name = '';
-                                    $message .= $person_image_name;
-                                    $messageEmail .= $messageEmailStr;
-                                    $txtmessageEmail = $messageEmailStr;
-                                }
-                                 * 
-                                 */
-                                //else
-                                //{    
+                                   
                                     $message .= $person_image_name;
                                     $messageEmail .= $person_image_name;
-                                //}
+                                
                             }
 
 				
                             // far todo - add $company_id_with_trigger by first creating $personal_id_with_trigger and then adding here
                             // add new block for adding jobs and funding in email body
-                            //if($triggers !='' && $personal_id_with_trigger !=''){
-                            //if($triggers !='' && $personal_id_with_trigger !='')
                             if(1 == 1)
                             {
                                 //for personal speaking 
@@ -2446,7 +2600,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                         <tr>
 
-                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -2467,9 +2621,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                         </table>
 
-                                                                                                                </td>
+                                                                                                                </td>';
 
-                                                                                                                <td align="right" width="170" class="btn-container">
+                                                                                        if($hide_submit_button == 0)
+                                                                                        {    
+                                                                                                                $message .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -2499,8 +2655,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                         </table>
 
-                                                                                                                </td>
-                                                                                                            </tr>
+                                                                                                                </td>';
+                                                                                        }    
+                                                                                                            $message .=' </tr>
 
                                                                                                             </table>
 
@@ -2527,7 +2684,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                             <td align="left">
                                                                                 <table border="0" cellspacing="0" cellpadding="0">
                                                                                     <tr>
-                                                                                        <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                        <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                                                                         <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                                                                         <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                                                                         <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$psRow['speaking_link'].'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Source</span></a></td>
@@ -2538,9 +2695,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                </td>
-
-                                                                <td align="right" width="170" class="btn-container">
+                                                                </td>';
+                                                                
+                                                                if($hide_submit_button == 0)
+                                                                {    
+                                                                $messageEmail .=' <td align="right" width="170" class="btn-container">
 
                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -2570,9 +2729,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                         </table>
 
-                                                                </td>
-
-                                                        </tr>
+                                                                </td>';
+                                                                }    
+                                                        $messageEmail .=' </tr>
 
                                                                                         </table>
 
@@ -2622,7 +2781,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                         <tr>
 
-                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -2642,9 +2801,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                                </td>
-
-                                                                                                                                <td align="right" width="170" class="btn-container">
+                                                                                                                                </td>';
+                                                                                                                                if($hide_submit_button == 0)
+                                                                                                                                {    
+                                                                                                                                $message .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -2674,9 +2834,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                                </td>
-
-                                                                                                                        </tr>
+                                                                                                                                </td>';
+                                                                                                                                }    
+                                                                                                                        $message .=' </tr>
 
                                                                                                                 </table>
 
@@ -2721,7 +2881,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                                                     <tr>
 
-                                                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -2741,9 +2901,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     </table>
 
-                                                                                                                                                            </td>
-
-                                                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                                                            </td>';
+                                                                                                                                                            if($hide_submit_button == 0)
+                                                                                                                                                            {    
+                                                                                                                                                            $messageEmail .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -2773,9 +2934,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     </table>
 
-                                                                                                                                                            </td>
-
-                                                                                                                                                    </tr>
+                                                                                                                                                            </td>';
+                                                                                                                                                            }        
+                                                                                                                                                    $messageEmail .=' </tr>
 
                                                                                                                                             </table>
 
@@ -3110,7 +3271,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                         <tr>
 
-                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -3130,9 +3291,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                                <td align="right" width="170" class="btn-container">
+                                                                                                                                </td>';
+                                                                                                                                if($hide_submit_button == 0)
+                                                                                                                                {    
+                                                                                                                                $message .=	'<td align="right" width="170" class="btn-container">
 
                                                                                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -3162,9 +3324,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                        </tr>
+                                                                                                                                </td>';
+                                                                                                                                }    
+                                                                                                                        $message .=	'</tr>
 
                                                                                                                 </table>
 
@@ -3208,7 +3370,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                         <tr>
 
-                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -3228,9 +3390,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                                <td align="right" width="170" class="btn-container">
+                                                                                                                                </td>';
+                                                                                                                                if($hide_submit_button == 0)
+                                                                                                                                {
+                                                                                                                                $messageEmail .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -3260,9 +3423,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                        </tr>
+                                                                                                                                </td>';
+                                                                                                                                }    
+                                                                                                                        $messageEmail .='</tr>
 
                                                                                                                 </table>
 
@@ -3308,7 +3471,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                         <tr>
 
-                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -3328,9 +3491,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                                <td align="right" width="170" class="btn-container">
+                                                                                                                                </td>';
+                                                                                                                                if($hide_submit_button == 0)
+                                                                                                                                {    
+                                                                                                                                $message .=	'<td align="right" width="170" class="btn-container">
 
                                                                                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -3360,9 +3524,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                        </tr>
+                                                                                                                                </td>';
+                                                                                                                                }    
+                                                                                                                        $message .=	'</tr>
 
                                                                                                                 </table>
 
@@ -3406,7 +3570,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                         <tr>
 
-                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -3426,9 +3590,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                                <td align="right" width="170" class="btn-container">
+                                                                                                                                </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                                                $messageEmail .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -3458,9 +3623,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                         </table>
 
-                                                                                                                                </td>
-
-                                                                                                                        </tr>
+                                                                                                                                </td>';
+}
+                                                                                                                        $messageEmail .='</tr>
 
                                                                                                                 </table>
 
@@ -3789,7 +3954,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                     <tr>
 
-                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -3809,9 +3974,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                     </table>
 
-                                                                                                            </td>
-
-                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                            </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                            $message .='<td align="right" width="170" class="btn-container">
 
                                                                                                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -3835,9 +4001,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                 </table>
 
-                                                                                                            </td>
-
-                                                                                                        </tr>
+                                                                                                            </td>';
+}
+                                                                                                        $message .='</tr>
 
                                                                                                     </table>
 
@@ -3888,7 +4054,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -3908,9 +4074,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                                            $messageEmail .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -3940,9 +4107,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $messageEmail .='</tr>
 
                                                                                                             </table>
 
@@ -3988,7 +4155,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -4008,9 +4175,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                                            $message .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -4040,9 +4208,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $message .='</tr>
 
                                                                                                             </table>
 
@@ -4087,7 +4255,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -4107,9 +4275,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                                            $messageEmail .= '<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -4139,9 +4308,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $messageEmail .= '</tr>
 
                                                                                                             </table>
 
@@ -4466,7 +4635,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -4486,9 +4655,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{    
+                                                                                                                            $message .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -4518,9 +4688,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $message .=' </tr>
 
                                                                                                             </table>
 
@@ -4565,7 +4735,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -4586,9 +4756,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{    
+                                                                                                                            $messageEmail .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -4618,9 +4789,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $messageEmail .=' </tr>
 
                                                                                                             </table>
 
@@ -4666,7 +4837,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -4686,9 +4857,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                                            $message .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -4718,9 +4890,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $message .=' </tr>
 
                                                                                                             </table>
 
@@ -4765,7 +4937,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -4785,9 +4957,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{    
+                                                                                                                            $messageEmail .=' <td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -4817,9 +4990,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $messageEmail .=' </tr>
 
                                                                                                             </table>
 
@@ -5133,7 +5306,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -5153,9 +5326,12 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
+                                                                                                                            </td>';
+                                                            
+                                                            if($hide_submit_button == 0)
+                                                            {    
 
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            $message .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -5185,9 +5361,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+                                                            }
+                                                                                                                    $message .='</tr>
 
                                                                                                             </table>
 
@@ -5232,7 +5408,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -5252,9 +5428,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{    
+                                                                                                                            $messageEmail .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -5284,9 +5461,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $messageEmail .='</tr>
 
                                                                                                             </table>
 
@@ -5332,7 +5509,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -5352,9 +5529,11 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
+                                                                                                                            </td>';
 
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                            if($hide_submit_button == 0)
+                                                            {    
+                                                                                                                            $message .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -5384,9 +5563,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+                                                            }
+                                                                                                                    $message .='</tr>
 
                                                                                                             </table>
 
@@ -5431,7 +5610,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                                                     <tr>
 
-                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalURL.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -5451,9 +5630,10 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                            <td align="right" width="170" class="btn-container">
+                                                                                                                            </td>';
+if($hide_submit_button == 0)
+{
+                                                                                                                            $messageEmail .='<td align="right" width="170" class="btn-container">
 
                                                                                                                                     <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
 
@@ -5483,9 +5663,9 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                                                     </table>
 
-                                                                                                                            </td>
-
-                                                                                                                    </tr>
+                                                                                                                            </td>';
+}
+                                                                                                                    $messageEmail .='</tr>
 
                                                                                                             </table>
 
@@ -5586,8 +5766,6 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                             if($debug == 1)
                             {
-                                //echo "<pre>header_funding_company_id_arr at end :";	print_r($header_funding_company_id_arr);	echo "</pre>";
-                                //echo "<pre>header_company_id_arr at end :";	print_r($header_company_id_arr);	echo "</pre>";
                                 echo "<br>jobsStr before final query: ".$jobsStr;
                                 echo "<br>fundingsStr before final query: ".$fundingsStr;
                             }	
@@ -5772,7 +5950,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                             <tr>
 
-                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                                <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -5836,7 +6014,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
 
                                                                                                     <tr>
 
-                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
 
                                                                                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
 
@@ -5945,7 +6123,7 @@ while($alert_row = com_db_fetch_array($alert_result)){
                             {
                                 $funding_text = "";
                                 //$header_funding_company_ids = implode($header_funding_company_id_arr,",");
-                                $fQuery = "select cf.funding_id,cm.company_name,company_logo,cf.funding_date,cf.funding_amount,funding_source,cm.company_id from ".$TABLE_COMPANY_FUNDING." cf, ".$TABLE_COMPANY_MASTER." cm where cf.company_id=cm.company_id and cm.company_id in (".$fundingsStr.") GROUP by cm.company_id order by cm.company_id desc";	
+                                $fQuery = "select cf.funding_id,cm.company_name,company_logo,cf.funding_date,cf.funding_amount,funding_source,cm.company_id from ".$TABLE_COMPANY_FUNDING." cf, ".$TABLE_COMPANY_MASTER." cm where cf.company_id=cm.company_id and cm.company_id in (".$fundingsStr.") and cf.funding_date>'".$before_date."' and cf.funding_date<'".$future_date."' GROUP by cm.company_id order by cm.company_id desc";	
 
                                 if($def_trigger_num != '')
                                     $fQuery .= " limit 0,$def_trigger_num";
@@ -6172,7 +6350,7 @@ $message .=' <div style="font-size:0pt; line-height:0pt; height:1px; background:
                                 <td align="left">
                                     <table border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                             <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                             <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                             <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$funding_source.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Source</span></a></td>
@@ -6208,7 +6386,7 @@ $messageEmail .=' <div style="font-size:0pt; line-height:0pt; height:1px; backgr
                                                 <td align="left">
                                                     <table border="0" cellspacing="0" cellpadding="0">
                                                         <tr>
-                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
+                                                            <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$dim_url.$exec_clause.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Details</span></a></td>
                                                                 <td class="img-right" style="font-size:0pt; line-height:0pt; text-align:right" width="15"><div class="hide-for-mobile"><img src="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.'images/bullet2.jpg" alt="" border="0" width="10" height="7" /></div></td>
                                                                 <td class="spacing" style="font-size:0pt; line-height:0pt; text-align:left" width="89"></td>
                                                                 <td class="links" style="color:#ffffff; font-family:Arial; font-size:14px; line-height:18px; text-align:left"><a href="'.$funding_source.'" target="_blank" class="link-u" style="color:#4f81bd; text-decoration:underline"><span class="link-u" style="color:#4f81bd; text-decoration:underline">Source</span></a></td>
@@ -6233,8 +6411,11 @@ $messageEmail .=' <div style="font-size:0pt; line-height:0pt; height:1px; backgr
             {
                 echo "<br>Adding decision maker to funding";
                 $messageEmail .='<tr><td><table><tr><td class="img-holder" style="font-size:0pt; line-height:0pt; text-align:left;padding-top:14px;" valign="top" width="105"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalFundingURL.'" target="_blank"><img src="'.$personal_funding_image_path.'" alt="" border="0" width="81" height="81" /></a></td>
-                    <td style="font-family:Arial; font-size:15px;">'.$person_first_name.' '.$person_last_name.', '.$person_funding_title.' at '.$company_name_funding.', is the decision maker</td>
-                    <td width="175" align="right">
+                    <td style="font-family:Arial; font-size:15px;">'.$person_first_name.' '.$person_last_name.', '.$person_funding_title.' at '.$company_name_funding.', is the decision maker</td>';
+                    
+                        if($hide_submit_button == 0)
+                        {    
+                        $messageEmail .='<td width="175" align="right">
                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
                             <tr>
                                 <td>
@@ -6249,12 +6430,18 @@ $messageEmail .=' <div style="font-size:0pt; line-height:0pt; height:1px; backgr
                                 </td>
                             </tr>
                         </table>
-                    </td></tr></table></td></tr>';
+                    </td>';
+                        }
+                    $messageEmail .='</tr></table></td></tr>';
 
 
                 $message .='<table><tr><td class="img-holder" style="font-size:0pt; line-height:0pt; text-align:left;padding-top:14px;" valign="top" width="105"><a href="'.$HTTP_SERVER.DIR_WS_HTTP_FOLDER.$personalFundingURL.'" target="_blank"><img src="'.$personal_funding_image_path.'" alt="" border="0" width="81" height="81" /></a></td>
-                    <td style="font-family:Arial; font-size:15px;">'.$person_first_name.' '.$person_last_name.', '.$person_funding_title.' at '.$company_name_funding.', is the decision maker</td>
-                    <td width="175" align="right">
+                    <td style="font-family:Arial; font-size:15px;">'.$person_first_name.' '.$person_last_name.', '.$person_funding_title.' at '.$company_name_funding.', is the decision maker</td>';
+                    
+                if($hide_submit_button == 0)
+                {    
+                
+                    $message .='<td width="175" align="right">
                         <table border="0" cellspacing="0" cellpadding="1" bgcolor="#dd9c0d">
                             <tr>
                                 <td>
@@ -6269,7 +6456,9 @@ $messageEmail .=' <div style="font-size:0pt; line-height:0pt; height:1px; backgr
                                 </td>
                             </tr>
                         </table>
-                    </td></tr></table>';
+                    </td>';
+                }    
+                    $message .='</tr></table>';
 
 
 
@@ -6352,6 +6541,11 @@ $messageFooter = '<div style="font-size:0pt; line-height:0pt; height:20px"><img 
 </table>';
 //$messageFooter .= '<img src=tracker.php?image=tracking.gif&last_inserted_alert='.$email_alert_id.' alt="">';
 //}
+
+$truncatedMsgTxt = '';
+if($alert_row['delivery_schedule']=='Weekly' || $numRows > 8)
+    $truncatedMsgTxt = "<a style=font-size:14px; href=".HTTP_SERVER_EXEC.DIR_WS_HTTP_FOLDER."alert-email-show.php?emailid=".$email_alert_id.">This email is truncated. To see full version, click here</a>";
+
             
 
 if($alert_row['text_only'] == '1')
@@ -6362,7 +6556,7 @@ if($alert_row['text_only'] == '1')
 else
 {    
     $emailDetails = $messageHead.$message.$messageFooter;	// This is used for online page
-    $emailContent = $messageHead.$messageEmail.$messageFooter;	
+    $emailContent = $messageHead.$messageEmail.$truncatedMsgTxt.$messageFooter;	
 }
 
 
@@ -6375,6 +6569,9 @@ else
                   echo "<br>emailContent: ". $emailContent;
             }	
 
+            
+            //$user_email = 'faraz.aia@nxvt.com';
+            
             $email = $user_email;
             $mail->MsgHTML($emailContent);
             $mail->AddAddress($email, $user_first_name);
@@ -6416,7 +6613,7 @@ else
             {
                 
                 $alert_info_query = "INSERT INTO " . TABLE_ALERT_SEND_INFO . "(user_id,alert_id,contact_id,job_id,funding_id,personal_id,email_content,email_details,email_id,sent_date) values('".$user_id."','". $alert_id."','".$total_contact_id."','".$total_job_id."','".$total_funding_id."','".$total_personal_id."','".$emailContent."','$emailDetails','$email_id','".$sent_date."')";	
-                echo "<br>alert_info_query: ".$alert_info_query;	
+                //echo "<br>alert_info_query: ".$alert_info_query;	
                 com_db_query($alert_info_query);
                 
                 $last_inserted_alert = com_db_insert_id();
@@ -6445,6 +6642,16 @@ else
 
                 }
 
+                
+                if($debug == 1)
+                {
+                    echo "<br>Next alert date: ".$next_alert_date;
+                    echo "<br>Date manipulation: ".date('Y-m-d',mktime(0,0,0,date('m'),date('d') - 6,date('Y')));
+                }
+                
+                
+                
+                
                 if($next_alert_date !='')
                 {
                     com_db_query("update ".TABLE_ALERT." set previous_date='".$previous_date."', alert_date='".$next_alert_date."' where alert_id='".$alert_id."'");

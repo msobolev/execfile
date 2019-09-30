@@ -17,6 +17,15 @@ require('admin_header.php');
     font-weight:bold;
 }
 </style>
+
+<script type="text/javascript">
+function handleSelect(elm)
+{
+    //window.location = elm.value;
+    document.getElementById("filters_frm").submit();
+}
+    
+</script>
 <?PHP
 
 
@@ -25,12 +34,19 @@ if (basename($_SERVER['PHP_SELF']) != 'login.php' && basename($_SERVER['PHP_SELF
 }
 //com_db_connect() or die('Unable to connect to database server!');
 com_db_connect_hre2() or die('Unable to connect to database server!');
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 $msg = "";
+
+$status_clause = "";
+
+//echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
+
+if(isset($_POST['user_status']) && $_POST['user_status'] != '2')
+{
+    $status_clause = " and status = '".$_POST['user_status']."'";
+}
+
+
 if(isset($_GET['action']) && $_GET['action'] == 'delete')
 {
     //echo "<br>  within edit";
@@ -42,7 +58,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'delete')
 }  
 
 
-$all_users = get_all_registered_users();
+$all_users = get_all_registered_users($status_clause);
 //echo "<pre>all_users: ";   print_r($all_users);   echo "</pre>";
 
 if($msg != '')
@@ -54,8 +70,17 @@ if($msg != '')
 ?>
 
 
-<h2>List of Registered Users</h2>
+<h2 style="float:left;width:400px;">List of Registered Users</h2>
 
+<form id="filters_frm" method="post" action="index.php">
+<span style="float:left;width:300;padding-top:30px;">
+    Sort by: <select name="user_status" id="user_status" onchange="javascript:handleSelect(this)">
+                <option <?PHP if($_POST['user_status'] == '1') echo "selected"; else echo ""; ?> value="1">Active</option>
+                <option <?PHP if($_POST['user_status'] == '0') echo "selected"; else echo ""; ?> value="0">Deactive</option>
+                <option <?PHP if($_POST['user_status'] == '2' || $_REQUEST['user_status'] == '') echo "selected"; else echo ""; ?> value="2">All</option>
+            </select>
+</span>
+</form>
 <table cellpadding="5" width="100%" style="border:1px solid #CCCCCC;"> 
     <tr>
         <td class="header_text" width="300">Name</td>
@@ -64,6 +89,9 @@ if($msg != '')
         <td class="header_text" width="100">Type</td>
         <td class="header_text"  width="200">Action</td>
     </tr>
+    
+    
+    
     
     <?PHP
     foreach($all_users as $user_id => $user_data)
@@ -86,6 +114,8 @@ if($msg != '')
             <a href="users.php?action=edit&user_id=<?=$user_id?>">Edit</a>
             &nbsp;&nbsp;
             <a href="index.php?action=delete&user_id=<?=$user_id?>">Delete</a>
+            &nbsp;&nbsp;
+            <a href="invoices.php?user_id=<?=$user_id?>">Invoice</a>
         </td>
     </tr>    
     <?PHP

@@ -19,7 +19,7 @@ include("header-content-page.php");
 include("config.php");
 include("functions.php");
 com_db_connect_hre2() or die('Unable to connect to database server!');
-
+recordTraffic('create_alert');
 $company_website = "";
 
 if(isset($_GET['l_id']) && $_GET['l_id'] != '')
@@ -34,6 +34,7 @@ if(isset($_GET['l_id']) && $_GET['l_id'] != '')
     
     
     $filter_arr = explode(":",$sfh);
+    $list_name = $this_list_arr['list_name'];
     
 }
 
@@ -195,6 +196,12 @@ if(isset($_GET['alert_id']) && $_GET['alert_id'] != '')
     
     $management_type = $this_alert_arr['type'];
     
+    $chief_level = $this_alert_arr['chief_level'];
+    $vp_level = $this_alert_arr['vp_level'];
+    $director_level = $this_alert_arr['director_level'];
+    
+    $hide_submit_button = $this_alert_arr['hide_submit_button'];
+    
     $submit_btn = "Update Alert";
     
     // case when user comes from setting page, $sfh is not set in that case
@@ -290,7 +297,29 @@ function sub_save_list()
                                 <h3 class="ico-executive">Chose Executive</h3>
                                 <div class="form-content">
                                     <div class="fields">
-                                        <div class="row"><label>Title:</label><input style="height:35px;width:260px;margin-left:12px;" type="text" name="title" id="title" title="e.g. CHRO or Vice President - Human Resources" value="<?PHP if($title==''){echo 'e.g. CHRO or Vice President - Human Resources';}else{echo $title;}?>" class="field" /></div><!-- /.row -->
+                                        
+                                        <?PHP
+                                        if(isset($_GET['l_id']) && $_GET['l_id'] != '')
+                                        {    
+                                        ?>
+                                        <div class="row"><label style="width:121px;">List Name</label><input style="width:260px;height:35px;margin-left:22px;" name="list_name" type="text" id="list_name" title="" value="<?PHP if($list_name==''){echo '';}else{echo $list_name;}?>" class="field" /></div><!-- /.row -->
+                                        <?PHP
+                                        }
+                                        ?>
+                                        
+                                        <div class="row">
+                                            <label>Title:</label>
+                                            <!-- <input style="height:35px;width:260px;margin-left:12px;" type="text" name="title" id="title" title="e.g. CHRO or Vice President - Human Resources" value="<?PHP //if($title==''){echo 'e.g. CHRO or Vice President - Human Resources';}else{echo $title;}?>" class="field" /> -->
+                                            <input style="position: relative;top:2px;" type="checkbox" value="chief"  name="chief_title_level" id="chief_title_level" <?PHP if($chief_level == 1) echo "checked"; ?> />
+                                            <label style="text-align:left;margin-left:0px;width:50px;" for="mgtchanges">C Level</label>
+                                            &nbsp;&nbsp;
+                                            <input style="position: relative;top:2px;" type="checkbox" value="vp"  name="vp_title_level" id="vp_title_level" <?PHP if($vp_level == 1) echo "checked"; ?> />
+                                            <label style="text-align:left;margin-left:0px;width:58px;" for="mgtchanges">VP Level</label>
+                                            &nbsp;&nbsp;
+                                            <input style="position: relative;top:2px;" type="checkbox" value="director"  name="director_title_level" id="director_title_level" <?PHP if($director_level == 1) echo "checked"; ?> />
+                                            <label style="text-align:left;margin-left:0px;width:78px;" for="mgtchanges">Director Level</label>
+                                            
+                                        </div>
                                         <div class="row"><label style="width:133px;" class="posr-label-select">Management<br /> Change Type:</label>
                                             <select class="chosen-select" style="width:260px;" name="management" id="management">
                                                 <option value="">Any</option>
@@ -464,6 +493,17 @@ function sub_save_list()
                             <div style="padding-top:0px;" class="row clearfix"><input name="sbt" type="submit" value="Save List" class="submit" /></div>
                         
                         </div><!-- /.fcol fcol2 -->
+                        
+                        
+                        &nbsp;&nbsp;
+                        <input style="position: relative;top:2px;" type="checkbox" value="1"  name="remove_email_btn" id="remove_email_btn" <?PHP if($hide_submit_button == 1) echo "checked"; ?> />
+                        <label style="text-align:left;margin-left:0px;width:50px;" for="remove_email_btn">Remove Email button</label>
+                        &nbsp;&nbsp;
+                        
+                        
+                        
+                        
+                        
                         
                     </div><!-- /.form-bottom -->
                     <input type="hidden" name="selected_alert" id="selected_alert" value="<?=$_GET['alert_id']?>">

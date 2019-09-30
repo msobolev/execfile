@@ -67,9 +67,20 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     $list_state = '';
     $list_zip = '';
     $list_mgt = '';
+    $title_level = "";
    // echo "<pre>POST:";   print_r($_POST);   echo "</pre>";
-   // echo "<pre>REQ:";   print_r($_REQUEST);   echo "</pre>";
+    //echo "<pre>REQ:";   print_r($_REQUEST);   echo "</pre>";
     
+    if(isset($_POST['chief_title_level']) && $_POST['chief_title_level'] == 'chief')
+        $title_level .= 'chief,';
+    if(isset($_POST['vp_title_level']) && $_POST['vp_title_level'] == 'vp')
+        $title_level .= 'vp,';
+    if(isset($_POST['director_title_level']) && $_POST['director_title_level'] == 'director')
+        $title_level .= 'director,';
+
+    //echo "<br>title_level:".$title_level;
+    
+   //die(); 
     if(isset($_POST['mgtchanges']) && $_POST['mgtchanges'] == 1)
     {
         $list_triggers .= 'movements,';
@@ -153,11 +164,11 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     {
         $selected_filters = $_POST['selected_filters'];
         
-        echo "<br>selected_filters:".$selected_filters;
+        //echo "<br>selected_filters:".$selected_filters;
         
         $selected_filters_arr = explode(":",$selected_filters);
-        echo "<pre>selected_filters_arr: ";   print_r($selected_filters_arr);   echo "</pre>";
-        
+        //echo "<pre>selected_filters_arr: ";   print_r($selected_filters_arr);   echo "</pre>";
+        //die();
         $selected_filters_arr[8] = $list_industry;
         
         // Updated on 4 june 2018
@@ -193,9 +204,21 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
         $selected_filters_arr[0] = $list_triggers;
         
         
+        //Updated on 7th Sept 2018 to handle title levels
+        $selected_filters_arr[15] = $title_level;
+        
+        
         $selected_filters = implode(":",$selected_filters_arr);
-         echo "<br>selected_filters after implode:".$selected_filters;
+         //echo "<br>selected_filters after implode:".$selected_filters;
     }    
+    
+    $insert_list_name_val = "";
+    $update_list_name = "";
+    if(isset($_POST['list_name']) && $_POST['list_name'] != '')
+    {    
+        $update_list_name = ",list_name='".$_POST['list_name']."'";
+        $insert_list_name_val = $_POST['list_name'];
+    }
     
     $this_user = $_SESSION['sess_user_id'];
     $websites_filter = $_REQUEST['company_website'];
@@ -204,24 +227,33 @@ if(isset($_REQUEST['sbt']) && $_REQUEST['sbt'] == 'Save List')
     $websites_filter	= str_replace($rep, "<br />", $websites_filter);
     
     
+    $ranQuery = "";
     if(isset($_REQUEST['edit_list']) && $_REQUEST['edit_list'] != '')
     {
-        echo "<br>In if";
-        $update_query = "UPDATE user_saved_lists set filters = '$selected_filters',websites_filter = '$websites_filter' where l_id = ".$_REQUEST['edit_list'];
-         echo "<br>update_query:".$update_query;
+        //echo "<br>In if";
+        $update_query = "UPDATE user_saved_lists set filters = '$selected_filters',websites_filter = '$websites_filter' $update_list_name where l_id = ".$_REQUEST['edit_list'];
+         //echo "<br>update_query:".$update_query;
         com_db_query($update_query);
         $action_msg = 'EditList';
+        $ranQuery = $update_query;
     }
     else
     {    
-        echo "<br>In else";
+        //echo "<br>In else";
         //echo "<br>websites_filter: ".$websites_filter;
-        $save_query = "insert into user_saved_lists (user_id,filters,websites_filter) values ('$this_user','$selected_filters','$websites_filter')";
-        echo "<br>save_query:".$save_query;
+        $save_query = "insert into user_saved_lists (user_id,filters,websites_filter,list_name) values ('$this_user','$selected_filters','$websites_filter','$insert_list_name_val')";
+        //echo "<br>save_query:".$save_query;
         com_db_query($save_query);
         $action_msg = 'SaveList';
+        $ranQuery = $save_query;
     }    
     //die("2");
+    
+    $new_exec = mysqli_connect("10.132.233.66","cfo2","cV!kJ201Ze","hre2") or die("Database 3 ERROR ");
+    mysqli_query($new_exec,$ranQuery);
+    mysqli_close($new_exec);
+    
+    
     $url = 'alert.php?action='.$action_msg;
     com_redirect($url);
     
@@ -240,8 +272,13 @@ elseif($action == 'AlertCreate')
     {
         $title = com_db_input($title);
     }
-    echo "<pre>REQ: ";   print_r($_REQUEST);   echo "</pre>";
+    //echo "<pre>REQ: ";   print_r($_REQUEST);   echo "</pre>";
     //$revenew_raw_arr = explode(" ",$_REQUEST['selected_filters']);
+    
+    if(isset($_POST['remove_email_btn']) && $_POST['remove_email_btn'] == 1)
+        $hide_email_btn = 1;
+    else
+        $hide_email_btn = 0;
     //die();
     //echo "<pre>POST: ";   print_r($_POST);   echo "</pre>";
     $type = $_POST['management'];
@@ -380,6 +417,29 @@ elseif($action == 'AlertCreate')
     }
     $employee_size = $employee_size_id_arr;
 
+    
+    $chief_level = "";
+    $vp_level = "";
+    $director_level = "";
+    
+    //echo "<br>chief_title_level:".$_POST['chief_title_level'];
+    //echo "<br>vp_title_level:".$_POST['vp_title_level'];
+    //echo "<br>director_title_level:".$_POST['director_title_level'];
+    //die();
+    //if(isset($_POST['title_level']) && $_POST['title_level'] != '')
+    //{
+        if(strpos($_POST['chief_title_level'],'chief') > -1)
+            $chief_level = 1;
+        if(strpos($_POST['vp_title_level'],'vp') > -1)
+            $vp_level = 1;
+        if(strpos($_POST['director_title_level'],'director') > -1)
+            $director_level = 1;
+                
+    //}
+    
+    
+    
+    
 
     $mgtchanges = $_POST['mgtchanges'];
 
@@ -402,18 +462,24 @@ elseif($action == 'AlertCreate')
     //$subscriptionID = com_db_GetValue("select subscription_id from ".TABLE_USER." where user_id='".$user_id."'");
     //$alertPermition = com_db_GetValue("select custom_alerts from ".TABLE_SUBSCRIPTION." where sub_id='".$subscriptionID."'");
 
+    // Added on 5th March to handle alerts for ciso/clo bundle user
+    $alert_site = "";
+    if(strpos($_SESSION['combine_site'],'/') > -1)
+    {
+        if($_SESSION['site'] != '')
+            $alert_site = $_SESSION['site'];
+    }        
     
     $selected_alert = $_POST['selected_alert'];
     if($selected_alert == '')
     {
-
         //$alert_query = "insert into " . TABLE_ALERT . " (user_id,title,type,country,state,city,zip_code,company,company_website,industry_id,revenue_size,employee_size,delivery_schedule,speaking,awards,publication,media_mention,board,jobs,fundings,monthly_budget,exp_date,alert_date,add_date) values ('$user_id','$title','$type','$country','$state','$city','$zip_code','$company','$company_website','$industry','$revenue_size','$employee_size','$delivery_schedule','$speaking','$awards','$publication','$media_mentions','$board','$jobs','$fundings','$monthly_budget','$exp_date','$alert_date','$add_date')";
-        $alert_query = "insert into " . TABLE_ALERT . " (user_id,title,type,country,state,city,zip_code,company,company_website,industry_id,revenue_size,employee_size,delivery_schedule,mgt_change,speaking,awards,publication,media_mention,board,jobs,fundings,monthly_budget,exp_date,alert_date,add_date,raw_revenue) values ('$user_id','$title','$type','$country','$state','$city','$zip_code','$company','$company_website','$industry','$revenue_size','$employee_size','$delivery_schedule','$mgtchanges','$speaking','$awards','$publication','$media_mentions','$board','$jobs','$fundings','$monthly_budget','$exp_date','$alert_date','$add_date','$revenue_size_raw')";
+        $alert_query = "insert into " . TABLE_ALERT . " (user_id,title,type,country,state,city,zip_code,company,company_website,industry_id,revenue_size,employee_size,delivery_schedule,mgt_change,speaking,awards,publication,media_mention,board,jobs,fundings,monthly_budget,exp_date,alert_date,add_date,raw_revenue,chief_level,vp_level,director_level,alert_site,hide_submit_button) values ('$user_id','$title','$type','$country','$state','$city','$zip_code','$company','$company_website','$industry','$revenue_size','$employee_size','$delivery_schedule','$mgtchanges','$speaking','$awards','$publication','$media_mentions','$board','$jobs','$fundings','$monthly_budget','$exp_date','$alert_date','$add_date','$revenue_size_raw','$chief_level','$vp_level','$director_level','$alert_site','$hide_email_btn')";
         $action_msg = 'added';
     }
     elseif($selected_alert > 0)
     {
-        $alert_query = "UPDATE " . TABLE_ALERT . " set title = '$title',type = '$type',country = '$country',state = '$state',city = '$city',zip_code = '$zip_code',company = '$company',company_website = '$company_website',industry_id = '$industry',revenue_size = '$revenue_size',employee_size = '$employee_size',delivery_schedule = '$delivery_schedule',mgt_change = '$mgtchanges',speaking = '$speaking',awards = '$awards',publication = '$publication',media_mention = '$media_mentions',board = '$board',jobs = '$jobs',fundings = '$fundings' where alert_id = $selected_alert";
+        $alert_query = "UPDATE " . TABLE_ALERT . " set title = '$title',type = '$type',country = '$country',state = '$state',city = '$city',zip_code = '$zip_code',company = '$company',company_website = '$company_website',industry_id = '$industry',revenue_size = '$revenue_size',employee_size = '$employee_size',delivery_schedule = '$delivery_schedule',mgt_change = '$mgtchanges',speaking = '$speaking',awards = '$awards',publication = '$publication',media_mention = '$media_mentions',board = '$board',jobs = '$jobs',fundings = '$fundings',chief_level='$chief_level',vp_level='$vp_level',director_level='$director_level',hide_submit_button='$hide_email_btn' where alert_id = $selected_alert";
         $action_msg = 'updated';
     }    
     //echo "<br>FA alert_query:".$alert_query;
@@ -421,6 +487,13 @@ elseif($action == 'AlertCreate')
     com_db_query($alert_query);
     $alert_id = com_db_insert_id();
 
+    // Adding alert to next Execfile
+    $new_exec = mysqli_connect("10.132.233.66","cfo2","cV!kJ201Ze","hre2") or die("Database 3 ERROR ");
+    mysqli_query($new_exec,$alert_query);
+    mysqli_close($new_exec);
+    
+    
+    
     $url = 'alert.php?action='.$action_msg;
     com_redirect($url);
 }

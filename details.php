@@ -34,7 +34,6 @@ if($_SERVER['HTTP_REFERER'] != '' && strpos($_SERVER['HTTP_REFERER'],'http://exe
     <head>
 <?PHP
  
-session_start();
 //echo "<br>Session site:".$_SESSION["this_user_site"];
 
 include("config.php");
@@ -81,7 +80,7 @@ if($_SESSION['site'] == '' || $_SESSION['site'] == 'hr')
 }
 elseif($_SESSION['site'] == 'cto' || $_SESSION['site'] == 'ciso')
 {
-    $personal_pic_root            = "https://www.ctosonthemove.com/";
+    $personal_pic_root            = "https://ctosonthemove.com/";
     
 }
 elseif($_SESSION['site'] == 'cfo')
@@ -101,7 +100,7 @@ elseif($_SESSION['site'] == 'clo')
 }
 
 
-$company_pic_root = "https://www.ctosonthemove.com/"; 
+$company_pic_root = "https://ctosonthemove.com/"; 
 $hr_dot = "http://hr.execfile.com/"; 
 
 
@@ -331,8 +330,9 @@ function get_https($url)
                                 //echo "<br>HTML STR: ".$html;
                                 //echo "<pre>html: ";   print_r($html);   echo "</pre>";
                                 
-                            }    
-                            show_movements($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['move_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['movement_type'],$all_data[$i]['more_link'],$all_data[$i]['personal_image'],$personal_pic_root,'',1);
+                            }
+                            //echo "<br>personal_image:".$all_data[$i]['personal_image'];
+                            show_movements($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['move_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['movement_type'],$all_data[$i]['more_link'],$all_data[$i]['personal_image'],$personal_pic_root,'','read',$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link'],1);
                         }    
                         elseif($type == 'awards')
                         {
@@ -346,7 +346,7 @@ function get_https($url)
                                     $html = file_get_html($all_data[$i]['awards_link']);
                                 
                             }   
-                            show_awards($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['awards_title'],$all_data[$i]['awards_given_by'],$all_data[$i]['awards_date'],$all_data[$i]['awards_link'],$personal_pic_root,'',1);
+                            show_awards($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['awards_title'],$all_data[$i]['awards_given_by'],$all_data[$i]['awards_date'],$all_data[$i]['awards_link'],$personal_pic_root,'','read',$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link'],1);
                         }
                         //
                         elseif($type == 'speaking')
@@ -369,7 +369,11 @@ function get_https($url)
                                 
                                 
                             } 
-                            show_speaking($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,'','read',1);
+                            
+                            //echo "<pre>all_data:";   print_r($all_data);  echo "</pre>";
+                            
+                            
+                            show_speaking($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,'','read',$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link'],1);
                         }
                         if($type == 'media_mention')
                         {
@@ -383,7 +387,7 @@ function get_https($url)
                                     $html = file_get_html($all_data[$i]['media_link']);
                                 
                             } 
-                            show_media($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['publication'],$all_data[$i]['media_link'],$all_data[$i]['media_link'],$all_data[$i]['pub_date'],$personal_pic_root,'','read',1);
+                            show_media($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['publication'],$all_data[$i]['media_link'],$all_data[$i]['media_link'],$all_data[$i]['pub_date'],$personal_pic_root,'','read',$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link'],1);
                         }
                         if($type == 'publication')
                         {    
@@ -411,7 +415,8 @@ function get_https($url)
                                     $html = file_get_html($all_data[$i]['funding_source']);
                                 
                             } 
-                            show_funding($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['funding_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['funding_source'],$all_data[$i]['funding_amount'],$all_data[$i]['funding_date'],$personal_pic_root,'read',1);
+                            //echo "<pre>all_data:";   print_r($all_data);   echo "</pre>";
+                            show_funding($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['funding_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['funding_source'],$all_data[$i]['funding_amount'],$all_data[$i]['funding_date'],$personal_pic_root,'','read',$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link'],1);
                         }
                         if($type == 'jobs')
                         {   
@@ -425,7 +430,7 @@ function get_https($url)
                                     $html = file_get_html($all_data[$i]['source']);
                                 
                             } 
-                            show_job($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['job_title'],$all_data[$i]['post_date'],$all_data[$i]['source'],$personal_pic_root,$company_pic_root,"",$all_data[$i]['show_state'],1);
+                            show_job($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['job_title'],$all_data[$i]['post_date'],$all_data[$i]['source'],$personal_pic_root,$company_pic_root,"","",$all_data[$i]['show_state'],1);
                         }
                         ?>
                     </ul>
@@ -498,7 +503,7 @@ function get_https($url)
 
                                 if($first_img != '')
                                     $other_content .= '<img width=100 src='.$first_img.'>';
-                                $other_content .= '</div><div style=float:left;width:75%;margin-bottom:10px;font-weight:700;margin-top:8px;>'.$ec_title.'<br><span style=font-size:12px;color:#59626a;font-weight:400;font-size:13px;>'.$ec_desc.'</span></div>';
+                                $other_content .= '</div><div style=float:left;width:75%;margin-bottom:10px;font-weight:700;margin-top:8px;>'.$ec_title.'<br><span style=color:#59626a;font-weight:400;font-size:15px;>'.$ec_desc.'</span></div>';
                             }
                         }
                         
@@ -538,6 +543,9 @@ function get_https($url)
     
     <?PHP
 //echo "<br>details_pos bottom : ".$details_pos;
+
+// Below line commented on 7th mar 2019 to reduce warnings, errors    
+/*    
 if($details_pos > -1)
 {
     ?>
@@ -547,6 +555,6 @@ if($details_pos > -1)
     </script>    
     <?PHP
 }    
-
+*/
 
 ?>

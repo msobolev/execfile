@@ -103,6 +103,17 @@ if($_SESSION['combine_site'] == 'clo_lite')
                             </li>    
                         <?PHP
                         }
+                        elseif($_SESSION['combine_site'] == 'ciso/clo')
+                        {    
+                        ?>
+                            <li>
+                                <a href="home.php?func=clo">CLO</a>
+                            </li>    
+                            <li>
+                                <a href="home.php?func=ciso">CISO</a>
+                            </li>    
+                        <?PHP
+                        }
                         else
                         {    
                         ?>
@@ -226,6 +237,13 @@ if($_SESSION['combine_site'] == 'clo_lite')
                     <li>
                         <a href="home.php?from_date=<?=$from_date_initial?>&to_date=<?=$to_date_initial?>&type=jobs<?=$left_parameters?>">Jobs<span id="job_unread_count"></span></a>
                     </li>
+                   
+                    
+                    
+                    <li>
+                        <a href="home.php?from_date=<?=$from_date_initial?>&to_date=<?=$to_date_initial?>&type=conferences<?=$left_parameters?>">Conferences<span id="conferences_unread_count"></span></a>
+                    </li>
+                    
                     <!--
                     <li>
                         <a href="#">Conferences</a>
@@ -237,7 +255,8 @@ if($_SESSION['combine_site'] == 'clo_lite')
         
         
         <?PHP
-        if($_SESSION['site'] == 'clo' && 1 == 2)
+        //if($_SESSION['site'] == 'clo' && 1 == 2)
+        if(1 == 1)
         {   
         ?>
         <li class="widget widget-alerts" <?=$disable_click?>>
@@ -265,18 +284,43 @@ if($_SESSION['combine_site'] == 'clo_lite')
                 if(strpos($_GET['title_level'],'director') > -1)
                     $dir_checked = "checked";
                 
-                
+                //echo "<br>Get Title text:".$_GET['title_text'];
                 if($_GET['title_level'] != '')
                 {    
+                    //echo "<br>Within";
                     $title_level_display = 'style=display:block;';
                 } 
                 
                 
             }
             
+            
+            
+            if(isset($_GET['title_text']) && $_GET['title_text'] != '')
+            {
+                $title_level_display = 'style=display:block;';
+            }
+            
             ?>
             
             <div class="widget-body" <?=$title_level_display?>>
+                
+                
+                <div class="search">
+                    <div style="padding:17px 21px;" class="ui-widget form-search">
+                        
+                        <input  onkeypress="return searchKeyPress(event);" style="width:86%;" id="title_text" placeholder="Enter title" class="search-field" value="<?=$_GET['title_text']?>">
+                       
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                <!-- <input id="developer" placeholder="Enter Title" class="search-field" value="<?=$_GET['searchnow']?>" onkeypress="return searchKeyPress(event);"> -->
+                
+                
                 <ul class="list-alerts">
                     <li>
                         <a href="#"><input <?=$chief_checked?> onclick="update_search()" type="checkbox" id="title_level" name="title_level" value="chief">&nbsp;&nbsp;C Level</a>

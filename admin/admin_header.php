@@ -12,4 +12,10 @@
     <a href="admin_email.php">Admin Email</a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="email_details.php">Admitted Email</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="login_report.php">Login Report</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="general_report.php">General Traffic</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="banned_ips.php">Banned IPs</a>
 </div>

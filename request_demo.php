@@ -9,6 +9,8 @@ include("config.php");
 include("functions.php");
    
 com_db_connect_hre2() or die('Unable to connect to database server!');
+recordTraffic('request_demo');
+
 $admin_email = com_db_GetValue("select admin_email from exec_admin");
 if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
 {
@@ -16,42 +18,55 @@ if(isset($_POST['request_demo_flag']) && $_POST['request_demo_flag'] == 1)
     $last_name = $_POST['last_name_rq'];
     $email = $_POST['email_rq'];
     
-    
-    $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
-    //echo "<br>check_user: ".$check_user;
-    $check_user_rs = com_db_query($check_user);
-    $check_user_rows = com_db_num_rows($check_user_rs);
-    //echo "<br>check_user_rows: ".$check_user_rows;
-    //die();
-    if($check_user_rows > 0)
+    if(strpos($email,'@') > -1)
     {
-        header("Location: request_demo.php?sf=2");
-    }    
-    else
-    {    
-    
-        add_user($first_name,$email,1,$last_name,'Request a demo');
-        $msg = "Thank you! One of our representatives will be in touch with you shortly.";
+        $check_user = "select * from " .TABLE_USER." where email = '".$email."'";
+        //echo "<br>check_user: ".$check_user;
+        $check_user_rs = com_db_query($check_user);
+        $check_user_rows = com_db_num_rows($check_user_rs);
+        //echo "<br>check_user_rows: ".$check_user_rows;
+        //die();
+        if($check_user_rows > 0)
+        {
+            header("Location: request_demo.php?sf=2");
+        }    
+        else
+        {    
+            $nameValidation = nameValidation($first_name);
+            
 
-        $email_message = "Below are details of request a demo user:";
-        $email_message .= "\r\nFirst Name: ".$first_name; 
-        $email_message .= "\r\nLast Name: ".$last_name; 
-        $email_message .= "\r\nEmail: ".$email; 
+            if($nameValidation == 0)
+            {
+                $msg = add_user($first_name,$email,1,$last_name,'Request a demo');
+            }
+            else
+            {
+                $msg = "Name is invalid.";
+            }    
+            /*
+            $msg = "Thank you! One of our representatives will be in touch with you shortly.";
 
-        $headers = 'From: info@execfile.com' . "\r\n" .
-        'Reply-To: info@execfile.com' . "\r\n" ;
+            $email_message = "Below are details of request a demo user:";
+            $email_message .= "\r\nFirst Name: ".$first_name; 
+            $email_message .= "\r\nLast Name: ".$last_name; 
+            $email_message .= "\r\nEmail: ".$email; 
 
-        // Send
-        mail($admin_email, 'Request A Demo User', $email_message,$headers);
-        //mail('faraz.aia@nxvt.com', 'Request A Demo User', $email_message,$headers);
-        
-        $todays = date('Y-m-d');
-        $add_query = "INSERT into exec_forms(form_data,form_date,form_type) values('".$email_message."','".$todays."','request_demo')";
-        //echo "query:".$query;
-        com_db_query($add_query);
-        
+            $headers = 'From: info@execfile.com' . "\r\n" .
+            'Reply-To: info@execfile.com' . "\r\n" ;
+
+            // Send
+            mail($admin_email, 'Request A Demo User', $email_message,$headers);
+            //mail('faraz.aia@nxvt.com', 'Request A Demo User', $email_message,$headers);
+
+            $todays = date('Y-m-d');
+            $add_query = "INSERT into exec_forms(form_data,form_date,form_type) values('".$email_message."','".$todays."','request_demo')";
+            //echo "query:".$query;
+            com_db_query($add_query);
+              
+             */
+
+        }
     }
-    
 }
 
 if(isset($_GET['sf']) && $_GET['sf'] == 1)

@@ -1,0 +1,965 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Anonimous</Author>
+  <LastAuthor>Anonimous</LastAuthor>
+  <Created>2019-01-03T02:39:56-05:00</Created>
+  <Company>Dumy Corp.</Company>
+  <Version>1.1</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>5010</WindowHeight>
+  <WindowWidth>12300</WindowWidth>
+  <WindowTopX>120</WindowTopX>
+  <WindowTopY>60</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="sheet 1">
+  <Table ss:ExpandedColumnCount="21" ss:ExpandedRowCount="46" x:FullColumns="1" x:FullRows="1">
+   <Row ss:Index="5">
+    <Cell ss:Index="1"><Data ss:Type="String">M E D I A    M E N T I O N</Data></Cell>
+   </Row>
+   <Row ss:Index="7">
+    <Cell ss:Index="1"><Data ss:Type="String">Personal Unique ID</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">First Name</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Last Name</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Title</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">E-Mail</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">Phone</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Company Name</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">Company Website</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">Company Size Revenue</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">Company Size Employees</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Company Industry</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">Address</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Address 2</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">City</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">State</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">Country</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">Zip Code</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">Date</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Quote</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Publication</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Source Link</Data></Cell>
+   </Row>
+   <Row ss:Index="8">
+    <Cell ss:Index="1"><Data ss:Type="String">96273</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Paula</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Just</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">paula.just@health-first.org</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">321.434.4335 </Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Health First</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.hf.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$500M-1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">250-1000</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Hospitals</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">6450 Us Highway 1</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Rockledge</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">FL</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">32955</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-24</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">This homegrown effort truly embraces the spirit of the season</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Florida Today</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.floridatoday.com/story/news/2018/12/24/children-make-christmas-cards-hospice-patients/2407689002/</Data></Cell>
+   </Row>
+   <Row ss:Index="9">
+    <Cell ss:Index="1"><Data ss:Type="String">95414</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Robert</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Sims</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Executive Vice President and Chief Human Resource Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">rsims@oshkoshcorp.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">920.235.9150</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Oshkosh Corporation</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.oshkoshcorporation.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Heavy Machinery</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">2307 Oregon St.</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Oshkosh</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">WI</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">54902</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-21</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Oshkosh Corporation has an active Military Network dedicated to recruiting, rallying and recognizing our military men and women</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Oshkosh Corporation</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://investor.oshkoshcorporation.com/investors/news-releases/news-releases-details/2018/Oshkosh-Corporation-Named-Military-Friendly-Employer-for-Second-Consecutive-Year/default.aspx</Data></Cell>
+   </Row>
+   <Row ss:Index="10">
+    <Cell ss:Index="1"><Data ss:Type="String">68766</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Robert</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Gibbs</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Assistant Administrator and Chief Human Capital Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">robert.gibbs@nasa.gov</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">202.358.0000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">National Aeronautics and Space Administration</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.nasa.gov</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$1-10 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">50K-100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">International Bodies and Organizations</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">300 E. Street SW</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Washington</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">DC</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">20546</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-19</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Our entire leadership team takes the protection of personal information very seriously</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Tripwire</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.tripwire.com/state-of-security/security-data-protection/nasa-notifies-employees-of-potential-data-breach/</Data></Cell>
+   </Row>
+   <Row ss:Index="11">
+    <Cell ss:Index="1"><Data ss:Type="String">98919</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Chatelle</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Lynch</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">chatelle_lynch@mcafee.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">408.346.3000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">McAfee</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.mcafee.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Software</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">2821 Mission College Blvd.</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Santa Clara</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">CA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">95054</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-19</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We value each and every one of our employees and the contribution they provide when they bring their full authentic self to work</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Marketwatch</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.marketwatch.com/press-release/mcafee-announces-global-commitment-to-gender-pay-parity-2018-12-19</Data></Cell>
+   </Row>
+   <Row ss:Index="12">
+    <Cell ss:Index="1"><Data ss:Type="String">104275</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Nadim</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Kara</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">nadim.kara@teranet.ca</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">416.643.8863</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Teranet</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.teranet.ca</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$50-100 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">250-1000</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Data Analytics, Management and Storage</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">123 Front Street West</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Suite 700</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Toronto</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">ON</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">M5J 2M2</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-19</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">A great workplace is defined by a collaborative team working towards a shared vision.  At Teranet, we employ talented people who achieve results while living our Values. Our leaders, led by our CEO Elgin Farewell, engage, inspire and empower employees in </Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">WRCBtv</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://www.wrcbtv.com/story/39667402/teranet-named-top-toronto-employer</Data></Cell>
+   </Row>
+   <Row ss:Index="13">
+    <Cell ss:Index="1"><Data ss:Type="String">57450</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Geoff</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Gerks</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">geoff.gerks@usa.g4s.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">800.275.8305</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">G4S North America</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.g4s.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Security Services</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1395 University Boulevard</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Jupiter</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">FL</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">33458</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-18</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">FinFit provides a holistic financial wellness offering, and we are excited to support our U.S. employees with this essential benefit.</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Businesswire</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.businesswire.com/news/home/20181218005832/en/FinFit-Announces-Largest-Enterprise-Wide-Financial-Wellness-Programs</Data></Cell>
+   </Row>
+   <Row ss:Index="14">
+    <Cell ss:Index="1"><Data ss:Type="String">103282</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Michael</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">D`Ambrose</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">michael.dambrose@adm.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">312.634.8100</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Archer Daniels Midland</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.adm.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Farming and Ranching</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">77 West Wacker Drive</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Suite 4600</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Chicago</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">IL</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">60601</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-18</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">The world population is expected to grow by 35 percent by 2050, and we will need to double our food supply in that same time frame. The only way to address this monumental challenge is through an industry-wide coalition of people and organizations dedicat</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Archer Daniels Midland</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.adm.com/news/news-releases/adm-recognized-for-efforts-to-promote-workplace-diversity-in-ag</Data></Cell>
+   </Row>
+   <Row ss:Index="15">
+    <Cell ss:Index="1"><Data ss:Type="String">61155</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Dana</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Bottenfield</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Vice President of Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">dana.bottenfield@stjude.org</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">800.822.6344</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">St. Jude Children`s Research Hospital</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.stjude.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$500M-1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Charitable Organizations and Foundations</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">262 Danny Thomas Place</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Memphis</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">TN</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">38105</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-17</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We care about our employees and realize every person at this institution contributes to our mission. We wanted to make sure our pay reflects this</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Daily Memphian</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.dailymemphian.com/article/1864/St-Jude-latest-hospital-to-raise-minimum-wage-to-15-an-hour</Data></Cell>
+   </Row>
+   <Row ss:Index="16">
+    <Cell ss:Index="1"><Data ss:Type="String">71192</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Rose</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Grande</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief People Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">rose.grande@flextg.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">N/A</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">American Traffic Solutions</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.atsol.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$10-50 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">250-1000</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Manufacturing Other</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1150 N Alma School Road</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Mesa</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">AZ</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">85201</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-17</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Our success is much more than becoming a bigger national company</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Flex Technology Group</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://flextg.com/sunshineacres/</Data></Cell>
+   </Row>
+   <Row ss:Index="17">
+    <Cell ss:Index="1"><Data ss:Type="String">68090</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Carol</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Ross-Spang</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Vice President of Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">spangc@methodisthealth.org</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">901.516.7000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Methodist Le Bonheur Healthcare</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.methodisthealth.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$250-500 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Hospitals</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1211 Union Ave</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Suite 700</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Memphis</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">TN</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">38104</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-17</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">MLH has a long-standing philosophy of competitive pay and benefits practices</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Daily Memphian</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.dailymemphian.com/article/1864/St-Jude-latest-hospital-to-raise-minimum-wage-to-15-an-hour</Data></Cell>
+   </Row>
+   <Row ss:Index="18">
+    <Cell ss:Index="1"><Data ss:Type="String">104044</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Michael</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">James</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">mike.james@utrgv.edu</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">956.665.2451</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">University of Texas Rio Grande Valley</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.utrgv.edu</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">250-1000</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Colleges and Universities</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">One West University Blvd.</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Brownsville</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">TX</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">78520</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-16</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We do regular market analysis for the job families</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">The Monitor</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.themonitor.com/2018/12/16/utrgv-rolls-first-merit-based-pay-adjustments/</Data></Cell>
+   </Row>
+   <Row ss:Index="19">
+    <Cell ss:Index="1"><Data ss:Type="String">102417</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Kathie</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Patterson</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">kathie.patterson@ally.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">877.247.2559</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Ally</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.ally.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Financial Services Other</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">500 Woodward Avenue</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Detroit</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">MI</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">48226</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-14</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We have also designated the entire month of November as `Giving Back Month` and provide numerous opportunities for employees to make a difference</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">SHRM</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.shrm.org/resourcesandtools/hr-topics/benefits/pages/top-7-benefits-articles-2018.aspx</Data></Cell>
+   </Row>
+   <Row ss:Index="20">
+    <Cell ss:Index="1"><Data ss:Type="String">104042</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Angela</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Bailey</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Capital Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">angela.bailey@hq.dhs.gov</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">202.282.8000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">United States Department of Homeland Security</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.dhs.gov</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">50K-100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">National Government</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">245 Murray Ln SW</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Stop 1</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Washington</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">DC</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">20528</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-14</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">It`s those kinds of things that our workforce is totally embracing, this whole concept of AI</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Federal News Network</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://federalnewsnetwork.com/ses/2018/12/absent-sweeping-civil-service-changes-ses-find-their-own-workforce-flexibilities/</Data></Cell>
+   </Row>
+   <Row ss:Index="21">
+    <Cell ss:Index="1"><Data ss:Type="String">94334</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Ernest</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Marshall</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Vice President Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">ernestwmarshall@eaton.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">440.523.4400</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">General Electric</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.ge.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">>100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Tools, Hardware and Light Machinery</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">3135 Easton Turnpike</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Fairfield</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">CT</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">06828</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-14</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We see investing in veteran-specific programs and resources as an ongoing part of our talent development strategy</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">IndustryWeek</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.industryweek.com/companies-executives/eaton-recognized-dol-veteran-employment</Data></Cell>
+   </Row>
+   <Row ss:Index="22">
+    <Cell ss:Index="1"><Data ss:Type="String">24171</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Jeffrey</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Brodsky</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">jeff.brodsky@morganstanley.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">212.761.4000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Morgan Stanley</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.morganstanley.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">50K-100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Investment Banking and Venture Capital</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1585 Broadway Avenue</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">New York</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">NY</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">10036</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-14</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Employees expressed their strong affinity for the convenience Uber offers them in their personal lives and wanted that flexibility for their business travel needs as well</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Quartz</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://qz.com/1493960/how-morgan-stanley-wooed-uber-for-its-ipo-business/</Data></Cell>
+   </Row>
+   <Row ss:Index="23">
+    <Cell ss:Index="1"><Data ss:Type="String">104038</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Brigid</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Pelino</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">brigid.pelino@economical.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">519.570.8200</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Economical Insurance</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.economical.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Insurance and Risk Management</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">111 Westmount Road South</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">P.O. Box 2000</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Waterloo</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">ON</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">N2J 4S4</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-13</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Economical`s Choose Your Charity campaign shows we`re stronger together when our employees give back to the communities supporting our brokers and customers</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Benefits Canada</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.benefitscanada.com/news/employees-at-economical-insurance-give-back-to-the-community-123121</Data></Cell>
+   </Row>
+   <Row ss:Index="24">
+    <Cell ss:Index="1"><Data ss:Type="String">67716</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Linda</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">McHugh</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">mchughl@ccf.org</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">216.445.8904</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Cleveland Clinic</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.clevelandclinic.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Hospitals</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">9500 Euclid Avenue</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Cleveland</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">OH</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">44195</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-12</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We try every year to improve their positions economically</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Cleveland.com</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.cleveland.com/business/2018/12/cleveland-clinic-raising-minimum-wage-to-15-per-hour-by-2020.html</Data></Cell>
+   </Row>
+   <Row ss:Index="25">
+    <Cell ss:Index="1"><Data ss:Type="String">56290</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Lisa</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Bisaccia</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">lisa.bisaccia@cvshealth.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">401.765.1500</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">CVS Health</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.cvshealth.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">>100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Personal Health Care Products</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">One CVS Drive</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Woonsocket</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">RI</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">02895</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-12</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">CVS Health has a presence in nearly 10,000 communities across the country, and for our company to thrive, we need a highly trained, culturally diverse health care workforce that is reflective of the communities we serve</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Marketwatch</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.marketwatch.com/press-release/public-and-private-organizations-convene-to-improve-health-of-hispanic-population-in-us-2018-12-12</Data></Cell>
+   </Row>
+   <Row ss:Index="26">
+    <Cell ss:Index="1"><Data ss:Type="String">60585</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Stephanie</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Lundquist</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Executive Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">stephanie.lundquist@target.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">612.304.6073</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Target</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.target.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">>100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Department Stores</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1000 Nicollet Mall</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Minneapolis</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">MN</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">55403</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-12</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We are at our best when we are inclusive for all</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Fortune</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://fortune.com/2018/12/12/mpw-next-gen-target-tesla-diversity-inclusion-hiring/</Data></Cell>
+   </Row>
+   <Row ss:Index="27">
+    <Cell ss:Index="1"><Data ss:Type="String">104039</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Robert</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Holmes</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">roholmes@nthrive.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">678.248.8208</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">nThrive</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.nthrive.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$100-250 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Data Analytics, Management and Storage</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">200 North Point Center East</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Suite 600</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Alpharetta</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">GA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">30022</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-12</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">It is gratifying to be certified as a Great Place to Work in back-to-back years. We value and appreciate our colleagues` feedback and have a continual commitment to improve colleague engagement</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">WRCBtv</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://www.wrcbtv.com/story/39629049/nthrive-certified-as-great-place-to-work</Data></Cell>
+   </Row>
+   <Row ss:Index="28">
+    <Cell ss:Index="1"><Data ss:Type="String">104041</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Vicki</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Cansler</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">vicki.cansler@piedmont.org</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">404.605.5000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Piedmont Hospital</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.piedmont.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Hospitals</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1968 Peachtree Road NW</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Atlanta</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">GA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">30309</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-11</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">In healthcare, the word `infectious` often has negative connotations, but Jennifer`s positive attitude is infectious in the best sense</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Metro Atlanta CEO</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://metroatlantaceo.com/news/2018/12/jennifer-lavoie-named-medical-fitness-association-pioneer/</Data></Cell>
+   </Row>
+   <Row ss:Index="29">
+    <Cell ss:Index="1"><Data ss:Type="String">104043</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Robert</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Hanley</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">bhanley@uchicago.edu</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">773.702.1000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">University of Chicago Medicine</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.uchicagomedicine.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Hospitals</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">5841 South Maryland Avenue</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Chicago</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">IL</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">60637</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-11</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Medical assistants are critical in the growth of ambulatory; and these dedicated and high-performing employees will become the new face of that growth</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">University of Chicago Medicine</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.uchicagomedicine.org/forefront/news/2018/december/medical-assistant-training-program</Data></Cell>
+   </Row>
+   <Row ss:Index="30">
+    <Cell ss:Index="1"><Data ss:Type="String">68724</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Jim</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Link</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">jim.link@randstadusa.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">770.937.7000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Randstad North America</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.randstadusa.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">HR, Recruiting, and Payroll Services</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">One Overton Park</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">3625 Cumberland Boulevard SE</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Atlanta</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">GA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">30339</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-10</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">HR strategies won`t be effective if they don`t evolve</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Albany CEO</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://albanyceo.com/news/2018/12/randstad-us-identifies-8-work-trends-watch-2019/</Data></Cell>
+   </Row>
+   <Row ss:Index="31">
+    <Cell ss:Index="1"><Data ss:Type="String">59205</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Andrew</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Doyle</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Executive Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">adoyle@oppenheimerfunds.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">800.525.7048</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">OppenheimerFunds</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.oppenheimerfunds.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$250-500 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Investment Banking and Venture Capital</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">225 Liberty Street</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">14th Floor</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">New York</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">NY</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">10281</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-10</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">It is an honor to be recognized for the third year in a row as one of the best places to work in asset management</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">CSRwire</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://www.csrwire.com/press_releases/41611-Pensions-Investments-Names-OppenheimerFunds-a-Best-Place-to-Work-in-Money-Management</Data></Cell>
+   </Row>
+   <Row ss:Index="32">
+    <Cell ss:Index="1"><Data ss:Type="String">41021</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Michelle</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Choquette</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Director - Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">michelle.choquette@gatewayloan.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">877.406.8109</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Thrifty Rent-A-Car System</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.thrifty.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$500M-1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Rental Cars</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">5310 E 31st St Ste 100</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Tulsa</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">OK</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">74135</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-10</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We strive to cultivate a healthy workplace environment where employees are encouraged and empowered to improve processes and develop important relationships with each other. This award is evidence we are on the right track</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Businesswire</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.businesswire.com/news/home/20181210005667/en/Gateway-Mortgage-Group-Named-Top-Place-Work</Data></Cell>
+   </Row>
+   <Row ss:Index="33">
+    <Cell ss:Index="1"><Data ss:Type="String">11</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Donna</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Morris</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Executive Vice President of Customer and Employee Experience</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">dmorris@adobe.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">408.536.6000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Adobe</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.adobe.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Software</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">345 Park Avenue</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">San Jose</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">CA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">95110</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-10</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Adobe`s appearance in the top 10 of this year`s America`s Most Just Companies List echoes our core belief that what is good for our employees, our customers and our communities is the right thing to do, and it is good for business</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Adobe</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://news.adobe.com/press-release/corporate/adobe-named-top-10-leader-corporate-citizenship</Data></Cell>
+   </Row>
+   <Row ss:Index="34">
+    <Cell ss:Index="1"><Data ss:Type="String">23479</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">John</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Renfro</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">john.renfro@capitalgroup.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">800.421.4225</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Aecom</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.aecom.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">50K-100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Construction and Remodeling</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1999 Avenue Of The Stars</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Suite 2600</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Los Angeles</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">CA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">90067</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-10</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Over 50% of our associates are women and 42% are racially and ethnically diverse in the U.S.</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Pensions and Investments</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.pionline.com/article/20181210/PRINT/181219981/capital-group</Data></Cell>
+   </Row>
+   <Row ss:Index="35">
+    <Cell ss:Index="1"><Data ss:Type="String">101564</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Victoria</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Brifo</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">brifovb@airproducts.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">610.481.4911</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Air Products and Chemicals</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.airproducts.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">10K-50K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Chemicals and Petrochemicals</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">7201 Hamilton Blvd</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Allentown</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">PA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">18195</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-07</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">My number one priority is that we achieve our goal of being the most diverse industrial gas company in the world. And that means bringing forth innovative strategies to recruit, retain, and develop the talent necessary to help us be collectively powerful </Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Air Products and Chemicals</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://www.airproducts.com/Company/news-center/2018/12/1207-ceo-action-for-diversity-and-inclusion-day-of-understanding.aspx</Data></Cell>
+   </Row>
+   <Row ss:Index="36">
+    <Cell ss:Index="1"><Data ss:Type="String">71664</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Michele</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Malczewski</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Director of Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">michele.malczewski@coastprofessional.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">318.654.7666</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Coast Professional</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.coastprofessional.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$10-50 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">100-250</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Business Services Other</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">214 Expo Cir</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Ste 7</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">West Monroe</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">LA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">71292</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-07</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We appreciate AutismUp`s determination to improve the lives of those living with autism in our local area and the support they provide to families</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Livingston County News</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://www.thelcn.com/lcn01/coast-professional-donates-to-autismup-20181207</Data></Cell>
+   </Row>
+   <Row ss:Index="37">
+    <Cell ss:Index="1"><Data ss:Type="String">101640</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Traci</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">DiMartini</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Capital Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">tdimartini@peacecorps.gov</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">202.692.2000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Peace Corps</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.peacecorps.gov</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$100-250 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">50K-100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Local Government</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">1111 20th Street NW</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Washington</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">DC</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">20526</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-06</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We don`t value training. The first thing that gets cut in the budget is training, and until we actually put our money where our mouth is, it`s never going to change</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Federal News Network</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://federalnewsnetwork.com/workforce/2018/12/natl-science-foundation-seeks-to-lower-the-barriers-to-reskilling-federal-workforce/</Data></Cell>
+   </Row>
+   <Row ss:Index="38">
+    <Cell ss:Index="1"><Data ss:Type="String">23430</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Matthew</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Schuyler</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">matt_schuyler@hilton.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">703.883.1000</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Hilton</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.hilton.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">>100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Hotels, Motels and Lodging</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">7930 Jones Branch Drive</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">McLean</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">VA</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">22102</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-06</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We`re deeply committed to recruiting and retaining Team Members who represent many different backgrounds, cultures and perspectives</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Hilton</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://newsroom.hilton.com/corporate/news/hilton-1-workplace-for-diversity-and-parents</Data></Cell>
+   </Row>
+   <Row ss:Index="39">
+    <Cell ss:Index="1"><Data ss:Type="String">103991</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Solange</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Goulet</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Resources Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">solange.goulet@bcf.ca</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">514.397.4594</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">BCF</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.bcf.ca</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$10-50 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">250-1000</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Legal Services</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">25th Floor</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">1100 Rene-Levesque Blvd West</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Montreal</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">QC</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">H3B 5C9</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-06</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We thought [an app] would be very convenient for them and they, at least, would consult a doctor.</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Benefits Canada</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.benefitscanada.com/news/just-9-of-employers-offer-virtual-health-care-survey-122608</Data></Cell>
+   </Row>
+   <Row ss:Index="40">
+    <Cell ss:Index="1"><Data ss:Type="String">103990</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Elias</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Hernandez</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief Human Capital Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">elias.hernandez@sba.gov</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">800.827.5722</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">United States Small Business Administration</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.sba.gov</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$500M-1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">1K-10K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">National Government</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">409 3rd St</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">SW 3511</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Washington</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">DC</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">20024</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-05</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Sometimes we look at it from the aspect of HR, but we have IT challenges that are affecting how our employees perceive the organization</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Federal News Network</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://federalnewsnetwork.com/workforce/2018/12/trump-administration-to-focus-on-fewer-workforce-initiatives-with-more-impact-in-2019/</Data></Cell>
+   </Row>
+   <Row ss:Index="41">
+    <Cell ss:Index="1"><Data ss:Type="String">98509</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Trevor</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Norris</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Associate Chief Human Capital Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">trevor.norris@treasury.gov</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">216.623.2016</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">United States Department of the Treasury</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.treasury.gov</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$0-1 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">0-25</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Government Other</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">One Cleveland Center</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">1375 E 9th St Ste 815</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Cleveland</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">OH</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">44114</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-05</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We`re looking at results in different ways, because we feel like when we look only at organizational units, there are some voices that get lost</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Federal News Network</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://federalnewsnetwork.com/workforce/2018/12/trump-administration-to-focus-on-fewer-workforce-initiatives-with-more-impact-in-2019/</Data></Cell>
+   </Row>
+   <Row ss:Index="42">
+    <Cell ss:Index="1"><Data ss:Type="String">103842</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Bruce</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Knott</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Director of Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">bknott@sara-tx.org</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">210.227.1373</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">San Antonio River Authority</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.sara-tx.org</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$0-1 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">100-250</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Local Government</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">100 East Guenther St.</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">San Antonio</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">TX</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">78204</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-04</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">I was troubled to learn that John (Gomez) knew about it but had not notified me</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">San Antonio Express-News</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.expressnews.com/news/local/article/SA-River-Authority-supervisor-throws-pipe-at-13443172.php</Data></Cell>
+   </Row>
+   <Row ss:Index="43">
+    <Cell ss:Index="1"><Data ss:Type="String">58613</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Emma</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Horgan</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Chief People Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">ehorgan@questrade.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">888.783.7866</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Questrade</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.questrade.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$100-250 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">100-250</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Investment Banking and Venture Capital</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">5650 Yonge St</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">North York</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">ON</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">M2M 4G3</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-04</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We work to ensure we have a culture in which our people can thrive, for individual, team and organization-wide success</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">StreetInsider</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.streetinsider.com/Press+Releases/Questrade+named+as+Canada%E2%80%99s+Most+Admired+Corporate+Cultures%E2%84%A2+for+2018/14889955.html</Data></Cell>
+   </Row>
+   <Row ss:Index="44">
+    <Cell ss:Index="1"><Data ss:Type="String">68536</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Richard</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Badgley</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Vice President and Chief People Officer</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">rick.badgley@brinker.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">972.980.9917</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Brinker</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.brinker.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">> $1 Billion</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">50K-100K</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Restaurants and Bars</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">6820 Lyndon B Johnson Freeway</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"># 200</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Dallas</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">TX</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">75240</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-02</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">We truly want these honorable men and women to see the restaurant and foodservice industry as a top option for fulfilling and rewarding careers</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">American Recruiters</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">https://www.americanrecruiters.com/2018/12/02/global-foodservice-and-equipment-newsletter-december-1-2018-edition/</Data></Cell>
+   </Row>
+   <Row ss:Index="45">
+    <Cell ss:Index="1"><Data ss:Type="String">103734</Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String">Sarah</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">Morgan</Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String">Senior Director of Human Resources</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">smorgan@safestreets.com</Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String">919.773.7802</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Safe Streets USA</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">www.safestreetsusa.com</Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String">$10-50 Million</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">100-250</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String">Security Services</Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String">5305 Raynor Rd</Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String">Suite 100</Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String">Garner</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">NC</Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">27529</Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">2018-12-01</Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String">Once, there was a weekly managers` meeting and the person coordinating the meeting was a man</Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String">Black Enterprise</Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">http://www.blackenterprise.com/dealing-with-microaggressions-in-the-workplace/</Data></Cell>
+   </Row>
+   <Row ss:Index="46">
+    <Cell ss:Index="1"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="2"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="4"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="6"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="9"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="12"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="13"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="14"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="16"><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="19"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="20"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String"></Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

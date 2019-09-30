@@ -32,20 +32,20 @@ if(isset($_POST['forgot_pw']) && $_POST['forgot_pw'] == 1)
         
         require_once('PHPMailer/class.phpmailer.php');
 
-        $from_admin = 'ms@hrexecsonthemove.com';
+        $from_admin = 'msobolev@execfile.com';   //'ms@hrexecsonthemove.com';
         $mail                = new PHPMailer();
         $mail->IsSMTP(); // telling the class to use SMTP
         $mail->SMTPAuth      = true;                  // enable SMTP authentication
         $mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
         $mail->Host          = "smtpout.secureserver.net"; // sets the SMTP server relay-hosting.secureserver.net smtpout.secureserver.net
-        $mail->Port          = 80;    // 25 465               // 26 set the SMTP port for the GMAIL server
+        $mail->Port          = 25;    // 25 465               // 26 set the SMTP port for the GMAIL server
         //$mail->Username      = "rts_email_sent@ctosonthemove.com"; // SMTP account username
         $mail->Username      = "msobolev@execfile.com";   //"rts_email_sent@hrexecsonthemove.com"; // SMTP account username
-        $mail->Password      = "ryazan";  //"rts0214";        // SMTP account password
+        $mail->Password      = "borabora2190";  //"rts0214";        // SMTP account password
         //$mail->SetFrom('rts_email_sent@ctosonthemove.com', 'ctosonthemove.com');
-        $mail->SetFrom('ms@hrexecsonthemove.com', 'hrexecsonthemove.com');
+        $mail->SetFrom('msobolev@execfile.com', 'execfile.com');
         //$mail->AddReplyTo('ms@ctosonthemove.com', 'ctosonthemove.com');
-        $mail->AddReplyTo($from_admin, 'hrexecsonthemove.com');
+        $mail->AddReplyTo("$from_admin", 'execfile.com');
         $mail->Subject       = "Forgot Password";
         
         

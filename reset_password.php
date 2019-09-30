@@ -40,7 +40,7 @@ if(isset($_POST['ChangePassword']) && $_POST['ChangePassword'] == 1)
         $user_id = $_POST['user_id'];
         //$user_update = "UPDATE " . TABLE_USER . "  set password = '$pass'  where user_id = '".$uID."'";
         //$user_update = "UPDATE " . TABLE_USER . "  set password = md5('$pass')  where user_id = '".$uID."'";
-        $user_update = "UPDATE " . TABLE_USER . "  set password = '$new_password'  where user_id = '".$user_id."'";
+        $user_update = "UPDATE " . TABLE_USER . "  set password = md5('$new_password')  where user_id = '".$user_id."'";
         
         //echo "<br>user_update:".$user_update;
         

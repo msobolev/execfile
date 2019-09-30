@@ -27,6 +27,7 @@ $publication_count = 0;
 $award_count = 0;
 $funding_count = 0;
 $job_count = 0;
+$conferences_count = 0;
 
 
 $speaking_last_id_db = '';
@@ -39,7 +40,12 @@ if(isset($_GET['login_page_flow']) && $_GET['login_page_flow'] == 1)
     $login_page_flow = 1;
 
 
+
+
 include("header.php"); 
+
+recordTraffic('search');
+
 //echo "<br>login_page_flow: ".$login_page_flow;
 //die("<br>FA");
 //echo "<br>SITE: ".$_SESSION['site'];
@@ -267,8 +273,8 @@ com_db_query($search_history);
         }
         elseif($_SESSION['site'] == 'cto' || $_SESSION['site'] == 'ciso')
         {
-            $pic_root            = "https://www.ctosonthemove.com/";
-            $hr_root_link = "https://www.ctosonthemove.com/";
+            $pic_root            = "https://ctosonthemove.com/";
+            $hr_root_link = "https://ctosonthemove.com/";
         }
         elseif($_SESSION['site'] == 'cfo')
         {
@@ -492,6 +498,11 @@ com_db_query($search_history);
                                     $filters .= "|LEVEL:".$title_level;
                                 }    
                                 
+                                
+                                if($title_text != '')
+                                {
+                                    $filters .= "|TITLE:".$title_text;
+                                }  
 
                                 if($from_date != '')
                                     $filters .= "|T:".$from_date;
@@ -835,29 +846,33 @@ com_db_query($search_history);
                     { 
                         if($all_data[$i]['type'] == 'speaking')
                         {
-                            show_speaking($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            show_speaking($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state'],$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link']);
                         }
                         if($all_data[$i]['type'] == 'media')
                         {
-                            show_media($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            show_media($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['event'],$all_data[$i]['speaking_link'],$all_data[$i]['event_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state'],$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link']);
                         }
                         if($all_data[$i]['type'] == 'awards')
                         {
-                            show_awards($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['awards_title'],$all_data[$i]['awards_given_by'],$all_data[$i]['awards_date'],$all_data[$i]['awards_link'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            //echo "<pre>all_data:";   print_r($all_data[$i]);   echo "</pre>"; 
+                            show_awards($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['awards_title'],$all_data[$i]['awards_given_by'],$all_data[$i]['awards_date'],$all_data[$i]['awards_link'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state'],$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link']);
                         }
 
                         if($all_data[$i]['type'] == 'movement')
                         {
-                            //echo "<br>personal_pic_root: ".$personal_pic_root;
-                            show_movements($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['move_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['movement_type'],$all_data[$i]['more_link'],$all_data[$i]['personal_image'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            //echo "<pre>all_data:";   print_r($all_data[$i]);   echo "</pre>";
+                            //echo "<br>twitter link ONE: ".$all_data[$i]['twitter_link'];
+                            //show_movements($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['move_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['movement_type'],$all_data[$i]['more_link'],$all_data[$i]['personal_image'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            // Added twitter and linkedin links on 2nd Jan 2018
+                            show_movements($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['move_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['movement_type'],$all_data[$i]['more_link'],$all_data[$i]['personal_image'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state'],$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link']);
                         }
                         if($all_data[$i]['type'] == 'funding')
                         {
-                            show_funding($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['funding_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['funding_source'],$all_data[$i]['funding_amount'],$all_data[$i]['funding_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            show_funding($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['funding_id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['funding_source'],$all_data[$i]['funding_amount'],$all_data[$i]['funding_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state'],$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link']);
                         }
                         if($all_data[$i]['type'] == 'jobs')
                         {
-                            show_job($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['job_title'],$all_data[$i]['post_date'],$all_data[$i]['source'],$personal_pic_root,"https://www.ctosonthemove.com/",$all_data[$i]['location'],$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            show_job($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_id'],$all_data[$i]['company_logo'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['job_title'],$all_data[$i]['post_date'],$all_data[$i]['source'],$personal_pic_root,"https://ctosonthemove.com/",$all_data[$i]['location'],$all_data[$i]['add_date'],$all_data[$i]['show_state']);
                         }
 
                         if($all_data[$i]['type'] == 'publication')
@@ -866,12 +881,87 @@ com_db_query($search_history);
                         }
                         if($all_data[$i]['type'] == 'media_mention')
                         {
-                            show_media($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['publication'],$all_data[$i]['media_link'],$all_data[$i]['media_link'],$all_data[$i]['pub_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state']);
+                            show_media($all_data[$i]['first_name'],$all_data[$i]['last_name'],$all_data[$i]['id'],$all_data[$i]['personal_id'],$all_data[$i]['company_name'],$all_data[$i]['title'],$all_data[$i]['email'],$all_data[$i]['phone'],$all_data[$i]['personal_image'],$all_data[$i]['publication'],$all_data[$i]['media_link'],$all_data[$i]['media_link'],$all_data[$i]['pub_date'],$personal_pic_root,$all_data[$i]['add_date'],$all_data[$i]['show_state'],$all_data[$i]['linkedin_link'],$all_data[$i]['twitter_link']);
+                        }
+                        if($all_data[$i]['type'] == 'conferences')
+                        {
+                            //echo "<pre>all_data:";   print_r($all_data[$i]);   echo "</pre>";
+                            show_conferences($all_data[$i]['event_name'],$all_data[$i]['add_date'],$all_data[$i]['event_id'],$all_data[$i]['event_location'],$all_data[$i]['short_name'],$all_data[$i]['event_logo'],$all_data[$i]['event_source'],$all_data[$i]['speakersCount'],$all_data[$i]['speaker']);
                         }
                     }
-                        
-                        //echo "<br>unread_media_count: ".$unread_media_count;
-                        ?>
+                    
+                    
+                    // Adding Conferences record - 24 Jan 2019
+                    ?>
+                    <!--    
+                    <li class="article">
+                            <ul class="list-checkboxes">
+                                    <li>
+                                            <div class="checkbox">
+                                                    <input type="checkbox" name="field-8#" id="field-8#">
+
+                                                    <label class="form-label" for="field-8#">1#</label>
+                                            </div>
+                                    </li>
+                            </ul>
+
+                            <span class="ico-article ico-article-secondary">
+                                    <i class="ico-desk"></i>
+                            </span>
+
+                            <div class="article-image">
+
+                                    <img src="https://ctosonthemove.com/company_logo/thumb/Pro-1502371028.png" height="80" width="80" alt="" class="article-avatar">
+                            </div>
+
+                            <div class="article-content">
+                                    <p>HCI Talent Acquisition taking place in New York on 6/15/2015, convening CHROs in North America</p>
+
+                                    <div class="socials">
+                                            <ul>
+                                                    <li>
+                                                            <a href="#" class="note">
+                                                                    <i class="ico-note"></i>
+                                                            </a>
+                                                    </li>
+
+                                                    <li>
+                                                            <a href="#" class="upload">
+                                                                    <i class="ico-upload"></i>
+                                                            </a>
+                                                    </li>
+
+                                                    <li>
+                                                            <a href="#" class="twitter">
+                                                                    <i class="ico-twitter"></i>
+                                                            </a>
+                                                    </li>
+
+                                                    <li>
+                                                            <a href="#" class="linkedin">
+                                                                    <i class="ico-linkedin"></i>
+                                                            </a>
+                                                    </li>
+                                            </ul>
+                                    </div>
+                            </div>
+
+                            <div class="article-actions">
+                                    <a href="#" class="btn btn-primary ">
+                                            <span>Register now</span>
+
+                                            <i class="ico-arrow-right"></i>
+                                    </a>
+
+                                    <a href="#" class="btn btn-primary btn-secondary">
+                                            <span>Sponsor</span>
+
+                                            <i class="ico-arrow-right"></i>
+                                    </a>
+                            </div>
+                    </li>    
+                    -->
+
 
                     </ul><!-- /.articles -->
                 </div><!-- /.section-body -->
@@ -920,6 +1010,7 @@ if(strpos($_SERVER['HTTP_REFERER'],'login.php') > -1)
     $unread_publication_count = $publication_count;
     $unread_funding_count = $funding_count;
     $unread_job_count = $job_count;
+    $unread_conferences_count = $conferences_count;
     //echo "<br>Unread_media_count: ".$unread_media_count;
     
     if($unread_movements_count == 0)
@@ -945,8 +1036,11 @@ if(strpos($_SERVER['HTTP_REFERER'],'login.php') > -1)
     if($unread_job_count == 0)
         $_SESSION['mark_jobs_read_clicked'] = 1;
     
+    if($unread_conferences_count == 0)
+        $_SESSION['mark_conferences_read_clicked'] = 1;
+    
     //echo "<br>unread_speaking_count: ".$unread_speaking_count;
-    update_user_counts($unread_movements_count,$unread_speaking_count,$unread_media_count,$unread_award_count,$unread_publication_count,$unread_funding_count,$unread_job_count);
+    update_user_counts($unread_movements_count,$unread_speaking_count,$unread_media_count,$unread_award_count,$unread_publication_count,$unread_funding_count,$unread_job_count,$unread_conferences_count);
 }
 else
 {
@@ -968,6 +1062,8 @@ else
     
     $unread_job_count = com_db_GetValue("select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'jobs'");
     
+    $unread_conferences_count = com_db_GetValue("select session_counts from ".TABLE_SESSION_COUNT." where user_id='".$_SESSION['sess_user_id']."' and record_type = 'conferences'");
+    
     if($unread_movements_count == '')
         $unread_movements_count = 0;
     
@@ -988,6 +1084,9 @@ else
     
     if($unread_job_count == '')
         $unread_job_count = 0;
+    
+    if($unread_conferences_count == '')
+        $unread_conferences_count = 0;
     
 }    
 ?>
@@ -1022,7 +1121,7 @@ $('#award_unread_count').html('<?=$unread_award_count?>');
 $('#publication_unread_count').html('<?=$unread_publication_count?>');
 $('#funding_unread_count').html('<?=$unread_funding_count?>');
 $('#job_unread_count').html('<?=$unread_job_count?>');
-
+$('#conferences_unread_count').html('<?=$unread_conferences_count?>');
 
 
 $(function () {

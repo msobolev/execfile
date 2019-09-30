@@ -26,7 +26,7 @@ define('DB_NAME', 'blog');
 define('DB_USER', 'root');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'mydevsql129');
+define('DB_PASSWORD', 'ecbu4!!exlmnnb');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');
