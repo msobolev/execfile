@@ -1198,7 +1198,7 @@ if(1 == 1)
                 echo "<br><br><a href=reports/".$fileName.">Download</a>";
             
             
-            if(1 == 2)
+            if(1 == 1)
             {
                 $subject = "Your monthly report is ready";
                 // Sending email informing about monthly report
